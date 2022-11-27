@@ -10,7 +10,7 @@ interface ChildrenProps {
 
 export const SidebarContextProvider: React.FC<ChildrenProps> = ({children}) => {
     const initialState = {
-        activeSidebar: true
+        activeSidebar: false
     }
 
     const[state, dispatch] = useReducer(SidebarReducer, initialState)

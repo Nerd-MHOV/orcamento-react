@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   BrowserRouter,
   Routes,
@@ -7,8 +6,8 @@ import {
 import Home from './pages/Home'
 import Login from './pages/Login'
 import './app.scss'
+import { PrivateRoute } from './pages/PrivateRoute'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="App">
@@ -16,7 +15,7 @@ function App() {
         <Routes>
           <Route path='/'>
             <Route index element={<Login />} />
-            <Route path='home' element={<Home />} />
+            <Route path='home' element={<PrivateRoute><Home /></PrivateRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

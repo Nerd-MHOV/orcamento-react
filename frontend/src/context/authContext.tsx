@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useApi } from "../hooks/api"
 
 export const AuthContext = createContext<any>({})
@@ -9,55 +10,67 @@ interface ChildrenProps {
 
 export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
 
-    const [userLogin, setUserLogin] = useState(null)
+    const [userLogin, setUserLogin] = useState <Number | null> (null)
     const api = useApi();
 
     useEffect(() => {
-        const validateToken = async () => {
+        validateToken();
+    },)
+
+    const validateToken = async () => {
+        try {
             const storageData = localStorage.getItem('authToken')
             if(storageData) {
-                const data = await api.validateToken(storageData);
-                if(data.user.user_id) {
-                    setUserLogin (data.user.user_id);
+                const data = await api.validateToken();
+                console.log(data)
+                console.log('da uma olhada aqui', data)
+                if(data.user.id) {
+                    setUserLogin (data.user.id);
+                    return true;
                 }
+
             }
+
+            return false
+        } catch (error) {
+            console.log(error)
         }
-        validateToken();
-    }, [api])
+
+    }
 
     const setToken = (token: string) => {
         localStorage.setItem('authToken', token)
     }
 
     const login = async (user: string, passwd:string) => {
-        const data = await api.login(user, passwd).then((data) => {
-            if(data.user && data.user.token) {
-                setUserLogin(data.user.user_id);
-                setToken(data.user.token);
-                return data.message;
+        try {
+            const data = await api.login(user, passwd)
+            if(data.user && data.token) {
+                setUserLogin(data.user.id)
+                setToken(data.token);
+                return data.message
             }
-            return data.message || null;
-        }).catch((err) => {
+            return {
+                message: "Usuario ou senha incorretos!",
+                type: "error"
+            }
+        } catch (err) {
+            console.log(err)
             return {
                 type: "error",
                 message: "Servidor fora do ar"
             }
-        });
-
-        return data;
-        
+        }
     }
 
 
     const logout = async () => {
-        const storageData = localStorage.getItem('authToken')
         setUserLogin(null);
         setToken('');
-        await api.logout(storageData);
     }
 
     return (
-        <AuthContext.Provider value={{ userLogin, login, logout }}>
+        <AuthContext.Provider value={{ userLogin, login, logout, validateToken }}>
             {children}
         </AuthContext.Provider>
     )

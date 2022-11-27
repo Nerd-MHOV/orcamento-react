@@ -61,7 +61,7 @@ const Home = () => {
     }
 
     function handleForm() {
-        const formUp = document.querySelector('#form')
+        const formUp: HTMLFormElement | any = document.querySelector('#form')
         const responseForm = serialize(formUp, { hash: true})
 
         console.log(responseForm)

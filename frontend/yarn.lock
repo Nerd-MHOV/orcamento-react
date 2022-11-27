@@ -521,7 +521,7 @@
 
 "@types/form-serialize@^0.7.2":
   version "0.7.2"
-  resolved "https://registry.npmjs.org/@types/form-serialize/-/form-serialize-0.7.2.tgz"
+  resolved "https://registry.yarnpkg.com/@types/form-serialize/-/form-serialize-0.7.2.tgz#6995e5541f6e1d4770c6e6bb7b226db6220984b9"
   integrity sha512-DOHz5r47gNIcA6bsKjMV7G/Bgs3FFTQBFCHw95D0+5bANYIjazCmrOCTnGhtgIKeg0dJGhKlnT0WOkS2HdeqXQ==
 
 "@types/parse-json@^4.0.0":

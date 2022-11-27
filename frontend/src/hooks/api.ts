@@ -1,28 +1,22 @@
 import axios from 'axios'
 
+const storageData = localStorage.getItem('authToken')
+
+
 const api = axios.create({
     baseURL: 'http://localhost:3333',
+    headers: {
+        'Authorization': `Bearer ${storageData}`
+    }
 })
 
 export const useApi = () => ({
-    validateToken: async (token: string) => {
-        const response = await api.post('/user/validate', { token });
+    validateToken: async () => {
+        const response = await api.get('/validate');
         return response.data;
     },
-    login: async (user: string, passwd: string) => {
-        const response = await api.post('/user/login', { user, passwd }).then((response) => {
-
-            return response.data;
-        }).catch((err) => {
-            return {message: {
-                type: "error",
-                message: "Servidor fora do ar"
-            }}
-        })
-        return response
-    },
-    logout: async (token: string | null) => {
-        const response = await api.post('/user/logout', {token});
+    login: async (username: string, password: string) => {
+        const response = await api.post('/login', { username, password })
         return response.data;
     },
 });

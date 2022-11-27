@@ -36,7 +36,7 @@ const Sidebar = ()=> {
                             </Link>
                         </li>
                         <li className={(pathname === "/home" ) ? "hovered" : ""} >
-                            <Link to="/painel" className="link" >
+                            <Link to="/home" className="link" >
                                 <span className="icon"><Dashboard /></span>
                                 <span className="title">Home</span>
                             </Link>

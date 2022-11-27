@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import "./style.scss"
 import Logo from "../../assets/GrupoperaltasCompleto.png"
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Btn from "../../components/Btn";
 import Message from "../../components/Message";
 import { AuthContext } from "../../context/authContext";
@@ -16,6 +16,7 @@ interface CallbackProps {
 
 const Login = () => {
 
+    const navigate = useNavigate();
     const [user, setUser] = useState('')
     const [passwd, setPasswd] = useState('')
     const [callback, setCallback] = useState<CallbackProps>({})
@@ -23,20 +24,16 @@ const Login = () => {
     async function handleLogin(e: Event) {
         e.preventDefault();
         try {
-            await auth.login(user, passwd)
-                .then((response: {}) => {
-                    console.log("aqui", response)
-                    if (response) {
-                        setCallback(response)
-                    } else {
-                        setCallback({
-                            type: "error",
-                            message: "SERVIDOR FORA DO AR"
-                        })
-                    }
-                }).catch((err: any) => {
-                    console.log(err)
+            const response = await auth.login(user, passwd)
+            console.log('resposne', response)
+            if (response) {
+                setCallback(response)
+            } else {
+                setCallback({
+                    type: "error",
+                    message: "Verifique a Senha e o Usuario!"
                 })
+            }
 
         } catch (err) {
             console.log(err)
@@ -44,9 +41,15 @@ const Login = () => {
 
     }
 
-    if (auth.userLogin) {
-        return <Navigate to="/painel" />
+    async function validateUserToken() {
+        console.log(await auth.validateToken())
+        if(auth.userLogin) {
+            navigate('/home')
+        }
     }
+
+   
+
 
     useEffect(() => {
         if(callback.type) {
@@ -55,6 +58,10 @@ const Login = () => {
             }, 5000)
         }
     }, [callback]) 
+
+    useEffect(() => {
+        validateUserToken();
+    }, []) 
 
 
     return (
