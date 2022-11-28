@@ -17,9 +17,10 @@ const Sidebar = ()=> {
     const token = localStorage.getItem('authToken')
     const navigate = useNavigate()
     
-    async function handleLogout() {
-        await auth.logout(token)
-        navigate('/')
+    async function handleLogout(e: React.MouseEvent<HTMLElement>) {
+        e.preventDefault();
+        await auth.logout()
+        navigate('/login')
     }
 
     return (
@@ -35,14 +36,14 @@ const Sidebar = ()=> {
                                 <span className="title">Gerador de Orçamento</span>
                             </Link>
                         </li>
-                        <li className={(pathname === "/home" ) ? "hovered" : ""} >
-                            <Link to="/home" className="link" >
+                        <li className={(pathname === "/" ) ? "hovered" : ""} >
+                            <Link to="/" className="link" >
                                 <span className="icon"><Dashboard /></span>
                                 <span className="title">Home</span>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/" className="link" onClick={handleLogout} >
+                            <Link to="/login" className="link" onClick={handleLogout} >
                                 <span className="icon"><Logout /></span>
                                 <span className="title">Sair</span>
                             </Link>

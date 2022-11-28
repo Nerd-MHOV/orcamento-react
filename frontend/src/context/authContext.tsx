@@ -1,78 +1,89 @@
-import { createContext, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useApi } from "../hooks/api"
+import { createContext, useEffect, useState } from "react";
+import { useApi } from "../hooks/api";
 
-export const AuthContext = createContext<any>({})
+export const AuthContext = createContext<any>({});
 
 interface ChildrenProps {
-    children: any
+  children: any;
 }
 
 export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
+  const [userLogin, setUserLogin] = useState<Number | null>(null);
+  const api = useApi();
+  const [loading, setLoading] = useState(true);
 
-    const [userLogin, setUserLogin] = useState <Number | null> (null)
-    const api = useApi();
+  useEffect(() => {
+    const recoveredUser = localStorage.getItem("authUser");
 
-    useEffect(() => {
-        validateToken();
-    },)
+    if (recoveredUser) {
+      setUserLogin(Number(recoveredUser));
+    }
+    setLoading(false);
 
-    const validateToken = async () => {
-        try {
-            const storageData = localStorage.getItem('authToken')
-            if(storageData) {
-                const data = await api.validateToken();
-                console.log(data)
-                console.log('da uma olhada aqui', data)
-                if(data.user.id) {
-                    setUserLogin (data.user.id);
-                    return true;
-                }
+  }, []);
 
-            }
-
-            return false
-        } catch (error) {
-            console.log(error)
+  const validateToken = async () => {
+    try {
+      const storageData = localStorage.getItem("authToken");
+      if (storageData) {
+        const data = await api.validateToken();
+        console.log(data);
+        console.log("da uma olhada aqui", data);
+        if (data.user.id) {
+          setUserLogin(data.user.id);
+          return true;
         }
+      }
 
+      return false;
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const setToken = (token: string) => {
-        localStorage.setItem('authToken', token)
+  const setToken = (token: string, id: string) => {
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("authUser", id);
+  };
+
+  const login = async (user: string, passwd: string) => {
+    try {
+      const data = await api.login(user, passwd);
+      if (data.user && data.token) {
+        setUserLogin(data.user.id);
+        setToken(data.token, data.user.id);
+        return data.message;
+      }
+      return {
+        message: "Usuario ou senha incorretos!",
+        type: "error",
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        type: "error",
+        message: "Servidor fora do ar",
+      };
     }
+  };
 
-    const login = async (user: string, passwd:string) => {
-        try {
-            const data = await api.login(user, passwd)
-            if(data.user && data.token) {
-                setUserLogin(data.user.id)
-                setToken(data.token);
-                return data.message
-            }
-            return {
-                message: "Usuario ou senha incorretos!",
-                type: "error"
-            }
-        } catch (err) {
-            console.log(err)
-            return {
-                type: "error",
-                message: "Servidor fora do ar"
-            }
-        }
-    }
+  const logout = async () => {
+    setUserLogin(null);
+    setToken("", "");
+  };
 
-
-    const logout = async () => {
-        setUserLogin(null);
-        setToken('');
-    }
-
-    return (
-        <AuthContext.Provider value={{ userLogin, login, logout, validateToken }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
-
+  return (
+    <AuthContext.Provider
+      value={{
+        authenticated: !!userLogin,
+        userLogin,
+        login,
+        logout,
+        validateToken,
+        loading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};

@@ -29,7 +29,7 @@ const TableCalc = ({data}: DataProps) => {
           >
             {
               data.columns.map(column => 
-              <TableCell style={{color: 'white', fontWeight: 'bold'}}>{column}</TableCell>
+              <TableCell style={{color: 'white', fontWeight: 'bold'}} key={column}>{column}</TableCell>
               )
             }
             {
@@ -51,8 +51,8 @@ const TableCalc = ({data}: DataProps) => {
               </TableCell>
 
               {
-                row.values.map((value) => 
-                  <TableCell>{value}</TableCell>
+                row.values.map((value, index) => 
+                  <TableCell key={index}>{value}</TableCell>
                 )
               }
               {

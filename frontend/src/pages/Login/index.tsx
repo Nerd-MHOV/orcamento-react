@@ -28,6 +28,7 @@ const Login = () => {
             console.log('resposne', response)
             if (response) {
                 setCallback(response)
+                navigate('/')
             } else {
                 setCallback({
                     type: "error",
@@ -41,16 +42,6 @@ const Login = () => {
 
     }
 
-    async function validateUserToken() {
-        console.log(await auth.validateToken())
-        if(auth.userLogin) {
-            navigate('/home')
-        }
-    }
-
-   
-
-
     useEffect(() => {
         if(callback.type) {
             setTimeout(() => {
@@ -58,11 +49,6 @@ const Login = () => {
             }, 5000)
         }
     }, [callback]) 
-
-    useEffect(() => {
-        validateUserToken();
-    }, []) 
-
 
     return (
         <div className="login">
