@@ -11,11 +11,81 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  phone     String 
-  name      String  
-  username  String  @unique 
-  password  String
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  phone    String
+  name     String
+  username String @unique
+  password String
+
+  @@map("users")
 }
 
+model Foods {
+  id    Int   @id @default(autoincrement())
+  adt   Float
+  adtex Float
+  chd0  Float
+  chd4  Float
+  chd8  Float
+
+  Tarrifs Tarrifs[]
+
+  @@map("foods")
+}
+
+model Categories {
+  id       Int    @id @default(autoincrement())
+  initials String @unique
+  name     String @unique
+
+  TarrifValues TarrifValues[]
+
+  @@map("categories")
+}
+
+model Pet {
+  id          Int    @id @default(autoincrement())
+  carrying    String @unique
+  daily_price Float
+}
+
+model Tarrifs {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  product_pipe String
+  active       Boolean
+  order_id     Int     @unique
+  food_id      Int
+
+  food Foods @relation(fields: [food_id], references: [id])
+
+  TarrifValues  TarrifValues[]
+  SpecificDates SpecificDates[]
+
+  @@map("tarrifs")
+}
+
+model TarrifValues {
+  id          Int   @id @default(autoincrement())
+  tarrifs_id  Int
+  category_id Int
+  adt         Float
+  adtex       Float
+  chd0        Float
+  chd4        Float
+  chd8        Float
+
+  tarrifs    Tarrifs    @relation(fields: [tarrifs_id], references: [id])
+  categories Categories @relation(fields: [category_id], references: [id])
+
+  @@map("tarrif_values")
+}
+
+model SpecificDates {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  tarrifs_id Int
+
+  tarrifs Tarrifs @relation(fields: [tarrifs_id], references: [id])
+}
