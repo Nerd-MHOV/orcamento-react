@@ -4,8 +4,8 @@ import './style.scss'
 export type RowsProps = {
   id: number;
   desc: string;
-  values: string[]
-  total: string;
+  values: string[] | number[] | any[]
+  total: string | number;
 }
 
 export type DataProps = {

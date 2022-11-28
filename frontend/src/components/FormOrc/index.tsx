@@ -2,21 +2,22 @@ import { Autocomplete, TextField } from "@mui/material";
 import { handleForm } from "../../pages/Home/handleForm";
 import { useState, useEffect } from "react";
 
-export interface selectionRange {
+export interface FormProps {
     selectionRange: {
         startDate: Date;
         endDate: Date;
         key: string;
-    }
+    },
+    addRows: (rows: any[]) => void
 }
 
-export const FormOrc = ({selectionRange}: selectionRange) => {
+export const FormOrc = ({selectionRange, addRows}: FormProps) => {
   const [childValue, setChildValue] = useState<any[]>([]);
   const [petValue, setPetValue] = useState<any[]>([]);
   const [categoryValue, setCategoryValue] = useState<string | null>(null);
 
   useEffect(() => {
-    handleForm(childValue, petValue, selectionRange);
+    handleForm(childValue, petValue, selectionRange, addRows);
   }, [childValue, petValue, categoryValue]);
 
   return (
@@ -27,7 +28,7 @@ export const FormOrc = ({selectionRange}: selectionRange) => {
         name="adult"
         className="textField"
         variant="standard"
-        onChange={() => handleForm(childValue, petValue, selectionRange)}
+        onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
       />
       <Autocomplete
         multiple
@@ -59,7 +60,7 @@ export const FormOrc = ({selectionRange}: selectionRange) => {
             type="text"
             placeholder="idade"
             variant="standard"
-            onChange={() => handleForm(childValue, petValue, selectionRange)}
+            onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
           />
         )}
       />
@@ -109,7 +110,7 @@ export const FormOrc = ({selectionRange}: selectionRange) => {
         label="Nº Pipe"
         type="number"
         name="numberPipe"
-        onChange={() => handleForm(childValue, petValue, selectionRange)}
+        onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
         className="textField"
         variant="standard"
       />

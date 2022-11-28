@@ -56,6 +56,16 @@ const Home = () => {
             })
     }
 
+    function addRows(rows: any[]) {
+        console.log(rows)
+        // setDataTable((par) => {
+        //     return {
+        //         rows: rows,
+        //         columns: par.columns
+        //     }
+        // })
+    }
+
    
 
     const dataInitial = {
@@ -106,7 +116,7 @@ const Home = () => {
                                 locale={ptBR}
                             />
 
-                            <FormOrc selectionRange={selectionRange} />
+                            <FormOrc selectionRange={selectionRange} addRows={addRows} />
                             
                         </div>
 

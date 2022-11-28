@@ -6,9 +6,19 @@ interface selectionRange {
     key: string;
 }
 
-export function handleForm(childValue: any[], petValue: any[], selectionRange: selectionRange) {
+export function handleForm(childValue: any[], petValue: any[], selectionRange: selectionRange, addRows: (rows: any[]) => void) {
     const formup: HTMLFormElement | any = document.querySelector('#form')
     const responseForm = serialize(formup, { hash: true})
+
+    const umDia = 24*60*60*1000; // horas*minutos*segundos*milisegundos
+
+    const checkin = selectionRange.startDate;
+
+    const checkout = selectionRange.endDate;
+
+    const daily = Math.round(Math.abs((checkin.getTime() - 
+    checkout.getTime())/(umDia)));
+
 
     console.log(responseForm)
     console.log(childValue)
@@ -23,26 +33,33 @@ export function handleForm(childValue: any[], petValue: any[], selectionRange: s
         return
     }
     
-    const valueRs = '100,00'
+    const valueRs = 100
 
     if(responseForm.adult) {
         let count = Number(responseForm.adult)
+        let countDaily = daily;
+        let value = []
+        let total = 0
         while(count > 0) {
 
+            while (countDaily > 0) {
+                value.push(valueRs)
+                total += Number(valueRs)
+                countDaily --;
+            }
+            
+            adultRows.push({
+                id: 100+count, desc: 'adult '+count, value: value, total: total
+            })
             console.log('ok')
             count --;
         }
     }
 
-    let newRows = [
-        {id: 1, desc: 'First', value: ['102', '102'], total: '204'}
-    ]
-    adultRows = [
-        {id: 2, desc: 'Second', value: ['601','601'], total: '1202'}
-    ]
 
     console.log([
-        ...newRows,
         ...adultRows
     ])
+
+    addRows([...adultRows])
 }
