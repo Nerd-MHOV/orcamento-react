@@ -29,7 +29,7 @@ model Foods {
   chd4  Float
   chd8  Float
 
-  Tarrifs Tarrifs[]
+  Tariffs Tariff[]
 
   @@map("foods")
 }
@@ -39,7 +39,7 @@ model Categories {
   initials String @unique
   name     String @unique
 
-  TarrifValues TarrifValues[]
+  TariffValues TariffValues[]
 
   @@map("categories")
 }
@@ -50,25 +50,27 @@ model Pet {
   daily_price Float
 }
 
-model Tarrifs {
+model Tariff {
   id           Int     @id @default(autoincrement())
   name         String  @unique
   product_pipe String
   active       Boolean
-  order_id     Int     @unique
+  order_id     Int     @unique @default(autoincrement())
   food_id      Int
 
   food Foods @relation(fields: [food_id], references: [id])
 
-  TarrifValues  TarrifValues[]
-  SpecificDates SpecificDates[]
+  TariffValues       TariffValues[]
+  SpecificDates      SpecificDates[]
+  tariffs_to_weekend CommonDates[]   @relation("tariff_to_weekend")
+  tariffs_to_midweek CommonDates[]   @relation("tariff_to_midweek")
 
-  @@map("tarrifs")
+  @@map("tariffs")
 }
 
-model TarrifValues {
+model TariffValues {
   id          Int   @id @default(autoincrement())
-  tarrifs_id  Int
+  tariffs_id  Int
   category_id Int
   adt         Float
   adtex       Float
@@ -76,16 +78,26 @@ model TarrifValues {
   chd4        Float
   chd8        Float
 
-  tarrifs    Tarrifs    @relation(fields: [tarrifs_id], references: [id])
+  tariffs    Tariff     @relation(fields: [tariffs_id], references: [id])
   categories Categories @relation(fields: [category_id], references: [id])
 
-  @@map("tarrif_values")
+  @@map("tariff_values")
 }
 
 model SpecificDates {
-  id         Int      @id @default(autoincrement())
-  date       DateTime
-  tarrifs_id Int
+  id         Int    @id @default(autoincrement())
+  date       String @unique
+  tariffs_id Int
 
-  tarrifs Tarrifs @relation(fields: [tarrifs_id], references: [id])
+  tariffs Tariff @relation(fields: [tariffs_id], references: [id])
+}
+
+model CommonDates {
+  id                   Int    @id @default(autoincrement())
+  date                 String @unique
+  tariff_to_midweek_id Int
+  tariff_to_weekend_id Int
+
+  tariff_to_midweek Tariff @relation(name: "tariff_to_midweek", fields: [tariff_to_midweek_id], references: [id])
+  tariff_to_weekend Tariff @relation(name: "tariff_to_weekend", fields: [tariff_to_weekend_id], references: [id])
 }

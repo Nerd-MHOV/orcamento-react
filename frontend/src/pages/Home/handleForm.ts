@@ -27,26 +27,26 @@ export function handleForm(
   console.log(childValue);
   console.log(petValue);
 
-
-  
-
-
   return;
 
   let adultRows = [];
+
   let childRows: {
     id: number;
     desc: string;
     values: number[];
     total: number;
   }[] = [];
+
   let petRows: {
     id: number;
     desc: string;
     values: number[];
     total: number;
   }[] = [];
+
   let totalLastRows = [];
+
   let totalValues: Array<number[]> = [];
 
   if (!responseForm.category) {
@@ -67,7 +67,7 @@ export function handleForm(
         countDaily--;
       }
 
-      totalValues.push(value)
+      totalValues.push(value);
       adultRows.push({
         id: 100 + count,
         desc: "ADT " + count,
@@ -90,7 +90,7 @@ export function handleForm(
         countDaily--;
       }
 
-      totalValues.push(value)
+      totalValues.push(value);
       childRows.push({
         id: 200 + index,
         desc: "CHD com " + child + " anos",
@@ -112,7 +112,7 @@ export function handleForm(
         countDaily--;
       }
 
-      totalValues.push(value)
+      totalValues.push(value);
       childRows.push({
         id: 300 + index,
         desc: "PET porte " + pet,
@@ -122,27 +122,31 @@ export function handleForm(
     });
   }
 
-
-  let totalArrayLast: number[]= [];
+  let totalArrayLast: number[] = [];
   totalValues.map((indicesValues) => {
     indicesValues.map((values, index) => {
-        totalArrayLast[index] = totalArrayLast[index] ? totalArrayLast[index] + values : values;
-    })
-  })
+      totalArrayLast[index] = totalArrayLast[index]
+        ? totalArrayLast[index] + values
+        : values;
+    });
+  });
 
   let totalSome = 0;
-  for(let i = 0; i < totalArrayLast.length; i++) {
-      totalSome += totalArrayLast[i];
+  for (let i = 0; i < totalArrayLast.length; i++) {
+    totalSome += totalArrayLast[i];
   }
 
   totalLastRows.push({
     id: 400,
-    desc: 'TOTAL',
+    desc: "TOTAL",
     values: totalArrayLast,
     total: totalSome,
   });
 
-  console.log('queisso',totalArrayLast.some((element) => element));
+  console.log(
+    "queisso",
+    totalArrayLast.some((element) => element)
+  );
 
   addRows([...adultRows, ...childRows, ...petRows, ...totalLastRows]);
 }
