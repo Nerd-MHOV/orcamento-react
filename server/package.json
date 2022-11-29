@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --exit-child --ignore-watch node_modules src/server.ts"
+    "dev": "ts-node-dev --transpile-only --exit-child --ignore-watch node_modules src/server.ts",
+    "build": "rm -rf ./dist && tsc",
+    "start": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
