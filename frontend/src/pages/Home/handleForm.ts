@@ -12,15 +12,13 @@ export function handleForm(
   selectionRange: selectionRange,
   addRows: (rows: any[]) => void
 ) {
-  const formup: HTMLFormElement | any = document.querySelector("#form");
-  const responseForm = serialize(formup, { hash: true });
+  const formUp: HTMLFormElement | any = document.querySelector("#form");
+  const responseForm = serialize(formUp, { hash: true });
 
-  const oneDay = 24 * 60 * 60 * 1000; // horas*minutos*segundos*milisegundos
-
+  //diarias
+  const oneDay = 24 * 60 * 60 * 1000; // horas*min*seg*mile
   const checkin = selectionRange.startDate;
-
   const checkout = selectionRange.endDate;
-
   const daily = Math.round(
     Math.abs((checkin.getTime() - checkout.getTime()) / oneDay)
   );
@@ -28,6 +26,12 @@ export function handleForm(
   console.log(responseForm);
   console.log(childValue);
   console.log(petValue);
+
+
+  
+
+
+  return;
 
   let adultRows = [];
   let childRows: {
@@ -42,7 +46,7 @@ export function handleForm(
     values: number[];
     total: number;
   }[] = [];
-  let totallastRows = [];
+  let totalLastRows = [];
   let totalValues: Array<number[]> = [];
 
   if (!responseForm.category) {
@@ -70,7 +74,6 @@ export function handleForm(
         values: value,
         total: total,
       });
-      console.log("ok");
       count--;
     }
   }
@@ -120,27 +123,26 @@ export function handleForm(
   }
 
 
-  console.log('TOTAL', totalValues)
-  let totaldosTotaisTotalizador: number[]= [];
+  let totalArrayLast: number[]= [];
   totalValues.map((indicesValues) => {
     indicesValues.map((values, index) => {
-        console.log('deplay', values)
-        totaldosTotaisTotalizador[index] = totaldosTotaisTotalizador[index] ? totaldosTotaisTotalizador[index] + values : values;
+        totalArrayLast[index] = totalArrayLast[index] ? totalArrayLast[index] + values : values;
     })
   })
 
-  console.log('nan', totaldosTotaisTotalizador)
+  let totalSome = 0;
+  for(let i = 0; i < totalArrayLast.length; i++) {
+      totalSome += totalArrayLast[i];
+  }
 
-  totallastRows.push({
+  totalLastRows.push({
     id: 400,
     desc: 'TOTAL',
-    values: totaldosTotaisTotalizador,
-    total: totaldosTotaisTotalizador.some((element) => {
-        return element;
-      }),
+    values: totalArrayLast,
+    total: totalSome,
   });
 
-  console.log([...adultRows]);
+  console.log('queisso',totalArrayLast.some((element) => element));
 
-  addRows([...adultRows, ...childRows, ...petRows, ...totallastRows]);
+  addRows([...adultRows, ...childRows, ...petRows, ...totalLastRows]);
 }
