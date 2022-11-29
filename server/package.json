@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --exit-child --ignore-watch node_modules src/server.ts"
+    "dev": "ts-node-dev --transpile-only --exit-child --ignore-watch node_modules src/server.ts",
+    "start": "node src/server.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

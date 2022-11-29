@@ -16,7 +16,7 @@ const createUser = new CreateUserController();
 const findUser = new FindUserController();
 const deleteUser = new DeleteUsersController();
 const loginUser = new LoginUsersController();
-const validateUset = new ValidateUsersController();
+const validateUser = new ValidateUsersController();
 
 const createFood = new CreateFoodController();
 const findFood = new FindFoodController();
@@ -30,7 +30,7 @@ routes.post("/login", loginUser.handle);
 routes.use(authMiddleware);
 routes.delete("/user", deleteUser.handle);
 routes.get("/user", findUser.handle);
-routes.get("/validate", validateUset.handle);
+routes.get("/validate", validateUser.handle);
 
 routes.get("/food", findFood.handle);
 routes.post("/food", createFood.handle);
