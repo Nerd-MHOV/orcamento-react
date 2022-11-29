@@ -1,6 +1,7 @@
 import express from "express";
 import routes from "./routes";
 import cors from "cors";
+import { errorMiddleware } from "./middlewares/error";
 
 require("dotenv").config();
 
@@ -22,10 +23,7 @@ app.use(
 app.use(express.json());
 app.use(routes);
 
-try {
-  app.listen(3333, () => {
-    console.log("Server is running in " + port);
-  });
-} catch (err) {
-  console.log(err);
-}
+app.use(errorMiddleware);
+app.listen(3333, () => {
+  console.log("Server is running in " + port);
+});
