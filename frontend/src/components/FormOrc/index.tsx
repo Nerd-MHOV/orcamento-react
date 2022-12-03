@@ -3,22 +3,34 @@ import { handleForm } from "../../pages/Home/handleForm";
 import { useState, useEffect } from "react";
 
 export interface FormProps {
-    selectionRange: {
-        startDate: Date;
-        endDate: Date;
-        key: string;
-    },
-    addRows: (rows: any[]) => void
+  selectionRange: {
+    startDate: Date;
+    endDate: Date;
+    key: string;
+  };
+  addRows: (rows: any[]) => void;
 }
 
-export const FormOrc = ({selectionRange, addRows}: FormProps) => {
+const optionsCategories = [
+  { label: "padrão", input: 1 },
+  { label: "padrão varanda", input: 2 },
+  { label: "luxo", input: 3 },
+  { label: "luxo conjugado", input: 4 },
+  { label: "luxo com hidro", input: 5 },
+];
+
+export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   const [childValue, setChildValue] = useState<any[]>([]);
   const [petValue, setPetValue] = useState<any[]>([]);
-  const [categoryValue, setCategoryValue] = useState<string | null>(null);
+  const [categoryValue, setCategoryValue] = useState<{
+    label: string;
+    input: number;
+  } | null>(null);
+  const [pensionValue, setPensionValue] = useState<string | null>(null);
 
   useEffect(() => {
     handleForm(childValue, petValue, selectionRange, addRows);
-  }, [childValue, petValue, categoryValue]);
+  }, [childValue, petValue, categoryValue, pensionValue]);
 
   return (
     <form id="form" className="form">
@@ -28,7 +40,9 @@ export const FormOrc = ({selectionRange, addRows}: FormProps) => {
         name="adult"
         className="textField"
         variant="standard"
-        onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
+        onChange={() =>
+          handleForm(childValue, petValue, selectionRange, addRows)
+        }
       />
       <Autocomplete
         multiple
@@ -60,7 +74,9 @@ export const FormOrc = ({selectionRange, addRows}: FormProps) => {
             type="text"
             placeholder="idade"
             variant="standard"
-            onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
+            onChange={() =>
+              handleForm(childValue, petValue, selectionRange, addRows)
+            }
           />
         )}
       />
@@ -85,12 +101,7 @@ export const FormOrc = ({selectionRange, addRows}: FormProps) => {
         )}
       />
       <Autocomplete
-        options={[
-          "padrão",
-          "padrão varanda",
-          "luxo",
-          "luxo hidro ou conjugado",
-        ]}
+        options={optionsCategories}
         className="textField"
         onChange={(_, newValue) => {
           setCategoryValue(newValue);
@@ -106,11 +117,30 @@ export const FormOrc = ({selectionRange, addRows}: FormProps) => {
           />
         )}
       />
+      <Autocomplete
+        options={["simples", "meia", "completa"]}
+        className="textField"
+        onChange={(_, newValue) => {
+          setPensionValue(newValue);
+        }}
+        value={pensionValue}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="pension"
+            label="Pensão"
+            type="text"
+            variant="standard"
+          />
+        )}
+      />
       <TextField
         label="Nº Pipe"
         type="number"
         name="numberPipe"
-        onChange={() => handleForm(childValue, petValue, selectionRange, addRows)}
+        onChange={() =>
+          handleForm(childValue, petValue, selectionRange, addRows)
+        }
         className="textField"
         variant="standard"
       />

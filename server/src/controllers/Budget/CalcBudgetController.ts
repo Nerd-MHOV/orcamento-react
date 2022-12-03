@@ -1,21 +1,35 @@
-import { addDays, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { addDays } from "date-fns";
 import { Request, Response } from "express";
-import { prismaClient } from "../../database/prismaClient";
-import { getTariff } from "./getTariff";
+import { adultBudget } from "./adultBudget";
+import { childBudget } from "./childBudget";
+import { petBudget } from "./petBudget";
 
-type RowsProps = {
+export type RowsProps = {
   id: number;
   desc: string;
-  values: {
-    [key: string]: number;
-  }[];
+  values: number[];
   total: number;
 };
 
+export type PetProps = "pequeno" | "médio" | "grande";
+
 export class CalcBudgetController {
   async handle(request: Request, response: Response) {
-    const { arrForm, arrChild, arrPet, rangeDate } = request.body;
+    const {
+      arrForm,
+      arrChild,
+      arrPet,
+      rangeDate,
+    }: {
+      arrForm: any[];
+      arrChild: string[];
+      arrPet: PetProps[];
+      rangeDate: {
+        startDate: string;
+        endDate: string;
+        [key: string]: any;
+      };
+    } = request.body;
 
     //vars:
     let adultRows: RowsProps[] = [];
@@ -29,48 +43,16 @@ export class CalcBudgetController {
 
     finalDate = addDays(finalDate, 1);
 
-    //ADULT
-    let amountAdults = arrForm.adult ?? 0;
-    let countAdult = 0;
-    while (countAdult < amountAdults) {
-      countAdult++;
+    //adult
+    adultRows = await adultBudget(arrForm, initDate, finalDate);
 
-      if (countAdult <= 2) {
-        let valuesAdult: {
-          [key: string]: number;
-        }[] = [];
-        let totalAdult = 0;
+    //child
+    childRows = await childBudget(arrChild, arrForm, initDate, finalDate);
 
-        while (initDate < finalDate) {
-          let dayMonthYear = format(initDate, "yyyy-MM-dd");
-          let monthYear = format(initDate, "yyyy-MM");
-          let tariffAdult = 0;
-          let tariffs = await getTariff(dayMonthYear, monthYear);
-
-          if (tariffs.tariff_mw) {
-          }
-
-          return response.json(tariffs);
-          valuesAdult.push({
-            [dayMonthYear]: tariffAdult,
-          });
-
-          initDate = addDays(initDate, 1);
-        }
-
-        adultRows.push({
-          id: 100 + countAdult,
-          desc: "Adulto " + countAdult,
-          values: valuesAdult,
-          total: totalAdult,
-        });
-      } else {
-      }
-    }
+    //pet
+    petRows = await petBudget(arrPet, initDate, finalDate, arrForm);
 
     let completeRows = [...adultRows, ...childRows, ...petRows, ...lastRow];
-
-    console.log(completeRows, "que");
 
     return response.json(completeRows);
   }

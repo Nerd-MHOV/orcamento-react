@@ -62,27 +62,8 @@ const Home = () => {
   }
 
   const dataInitial = {
-    rows: [
-      // {
-      //     id: 1,
-      //     desc: 'Adulto 1',
-      //     values: ['102,00', '102,00', '102,00', '102,00'],
-      //     total: '408,00'
-      // },
-      // {
-      //     id: 2,
-      //     desc: 'Adulto 2',
-      //     values: ['102,00', '102,00', '102,00', '102,00'],
-      //     total: '408,00'
-      // },
-      // {
-      //     id: 3,
-      //     desc: 'TOTAL',
-      //     values: ['204,00', '204,00', '204,00', '204,00'],
-      //     total: '816,00',
-      // }
-    ],
-    columns: ["desc", "segunda", "terça", "quarta", "quinta"],
+    rows: [],
+    columns: [],
   };
 
   useEffect(() => {
