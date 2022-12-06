@@ -11,6 +11,18 @@
           display: none;
         }
 
+        .buttons {
+          margin-top: 15px;
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+          .boxButtons {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+          }
+        }
+
         .top {
           display: flex;
           justify-content: space-around;
@@ -24,6 +36,10 @@
             display: grid;
 
           }
+        }
+
+        .bottom {
+          margin-top: 15px;
         }
       }
       .charts {

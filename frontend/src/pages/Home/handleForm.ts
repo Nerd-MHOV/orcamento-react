@@ -11,15 +11,11 @@ export async function handleForm(
   childValue: any[],
   petValue: any[],
   selectionRange: selectionRange,
-  addRows: (rows: any[]) => void
+  addRows: (rows: any[], category: string, pension: string) => void
 ) {
   const api = useApi();
   const formUp: HTMLFormElement | any = document.querySelector("#form");
   const responseForm = serialize(formUp, { hash: true });
-
-  console.log(responseForm, "pensinos");
-  console.log(childValue);
-  console.log(petValue);
 
   if (!responseForm.category || !responseForm.pension) return;
 
@@ -29,7 +25,10 @@ export async function handleForm(
     petValue,
     selectionRange
   );
-  console.log(response, "response");
 
-  addRows(response);
+  addRows(
+    response,
+    String(responseForm.category),
+    String(responseForm.pension)
+  );
 }

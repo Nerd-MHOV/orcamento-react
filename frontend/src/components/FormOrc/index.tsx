@@ -8,7 +8,7 @@ export interface FormProps {
     endDate: Date;
     key: string;
   };
-  addRows: (rows: any[]) => void;
+  addRows: (rows: any[], category: string, pension: string) => void;
 }
 
 const optionsCategories = [
@@ -30,7 +30,7 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
 
   useEffect(() => {
     handleForm(childValue, petValue, selectionRange, addRows);
-  }, [childValue, petValue, categoryValue, pensionValue]);
+  }, [childValue, petValue, categoryValue, pensionValue, selectionRange]);
 
   return (
     <form id="form" className="form">

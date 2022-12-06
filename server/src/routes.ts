@@ -55,7 +55,7 @@ const calcBudget = new CalcBudgetController();
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
 
-//routes.use(authMiddleware);
+// routes.use(authMiddleware);
 routes.delete("/user", deleteUser.handle);
 routes.get("/user", findUser.handle);
 routes.get("/validate", validateUser.handle);

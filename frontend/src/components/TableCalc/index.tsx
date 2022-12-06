@@ -23,6 +23,8 @@ export type DataProps = {
 export type DataContentProps = {
   rows: Array<RowsProps> | [];
   columns: string[] | [];
+  category?: string;
+  pension?: string;
 };
 
 const TableCalc = ({ data }: DataProps) => {
@@ -94,23 +96,27 @@ const TableCalc = ({ data }: DataProps) => {
               "&:last-child td": { background: "rgb(248,248,248)" },
             }}
           >
-            <TableCell
-              component="th"
-              scope="row"
-              style={{ background: "rgb(248,248,248)" }}
-            >
-              TOTAL
-            </TableCell>
+            {!!total && (
+              <>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ background: "rgb(248,248,248)" }}
+                >
+                  TOTAL
+                </TableCell>
 
-            {totalPerRow.map((value, index) => (
-              <TableCell key={index}>{value}</TableCell>
-            ))}
+                {totalPerRow.map((value, index) => (
+                  <TableCell key={index}>{value}</TableCell>
+                ))}
 
-            <TableCell
-              style={{ background: "rgb(248,248,248)", fontWeight: "bold" }}
-            >
-              {total}
-            </TableCell>
+                <TableCell
+                  style={{ background: "rgb(248,248,248)", fontWeight: "bold" }}
+                >
+                  {total}
+                </TableCell>
+              </>
+            )}
           </TableRow>
         </TableBody>
       </Table>
