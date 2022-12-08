@@ -1,4 +1,4 @@
-import { cloneElement, useEffect, useState } from "react";
+import { cloneElement, useContext, useEffect, useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import { addDays } from "date-fns/esm";
 import { ptBR } from "date-fns/locale";
@@ -22,8 +22,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Delete, Folder, Paid } from "@mui/icons-material";
+import { useApi } from "../../hooks/api";
+import pdfBudget from "./pdfBudget";
+import { AuthContext } from "../../context/authContext";
 
 const Home = () => {
+  const api = useApi();
+  const { userLogin } = useContext(AuthContext);
   const [dense, setDense] = useState(false);
   const [dataTable, setDataTable] = useState<DataContentProps>({
     rows: [],
@@ -31,8 +36,7 @@ const Home = () => {
   });
 
   const [budgets, setBudgets] = useState<DataContentProps[]>([]);
-  const [category, setCategory] = useState<string>("");
-  const [pension, setPension] = useState<string>("");
+  const [arrComplete, setArrComplete] = useState<any>([]);
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -66,22 +70,26 @@ const Home = () => {
     });
   }
 
-  function addRows(rows: any[], category: string, pension: string) {
-    console.log(rows);
+  function addRows(rows: any[], arrComplete: any) {
+    console.log(arrComplete, "arr");
     setDataTable((par) => {
       return {
         rows: rows,
         columns: par.columns,
       };
     });
-    setCategory(category);
-    setPension(pension);
+    setArrComplete(arrComplete);
   }
 
   function deleteLine(indexDelete: number) {
     setBudgets((old) => {
       return old.filter((arr, index) => index !== indexDelete);
     });
+  }
+
+  async function generatePdfBudget() {
+    const arrUser = await api.findUniqueUser(userLogin);
+    pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone);
   }
 
   const dataInitial = {
@@ -126,7 +134,7 @@ const Home = () => {
                   {budgets.map((budget, index) => {
                     console.log("budget", budget);
                     let countDaily = budget.columns.length - 2;
-                    let primary = `${countDaily} diárias no ${budget.category}`;
+                    let primary = `${countDaily} diárias no ${budget.arrComplete.responseForm.category}`;
                     let total = 0;
                     budget.rows.map((row) => {
                       total += Number(row.total);
@@ -151,7 +159,12 @@ const Home = () => {
                           </ListItemAvatar>
                           <ListItemText
                             primary={primary}
-                            secondary={`Pensão: ${budget.pension} \n Total: ${total}`}
+                            secondary={`Pensão: ${
+                              budget.arrComplete.responseForm.pension
+                            } \n Total: R$ ${total.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}`}
                           />
                         </ListItem>
                       </List>
@@ -168,10 +181,7 @@ const Home = () => {
                       return;
                     }
                     setBudgets((old) => {
-                      return [
-                        ...old,
-                        { ...dataTable, category: category, pension: pension },
-                      ];
+                      return [...old, { ...dataTable, arrComplete }];
                     });
                     console.log("budgets", budgets);
                   }}
@@ -179,7 +189,7 @@ const Home = () => {
                 <Btn
                   action="Gerar PDF Orçamento"
                   color="darkBlue"
-                  onClick={() => {}}
+                  onClick={generatePdfBudget}
                 />
                 <Btn
                   action="Gerar PDF tarifa"

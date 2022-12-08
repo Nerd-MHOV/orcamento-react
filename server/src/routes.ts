@@ -16,6 +16,7 @@ import { CreateTariffValueController } from "./controllers/TariffValue/CreateTar
 import { FindTariffValueController } from "./controllers/TariffValue/FindTariffValueController";
 import { CreateUserController } from "./controllers/Users/CreateUsersController";
 import { DeleteUsersController } from "./controllers/Users/DeleteUsersController";
+import { FindUniqueUserController } from "./controllers/Users/FindUniqueUserController";
 import { FindUserController } from "./controllers/Users/FindUsersController";
 import { LoginUsersController } from "./controllers/Users/LoginUsersController";
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
@@ -25,6 +26,7 @@ const routes = express.Router();
 
 const createUser = new CreateUserController();
 const findUser = new FindUserController();
+const findUniqueUser = new FindUniqueUserController();
 const deleteUser = new DeleteUsersController();
 const loginUser = new LoginUsersController();
 const validateUser = new ValidateUsersController();
@@ -59,6 +61,7 @@ routes.post("/login", loginUser.handle);
 routes.delete("/user", deleteUser.handle);
 routes.get("/user", findUser.handle);
 routes.get("/validate", validateUser.handle);
+routes.post("/unique-user", findUniqueUser.handle);
 
 routes.get("/food", findFood.handle);
 routes.post("/food", createFood.handle);

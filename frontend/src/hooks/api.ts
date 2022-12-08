@@ -16,6 +16,7 @@ export const useApi = () => ({
     const response = await api.get("/validate");
     return response.data;
   },
+
   login: async (username: string, password: string) => {
     const response = await api.post("/login", { username, password });
     return response.data;
@@ -38,7 +39,11 @@ export const useApi = () => ({
       arrPet,
       rangeDate,
     });
+    return response.data;
+  },
 
+  findUniqueUser: async (id: number) => {
+    const response = await api.post("/unique-user", { id });
     return response.data;
   },
 });

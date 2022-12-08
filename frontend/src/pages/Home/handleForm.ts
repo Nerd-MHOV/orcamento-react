@@ -11,7 +11,7 @@ export async function handleForm(
   childValue: any[],
   petValue: any[],
   selectionRange: selectionRange,
-  addRows: (rows: any[], category: string, pension: string) => void
+  addRows: (rows: any[], arrComplete: any) => void
 ) {
   const api = useApi();
   const formUp: HTMLFormElement | any = document.querySelector("#form");
@@ -26,9 +26,5 @@ export async function handleForm(
     selectionRange
   );
 
-  addRows(
-    response,
-    String(responseForm.category),
-    String(responseForm.pension)
-  );
+  addRows(response, { responseForm, childValue, petValue, selectionRange });
 }

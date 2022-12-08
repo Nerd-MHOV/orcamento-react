@@ -23,8 +23,7 @@ export type DataProps = {
 export type DataContentProps = {
   rows: Array<RowsProps> | [];
   columns: string[] | [];
-  category?: string;
-  pension?: string;
+  arrComplete?: any;
 };
 
 const TableCalc = ({ data }: DataProps) => {
