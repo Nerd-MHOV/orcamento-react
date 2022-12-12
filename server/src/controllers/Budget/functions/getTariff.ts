@@ -1,4 +1,4 @@
-import { prismaClient } from "../../database/prismaClient";
+import { prismaClient } from "../../../database/prismaClient";
 
 export async function getTariff(specificDay: string, commonDay: string) {
   const responseSpecific = await prismaClient.specificDates.findFirst({
@@ -15,7 +15,6 @@ export async function getTariff(specificDay: string, commonDay: string) {
     },
   });
 
-  console.log(responseSpecific);
   if (responseSpecific) {
     return {
       type: "specific",

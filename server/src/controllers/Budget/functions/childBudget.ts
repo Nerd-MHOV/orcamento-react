@@ -1,19 +1,17 @@
-import { RowsProps } from "./CalcBudgetController";
+import { ArrFormProps, RowsProps } from "../CalcBudgetController";
 import { generateBudget } from "./generateBudget";
 
 export async function childBudget(
-  arrChild: string[],
-  arrForm: any[],
+  arrChild: number[],
+  arrForm: ArrFormProps,
   initDate: Date,
   finalDate: Date
 ) {
+  let amountAdults = arrForm.adult ?? 0;
+  let amountChild = arrChild.length;
   let childRows: RowsProps[] = [];
 
-  arrChild.sort(function (a, b) {
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
-  });
+  arrChild.sort((a, b) => a - b);
   for (let countChild = 0; countChild < arrChild.length; countChild++) {
     const numChild = countChild + 1;
     let valuesChild: number[] = [];
@@ -36,6 +34,10 @@ export async function childBudget(
         "chd8",
         true
       );
+
+    if (Number(amountAdults) === 1 && countChild === amountChild - 1) {
+      valuesChild = await generateBudget(initDate, finalDate, arrForm, "adt");
+    }
 
     for (let i = 0; i < valuesChild.length; i++) {
       totalChild += valuesChild[i];

@@ -1,6 +1,5 @@
 import { addDays, format } from "date-fns";
-import { prismaClient } from "../../database/prismaClient";
-import { getTariff } from "./getTariff";
+import { prismaClient } from "../../../database/prismaClient";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
@@ -16,7 +15,9 @@ export async function generateBudgetPet(
     let tariffBudget = 0;
     let tariffs = await prismaClient.pet.findMany();
 
-    let tariffSpecific = tariffs.filter((arr) => arr.carrying === carrying);
+    let tariffSpecific = tariffs.filter(
+      (arr: any) => arr.carrying === carrying
+    );
     if (tariffSpecific) tariffBudget = tariffSpecific[0].daily_price;
 
     valuesBudget.push(tariffBudget);

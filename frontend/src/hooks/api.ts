@@ -31,12 +31,14 @@ export const useApi = () => ({
     arrForm: any,
     arrChild: string[],
     arrPet: string[],
+    arrRequirement: string[],
     rangeDate: selectionRange
   ) => {
     const response = await api.post("/budget", {
       arrForm,
       arrChild,
       arrPet,
+      arrRequirement,
       rangeDate,
     });
     return response.data;
@@ -44,6 +46,11 @@ export const useApi = () => ({
 
   findUniqueUser: async (id: number) => {
     const response = await api.post("/unique-user", { id });
+    return response.data;
+  },
+
+  getRequirements: async () => {
+    const response = await api.get("/requirement");
     return response.data;
   },
 });

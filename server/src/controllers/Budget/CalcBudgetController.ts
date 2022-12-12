@@ -1,8 +1,10 @@
 import { addDays } from "date-fns";
 import { Request, Response } from "express";
-import { adultBudget } from "./adultBudget";
-import { childBudget } from "./childBudget";
-import { petBudget } from "./petBudget";
+import { adultBudget } from "./functions/adultBudget";
+import { childBudget } from "./functions/childBudget";
+import { discountBudget } from "./functions/discountBudget";
+import { petBudget } from "./functions/petBudget";
+import { requirementBudget } from "./functions/requirementBudget";
 
 export type RowsProps = {
   id: number;
@@ -10,6 +12,14 @@ export type RowsProps = {
   values: number[];
   total: number;
 };
+
+export interface ArrFormProps {
+  adult?: number;
+  discount?: number;
+  category?: string;
+  pension?: string;
+  numberPipe?: number;
+}
 
 export type PetProps = "pequeno" | "médio" | "grande";
 
@@ -19,11 +29,13 @@ export class CalcBudgetController {
       arrForm,
       arrChild,
       arrPet,
+      arrRequirement,
       rangeDate,
     }: {
-      arrForm: any[];
-      arrChild: string[];
+      arrForm: ArrFormProps;
+      arrChild: number[];
       arrPet: PetProps[];
+      arrRequirement: string[];
       rangeDate: {
         startDate: string;
         endDate: string;
@@ -36,7 +48,8 @@ export class CalcBudgetController {
     let childRows: RowsProps[] = [];
     let petRows: RowsProps[] = [];
 
-    let lastRow: RowsProps[] = [];
+    let requirementRows: RowsProps[] = [];
+    let discountRow: RowsProps[] = [];
 
     let initDate = new Date(rangeDate.startDate);
     let finalDate = new Date(rangeDate.endDate);
@@ -44,7 +57,7 @@ export class CalcBudgetController {
     finalDate = addDays(finalDate, 1);
 
     //adult
-    adultRows = await adultBudget(arrForm, initDate, finalDate);
+    adultRows = await adultBudget(arrForm, arrChild, initDate, finalDate);
 
     //child
     childRows = await childBudget(arrChild, arrForm, initDate, finalDate);
@@ -52,8 +65,27 @@ export class CalcBudgetController {
     //pet
     petRows = await petBudget(arrPet, initDate, finalDate, arrForm);
 
-    let completeRows = [...adultRows, ...childRows, ...petRows, ...lastRow];
+    //requirement
+    requirementRows = await requirementBudget(
+      initDate,
+      finalDate,
+      arrForm,
+      arrRequirement
+    );
 
-    return response.json(completeRows);
+    //discountRow
+    discountRow = await discountBudget(arrForm, arrChild, initDate, finalDate);
+
+    let completeRows = [
+      ...adultRows,
+      ...childRows,
+      ...petRows,
+      ...requirementRows,
+      ...discountRow,
+    ];
+
+    return response.json({
+      rows: completeRows,
+    });
   }
 }

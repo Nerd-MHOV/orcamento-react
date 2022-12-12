@@ -1,8 +1,9 @@
-import { RowsProps } from "./CalcBudgetController";
+import { RowsProps } from "../CalcBudgetController";
 import { generateBudget } from "./generateBudget";
 
 export async function adultBudget(
   arrForm: any,
+  arrChild: number[],
   initDate: Date,
   finalDate: Date
 ) {
@@ -18,6 +19,11 @@ export async function adultBudget(
       valuesAdult = await generateBudget(initDate, finalDate, arrForm, "adt");
     } else {
       valuesAdult = await generateBudget(initDate, finalDate, arrForm, "adtex");
+    }
+
+    //single
+    if (Number(amountAdults) === 1 && arrChild.length === 0) {
+      valuesAdult = valuesAdult.map((value) => value * 2);
     }
 
     for (let i = 0; i < valuesAdult.length; i++) {

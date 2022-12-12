@@ -1,0 +1,12 @@
+.form{    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .textField {
+        margin: 2px;
+    }
+    .formBox{
+        display: flex;
+        flex-direction: column;
+    }
+}

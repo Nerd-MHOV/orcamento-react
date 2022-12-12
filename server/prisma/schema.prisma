@@ -48,6 +48,8 @@ model Pet {
   id          Int    @id @default(autoincrement())
   carrying    String @unique
   daily_price Float
+
+  @@map("pets")
 }
 
 model Tariff {
@@ -60,10 +62,11 @@ model Tariff {
 
   food Foods @relation(fields: [food_id], references: [id])
 
-  TariffValues       TariffValues[]
-  SpecificDates      SpecificDates[]
-  tariffs_to_weekend CommonDates[]   @relation("tariff_to_weekend")
-  tariffs_to_midweek CommonDates[]   @relation("tariff_to_midweek")
+  TariffValues        TariffValues[]
+  SpecificDates       SpecificDates[]
+  tariffs_to_weekend  CommonDates[]         @relation("tariff_to_weekend")
+  tariffs_to_midweek  CommonDates[]         @relation("tariff_to_midweek")
+  TariffCheckInValues TariffCheckInValues[]
 
   @@map("tariffs")
 }
@@ -90,6 +93,8 @@ model SpecificDates {
   tariffs_id Int
 
   tariffs Tariff @relation(fields: [tariffs_id], references: [id])
+
+  @@map("specific_dates")
 }
 
 model CommonDates {
@@ -100,4 +105,28 @@ model CommonDates {
 
   tariff_to_midweek Tariff @relation(name: "tariff_to_midweek", fields: [tariff_to_midweek_id], references: [id])
   tariff_to_weekend Tariff @relation(name: "tariff_to_weekend", fields: [tariff_to_weekend_id], references: [id])
+
+  @@map("common_dates")
+}
+
+model Requirement {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  price Float
+
+  @@map("requirements")
+}
+
+model TariffCheckInValues {
+  id         Int   @id @default(autoincrement())
+  tariffs_id Int
+  adt        Float
+  adtex      Float
+  chd0       Float
+  chd4       Float
+  chd8       Float
+
+  tariffs Tariff @relation(fields: [tariffs_id], references: [id])
+
+  @@map("tariff_checkin_values")
 }

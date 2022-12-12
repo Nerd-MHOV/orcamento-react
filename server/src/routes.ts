@@ -8,6 +8,7 @@ import { CreateFoodController } from "./controllers/Food/CreateFoodController";
 import { FindFoodController } from "./controllers/Food/FindFoodController";
 import { CreatePetController } from "./controllers/Pet/CreatePetController";
 import { FindPetController } from "./controllers/Pet/FindPetController";
+import { FindRequirementsController } from "./controllers/Requirement/FindRequirementsController";
 import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateSpecificDateController";
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
 import { CreateTariffController } from "./controllers/Tariff/CreateTariffController";
@@ -52,6 +53,8 @@ const createCommonDate = new CreateCommonDateController();
 const findSpecificDate = new FindSpecificDateController();
 const createSpecificDate = new CreateSpecificDateController();
 
+const FindRequirements = new FindRequirementsController();
+
 const calcBudget = new CalcBudgetController();
 
 routes.post("/user", createUser.handle);
@@ -83,6 +86,8 @@ routes.post("/commondate", createCommonDate.handle);
 
 routes.get("/specificdate", findSpecificDate.handle);
 routes.post("/specificdate", createSpecificDate.handle);
+
+routes.get("/requirement", FindRequirements.handle);
 
 routes.post("/budget", calcBudget.handle);
 

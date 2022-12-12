@@ -105,11 +105,13 @@ async function pdfBudget(
     });
 
     rowBudget.push({
-      text:
-        budget.arrComplete.responseForm.category.toUpperCase() +
-        adultSting +
-        childString +
-        petString,
+      text: [
+        {
+          text: budget.arrComplete.responseForm.category.toUpperCase(),
+          bold: true,
+        },
+        adultSting + childString + petString,
+      ],
       style: "tbody",
       border: [false, false, false, true],
       borderColor: "#c8c8c8",
@@ -124,6 +126,7 @@ async function pdfBudget(
       border: [false, false, false, true],
       borderColor: "#c8c8c8",
       margin: 8,
+      bold: true,
     });
     rowBudget.push({
       text:

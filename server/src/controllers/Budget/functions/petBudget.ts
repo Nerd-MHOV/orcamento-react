@@ -1,11 +1,11 @@
-import { PetProps, RowsProps } from "./CalcBudgetController";
+import { ArrFormProps, PetProps, RowsProps } from "../CalcBudgetController";
 import { generateBudgetPet } from "./generateBudgetPet";
 
 export async function petBudget(
   arrPet: PetProps[],
   initDate: Date,
   finalDate: Date,
-  arrForm: any[]
+  arrForm: ArrFormProps
 ) {
   let petRows: RowsProps[] = [];
 

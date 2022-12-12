@@ -1,6 +1,6 @@
 import { Categories } from "@prisma/client";
 import { addDays, format } from "date-fns";
-import { prismaClient } from "../../database/prismaClient";
+import { prismaClient } from "../../../database/prismaClient";
 import { getTariff } from "./getTariff";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
@@ -14,7 +14,6 @@ export async function generateBudget(
 ) {
   const valuesBudget = [];
 
-  console.log("VALORES: ", [initDate, finalDate, arrForm, ageGroup, onlyFood]);
   while (initDate < finalDate) {
     let dayMonthYear = format(initDate, "yyyy-MM-dd");
     let monthYear = format(initDate, "yyyy-MM");
@@ -49,7 +48,7 @@ export async function generateBudget(
       }
 
       let tariffDay = tariffWeek.filter(
-        (arr) => arr.category_id === numCategory.id
+        (arr: any) => arr.category_id === numCategory.id
       )[0];
 
       tariffBudget = tariffDay[ageGroup] + tariffFood;

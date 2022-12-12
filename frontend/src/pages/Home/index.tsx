@@ -1,4 +1,4 @@
-import { cloneElement, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import { addDays } from "date-fns/esm";
 import { ptBR } from "date-fns/locale";
@@ -29,7 +29,6 @@ import { AuthContext } from "../../context/authContext";
 const Home = () => {
   const api = useApi();
   const { userLogin } = useContext(AuthContext);
-  const [dense, setDense] = useState(false);
   const [dataTable, setDataTable] = useState<DataContentProps>({
     rows: [],
     columns: [],
@@ -140,7 +139,7 @@ const Home = () => {
                       total += Number(row.total);
                     });
                     return (
-                      <List dense={dense} key={index}>
+                      <List dense={true} key={index}>
                         <ListItem
                           secondaryAction={
                             <IconButton
