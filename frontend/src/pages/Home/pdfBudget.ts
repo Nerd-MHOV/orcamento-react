@@ -504,7 +504,11 @@ async function pdfBudget(
                   {
                     text: [
                       `Faça a sua reserva antecipadamente para a visita na Fundação CEU e ganhe 20% de
-                              descontos nos ingressos integrais! www.fundacaoceu.org.br`,
+                              descontos nos ingressos integrais! www.fundacaoceu.org.br\n`,
+                      {
+                        text: "Consulte se há sessão aberta e disponivel na data de sua estada",
+                        bold: true,
+                      },
                     ],
                     border: [false, false, false, true],
                     borderColor: ["", "", "", "#c8c8c8"],

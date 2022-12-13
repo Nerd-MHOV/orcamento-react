@@ -118,8 +118,9 @@ model Requirement {
 }
 
 model TariffCheckInValues {
-  id         Int   @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
   tariffs_id Int
+  type       String
   adt        Float
   adtex      Float
   chd0       Float

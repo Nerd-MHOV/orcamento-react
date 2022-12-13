@@ -1,4 +1,5 @@
 import serialize from "form-serialize";
+import { RequirementSubmitProps } from "../../components/FormOrc";
 import { useApi } from "../../hooks/api";
 
 export interface selectionRange {
@@ -8,7 +9,7 @@ export interface selectionRange {
 }
 
 export async function handleForm(
-  requirementValue: string[],
+  requirementValue: RequirementSubmitProps[],
   childValue: any[],
   petValue: any[],
   selectionRange: selectionRange,

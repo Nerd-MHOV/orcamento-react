@@ -25,6 +25,7 @@ import { Delete, Folder, Paid } from "@mui/icons-material";
 import { useApi } from "../../hooks/api";
 import pdfBudget from "./pdfBudget";
 import { AuthContext } from "../../context/authContext";
+import { ModalRequirement } from "../../components/ModalRequirement";
 
 const Home = () => {
   const api = useApi();

@@ -5,7 +5,15 @@ export async function requirementBudget(
   initDate: Date,
   finalDate: Date,
   arrForm: ArrFormProps,
-  arrRequirement: string[]
+  arrRequirement: {
+    requirement: string;
+    type: string;
+    values: {
+      adult: number;
+      child: number[];
+      amount: number;
+    };
+  }[]
 ) {
   let requirementRows: RowsProps[] = [];
 
@@ -17,13 +25,14 @@ export async function requirementBudget(
     const numRequirement = countRequirement + 1;
     let valueRequirement: number[] = [];
     let totalRequirement = 0;
-    let uRequirement = arrRequirement[countRequirement];
+    let uRequirement = arrRequirement[countRequirement].requirement;
+    let uType = arrRequirement[countRequirement].type;
 
     valueRequirement = await generateBudgetRequirement(
       initDate,
       finalDate,
       arrForm,
-      uRequirement
+      arrRequirement[countRequirement]
     );
 
     for (let i = 0; i < valueRequirement.length; i++) {

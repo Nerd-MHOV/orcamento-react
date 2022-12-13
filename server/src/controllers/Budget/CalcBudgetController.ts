@@ -35,7 +35,7 @@ export class CalcBudgetController {
       arrForm: ArrFormProps;
       arrChild: number[];
       arrPet: PetProps[];
-      arrRequirement: string[];
+      arrRequirement: any[];
       rangeDate: {
         startDate: string;
         endDate: string;
@@ -66,6 +66,7 @@ export class CalcBudgetController {
     petRows = await petBudget(arrPet, initDate, finalDate, arrForm);
 
     //requirement
+    console.log(arrRequirement);
     requirementRows = await requirementBudget(
       initDate,
       finalDate,

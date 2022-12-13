@@ -1,5 +1,6 @@
 import axios from "axios";
 import serialize from "form-serialize";
+import { RequirementSubmitProps } from "../components/FormOrc";
 import { selectionRange } from "../pages/Home/handleForm";
 
 const storageData = localStorage.getItem("authToken");
@@ -31,7 +32,7 @@ export const useApi = () => ({
     arrForm: any,
     arrChild: string[],
     arrPet: string[],
-    arrRequirement: string[],
+    arrRequirement: RequirementSubmitProps[],
     rangeDate: selectionRange
   ) => {
     const response = await api.post("/budget", {

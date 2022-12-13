@@ -97,6 +97,28 @@ async function main() {
             product_pipe: "203",
             active: true,
             food_id: 1,
+            TariffCheckInValues: {
+              createMany: {
+                data: [
+                  {
+                    type: "10h",
+                    adt: 411,
+                    adtex: 411,
+                    chd0: 0,
+                    chd4: 122,
+                    chd8: 130,
+                  },
+                  {
+                    type: "12h",
+                    adt: 242,
+                    adtex: 242,
+                    chd0: 0,
+                    chd4: 129,
+                    chd8: 129,
+                  },
+                ],
+              },
+            },
             TariffValues: {
               createMany: {
                 data: [
@@ -154,6 +176,28 @@ async function main() {
             product_pipe: "204",
             active: true,
             food_id: 1,
+            TariffCheckInValues: {
+              createMany: {
+                data: [
+                  {
+                    type: "10h",
+                    adt: 330,
+                    adtex: 330,
+                    chd0: 0,
+                    chd4: 117,
+                    chd8: 124,
+                  },
+                  {
+                    type: "12h",
+                    adt: 204,
+                    adtex: 204,
+                    chd0: 0,
+                    chd4: 109,
+                    chd8: 109,
+                  },
+                ],
+              },
+            },
             TariffValues: {
               createMany: {
                 data: [
@@ -258,6 +302,8 @@ async function main() {
       { name: "decoração romântica II", price: 325 },
       { name: "decoração romântica III", price: 435 },
       { name: "decoração romântica IV", price: 575 },
+      { name: "observação C.E.U (inteira)", price: 56 },
+      { name: "observação C.E.U (meia)", price: 35 },
       { name: "Eco A. - Rafting", price: 148.0 },
       { name: "Eco A. - Mini Rafting", price: 99.0 },
       { name: "Eco A. - Rafting Pet", price: 99.0 },
