@@ -45,13 +45,18 @@ export const useApi = () => ({
     return response.data;
   },
 
+  getRequirements: async () => {
+    const response = await api.get("/requirement");
+    return response.data;
+  },
+
   findUniqueUser: async (id: number) => {
     const response = await api.post("/unique-user", { id });
     return response.data;
   },
 
-  getRequirements: async () => {
-    const response = await api.get("/requirement");
+  findAllHousingUnits: async () => {
+    const response = await api.get("/housing-units");
     return response.data;
   },
 });

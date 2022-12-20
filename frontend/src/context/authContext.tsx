@@ -19,7 +19,6 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
       setUserLogin(Number(recoveredUser));
     }
     setLoading(false);
-
   }, []);
 
   const validateToken = async () => {

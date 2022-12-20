@@ -1,9 +1,10 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { handleForm } from "../../pages/Home/handleForm";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./style.scss";
 import { useApi } from "../../hooks/api";
 import { ModalRequirement } from "../ModalRequirement";
+import serialize from "form-serialize";
 
 export interface FormProps {
   selectionRange: {
@@ -31,23 +32,31 @@ export type RequirementSubmitValuesProps = {
   amount: number;
 };
 
-const optionsCategories = [
-  { label: "padrão", input: 1 },
-  { label: "padrão varanda", input: 2 },
-  { label: "luxo", input: 3 },
-  { label: "luxo conjugado", input: 4 },
-  { label: "luxo com hidro", input: 5 },
-];
+export interface CategoryOptionsProps {
+  label: string;
+  unit: number;
+  category: string;
+}
+
+export interface CategoriesProps {
+  category: {
+    id: string;
+    name: string;
+  };
+  category_id: string;
+  id: number;
+  minimum_occupancy: number;
+  maximum_occupancy: number;
+}
 
 export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   const api = useApi();
+
   const [open, setOpen] = useState(false);
   const [childValue, setChildValue] = useState<any[]>([]);
   const [petValue, setPetValue] = useState<any[]>([]);
-  const [categoryValue, setCategoryValue] = useState<{
-    label: string;
-    input: number;
-  } | null>(null);
+  const [categoryValue, setCategoryValue] =
+    useState<CategoryOptionsProps | null>(null);
   const [pensionValue, setPensionValue] = useState<string | null>(null);
   const [requirementValue, setRequirementValue] = useState<string[]>([]);
   const [listRequirements, setListRequirements] = useState<string[]>([]);
@@ -58,6 +67,23 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   const [requirementSubmit, setRequirementSubmit] = useState<
     RequirementSubmitProps[]
   >([]);
+  const [categoryOptions, setCategoryOptions] = useState<
+    CategoryOptionsProps[]
+  >([]);
+  const [allCategories, setAllCategories] = useState<CategoriesProps[]>([]);
+  const [occupancy, setOccupancy] = useState<{
+    text: string;
+    max: number;
+    min: number;
+    category: string;
+  }>({
+    text: "",
+    max: 0,
+    min: 0,
+    category: "",
+  });
+  const [occupancyWrong, setOccupancyWrong] = useState(false);
+
   async function getListRequirements() {
     await api.getRequirements().then((response) => {
       let list: string[] = [];
@@ -66,6 +92,23 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
         list.push(res.name);
       });
       setListRequirements(list);
+    });
+  }
+
+  async function getCategoryOptions() {
+    await api.findAllHousingUnits().then((response) => {
+      let list: CategoryOptionsProps[] = [];
+
+      response.map((res: any) => {
+        list.push({
+          label: `${res.id} - ${res.category_id}`,
+          unit: res.id,
+          category: res.category.name,
+        });
+      });
+
+      setAllCategories(response);
+      setCategoryOptions(list);
     });
   }
   const handleClickOpen = (requirement: string[]) => {
@@ -116,11 +159,50 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
     setRequirementValue(array);
   }
 
+  function changeOccupancy(housingUnit: CategoryOptionsProps) {
+    console.log(housingUnit);
+    console.log(allCategories);
+    let category = allCategories.filter((arr) => arr.id === housingUnit.unit);
+
+    setOccupancy({
+      text: `${category[0].id} - min: ${category[0].minimum_occupancy}, max: ${category[0].maximum_occupancy}`,
+      max: category[0].maximum_occupancy,
+      min: category[0].minimum_occupancy,
+      category: housingUnit.category,
+    });
+    changeOccupancyWrong({
+      text: `${category[0].id} - min: ${category[0].minimum_occupancy}, max: ${category[0].maximum_occupancy}`,
+      max: category[0].maximum_occupancy,
+      min: category[0].minimum_occupancy,
+      category: housingUnit.category,
+    });
+  }
+
+  function changeOccupancyWrong(occupancy: {
+    text: string;
+    max: number;
+    min: number;
+    category: string;
+  }) {
+    const formUp: HTMLFormElement | any = document.querySelector("#form");
+    const responseForm = serialize(formUp, { hash: true });
+    let adult = responseForm.adult;
+    let child = childValue.length;
+    let paq = Number(adult) + child;
+    console.log("paq", paq, occupancy);
+    if (paq > occupancy.max || paq < occupancy.min) {
+      setOccupancyWrong(true);
+    } else {
+      setOccupancyWrong(false);
+    }
+  }
+
   useEffect(() => {
     changeRequirementValue();
   }, [requirementSubmit]);
   useEffect(() => {
     handleForm(
+      occupancy.category,
       requirementSubmit,
       childValue,
       petValue,
@@ -137,7 +219,8 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   ]);
   useEffect(() => {
     getListRequirements();
-  });
+    getCategoryOptions();
+  }, []);
 
   return (
     <>
@@ -153,177 +236,196 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
           />
         )}
       </div>
-      <form id="form" className="form">
-        <div className="formBox">
-          <TextField
-            label="Adulto"
-            type="number"
-            name="adult"
-            className="textField"
-            variant="standard"
-            onChange={() =>
-              handleForm(
-                requirementSubmit,
-                childValue,
-                petValue,
-                selectionRange,
-                addRows
-              )
-            }
-          />
-          <Autocomplete
-            multiple
-            componentName="child"
-            onChange={(_, newValue) => {
-              setChildValue(newValue);
-            }}
-            value={childValue}
-            options={[
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-            ]}
-            isOptionEqualToValue={() => false}
-            className="textField"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Criança"
-                type="text"
-                placeholder="idade"
-                variant="standard"
-                onChange={() =>
-                  handleForm(
-                    requirementSubmit,
-                    childValue,
-                    petValue,
-                    selectionRange,
-                    addRows
-                  )
-                }
-              />
-            )}
-          />
-          <Autocomplete
-            multiple
-            options={["pequeno", "médio", "grande"]}
-            isOptionEqualToValue={() => false}
-            className="textField"
-            onChange={(_, newValue) => {
-              setPetValue(newValue);
-            }}
-            value={petValue}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Pet"
-                name="pet"
-                placeholder="porte"
-                type="text"
-                variant="standard"
-              />
-            )}
-          />
-          <TextField
-            label="Desconto"
-            type="number"
-            name="discount"
-            className="textField"
-            variant="standard"
-            onChange={() =>
-              handleForm(
-                requirementSubmit,
-                childValue,
-                petValue,
-                selectionRange,
-                addRows
-              )
-            }
-          />
-        </div>
-        <div className="formBox">
-          <Autocomplete
-            options={optionsCategories}
-            className="textField"
-            onChange={(_, newValue) => {
-              setCategoryValue(newValue);
-            }}
-            value={categoryValue}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                name="category"
-                label="Categoria"
-                type="text"
-                variant="standard"
-              />
-            )}
-          />
-          <Autocomplete
-            options={["simples", "meia", "completa"]}
-            className="textField"
-            onChange={(_, newValue) => {
-              setPensionValue(newValue);
-            }}
-            value={pensionValue}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                name="pension"
-                label="Pensão"
-                type="text"
-                variant="standard"
-              />
-            )}
-          />
-          <TextField
-            label="Nº Pipe"
-            type="number"
-            name="numberPipe"
-            onChange={() =>
-              handleForm(
-                requirementSubmit,
-                childValue,
-                petValue,
-                selectionRange,
-                addRows
-              )
-            }
-            className="textField"
-            variant="standard"
-          />
+      <div className="boxFormAndInfo">
+        <form id="form" className="form">
+          <div className="formBox">
+            <TextField
+              label="Adulto"
+              type="number"
+              name="adult"
+              className="textField"
+              variant="standard"
+              onChange={() => {
+                handleForm(
+                  occupancy.category,
+                  requirementSubmit,
+                  childValue,
+                  petValue,
+                  selectionRange,
+                  addRows
+                );
+                changeOccupancyWrong(occupancy);
+              }}
+            />
+            <Autocomplete
+              componentName="child"
+              multiple
+              onChange={(_, newValue) => {
+                setChildValue(newValue);
+                changeOccupancyWrong(occupancy);
+              }}
+              value={childValue}
+              options={[
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+              ]}
+              isOptionEqualToValue={() => false}
+              className="textField"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Criança"
+                  type="text"
+                  placeholder="idade"
+                  variant="standard"
+                  onChange={() =>
+                    handleForm(
+                      occupancy.category,
+                      requirementSubmit,
+                      childValue,
+                      petValue,
+                      selectionRange,
+                      addRows
+                    )
+                  }
+                />
+              )}
+            />
+            <Autocomplete
+              componentName="pet"
+              multiple
+              options={["pequeno", "médio", "grande"]}
+              isOptionEqualToValue={() => false}
+              className="textField"
+              onChange={(_, newValue) => {
+                setPetValue(newValue);
+              }}
+              value={petValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Pet"
+                  name="pet"
+                  placeholder="porte"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+            <TextField
+              name="discount"
+              label="Desconto"
+              type="number"
+              className="textField"
+              variant="standard"
+              onChange={() =>
+                handleForm(
+                  occupancy.category,
+                  requirementSubmit,
+                  childValue,
+                  petValue,
+                  selectionRange,
+                  addRows
+                )
+              }
+            />
+          </div>
+          <div className="formBox">
+            <Autocomplete
+              componentName="category"
+              options={categoryOptions}
+              className="textField"
+              onChange={(_, newValue) => {
+                setCategoryValue(newValue);
+                if (newValue) changeOccupancy(newValue);
+              }}
+              value={categoryValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="category"
+                  label="Categoria"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+            <Autocomplete
+              componentName="pension"
+              options={["simples", "meia", "completa"]}
+              className="textField"
+              onChange={(_, newValue) => {
+                setPensionValue(newValue);
+              }}
+              value={pensionValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="pension"
+                  label="Pensão"
+                  type="text"
+                  variant="standard"
+                />
+              )}
+            />
+            <TextField
+              name="numberPipe"
+              label="Nº Pipe"
+              type="number"
+              onChange={() =>
+                handleForm(
+                  occupancy.category,
+                  requirementSubmit,
+                  childValue,
+                  petValue,
+                  selectionRange,
+                  addRows
+                )
+              }
+              className="textField"
+              variant="standard"
+            />
 
-          <Autocomplete
-            multiple
-            isOptionEqualToValue={() => false}
-            options={listRequirements}
-            className="textField"
-            onChange={(_, newValue) => {
-              handleClickOpen(newValue);
-            }}
-            value={requirementValue}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Requerimento"
-                type="text"
-                name="requirement"
-                className="textField"
-                variant="standard"
-              />
-            )}
-          />
+            <Autocomplete
+              componentName="requirement"
+              multiple
+              isOptionEqualToValue={() => false}
+              options={listRequirements}
+              className="textField"
+              onChange={(_, newValue) => {
+                handleClickOpen(newValue);
+              }}
+              value={requirementValue}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Requerimento"
+                  type="text"
+                  name="requirement"
+                  className="textField"
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+        </form>
+        <div
+          className="occupancy"
+          style={occupancyWrong ? { color: "red" } : {}}
+        >
+          {occupancy.text}
         </div>
-      </form>
+      </div>
     </>
   );
 };

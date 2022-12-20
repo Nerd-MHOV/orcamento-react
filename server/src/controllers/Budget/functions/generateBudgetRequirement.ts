@@ -27,6 +27,8 @@ export async function generateBudgetRequirement(
   while (initDate < finalDate) {
     let dayMonthYear = format(initDate, "yyyy-MM-dd");
     let monthYear = format(initDate, "yyyy-MM");
+    let dayWeek = format(initDate, "E");
+    let month = format(initDate, "MM");
     let tariffBudget = 0;
 
     if (initDate === firstDate) {
@@ -43,10 +45,21 @@ export async function generateBudgetRequirement(
           typeCheck = "12h";
         }
 
+        // mds or fds
+        let tariffWeek = "";
+        if (
+          daysOfWeekend.includes(dayWeek) ||
+          (dayWeek === "Thu" && (month === "07" || month === "01"))
+        ) {
+          tariffWeek = tariffValues.tariff_we_id ?? "";
+        } else {
+          tariffWeek = tariffValues.tariff_mw_id ?? "";
+        }
+
         let tariff = await prismaClient.tariffCheckInValues.findFirst({
           where: {
             AND: {
-              tariffs_id: tariffValues.tariff_id,
+              tariffs_id: tariffWeek,
               type: typeCheck,
             },
           },
@@ -84,6 +97,9 @@ export async function generateBudgetRequirement(
 
           tariffBudget = adultValues + childValues;
         }
+      } else if (typeRequirement === "voucher") {
+        let tariff = 2;
+        tariffBudget = tariff * values.amount;
       } else {
         let tariff = await prismaClient.requirement.findUnique({
           where: {

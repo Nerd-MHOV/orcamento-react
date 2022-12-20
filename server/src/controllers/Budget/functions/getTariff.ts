@@ -18,7 +18,8 @@ export async function getTariff(specificDay: string, commonDay: string) {
   if (responseSpecific) {
     return {
       type: "specific",
-      tariff_id: responseSpecific.id,
+      tariff_mw_id: responseSpecific.tariffs_id,
+      tariff_we_id: responseSpecific.tariffs_id,
       tariff_mw: responseSpecific.tariffs,
       tariff_we: responseSpecific.tariffs,
     };
@@ -47,7 +48,8 @@ export async function getTariff(specificDay: string, commonDay: string) {
   if (responseCommon) {
     return {
       type: "common",
-      tariff_id: responseCommon.id,
+      tariff_mw_id: responseCommon.tariff_to_midweek_id,
+      tariff_we_id: responseCommon.tariff_to_weekend_id,
       tariff_mw: responseCommon.tariff_to_midweek,
       tariff_we: responseCommon.tariff_to_weekend,
     };

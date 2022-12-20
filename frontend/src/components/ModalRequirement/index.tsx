@@ -188,6 +188,10 @@ export function ModalRequirement({
             name="tourismPerson"
             className="textField"
             variant="standard"
+            onChange={(value) => {
+              setAmount(Number(value.target.value));
+            }}
+            value={amount}
           />
         </div>
       </DialogContent>

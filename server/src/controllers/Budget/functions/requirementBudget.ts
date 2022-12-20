@@ -17,6 +17,18 @@ export async function requirementBudget(
 ) {
   let requirementRows: RowsProps[] = [];
 
+  //voucher municipal:
+  if (arrForm.adult)
+    arrRequirement.push({
+      requirement: "voucher",
+      type: "voucher",
+      values: {
+        adult: 0,
+        child: [],
+        amount: arrForm.adult,
+      },
+    });
+
   for (
     let countRequirement = 0;
     countRequirement < arrRequirement.length;

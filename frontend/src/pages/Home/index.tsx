@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import { addDays } from "date-fns/esm";
 import { ptBR } from "date-fns/locale";
-import { format } from "date-fns";
+import { format, isWeekend } from "date-fns";
 
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
@@ -26,6 +26,7 @@ import { useApi } from "../../hooks/api";
 import pdfBudget from "./pdfBudget";
 import { AuthContext } from "../../context/authContext";
 import { ModalRequirement } from "../../components/ModalRequirement";
+import pdfDescription from "./pdfDescription";
 
 const Home = () => {
   const api = useApi();
@@ -42,6 +43,7 @@ const Home = () => {
     endDate: new Date(),
     key: "selection",
   });
+  const [holidays, setHolidays] = useState<Date[]>([]);
 
   async function handleSelect(ranges: any) {
     setSelectionRange(ranges.selection);
@@ -92,6 +94,40 @@ const Home = () => {
     pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone);
   }
 
+  async function generatePdfDescription() {
+    console.log(budgets);
+    pdfDescription(budgets);
+  }
+
+  async function clearTariffs() {
+    setBudgets([]);
+  }
+
+  function customDayContent(day: Date) {
+    let extraDot = null;
+    if (isWeekend(day)) {
+      extraDot = (
+        <div
+          style={{
+            height: "5px",
+            width: "5px",
+            borderRadius: "100%",
+            background: "orange",
+            position: "absolute",
+            top: 2,
+            right: 2,
+          }}
+        />
+      );
+    }
+    return (
+      <div>
+        {extraDot}
+        <span>{format(day, "d")}</span>
+      </div>
+    );
+  }
+
   const dataInitial = {
     rows: [],
     columns: [],
@@ -114,6 +150,7 @@ const Home = () => {
                 onChange={handleSelect}
                 months={2}
                 showDateDisplay={false}
+                dayContentRenderer={customDayContent}
                 direction="horizontal"
                 locale={ptBR}
               />
@@ -194,9 +231,9 @@ const Home = () => {
                 <Btn
                   action="Gerar PDF tarifa"
                   color="dashboard"
-                  onClick={() => {}}
+                  onClick={generatePdfDescription}
                 />
-                <Btn action="Limpar" color="red" onClick={() => {}} />
+                <Btn action="Limpar" color="red" onClick={clearTariffs} />
               </div>
             </div>
           </div>

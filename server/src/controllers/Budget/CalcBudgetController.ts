@@ -43,6 +43,7 @@ export class CalcBudgetController {
       };
     } = request.body;
 
+    console.log(arrForm.category);
     //vars:
     let adultRows: RowsProps[] = [];
     let childRows: RowsProps[] = [];
@@ -66,7 +67,6 @@ export class CalcBudgetController {
     petRows = await petBudget(arrPet, initDate, finalDate, arrForm);
 
     //requirement
-    console.log(arrRequirement);
     requirementRows = await requirementBudget(
       initDate,
       finalDate,

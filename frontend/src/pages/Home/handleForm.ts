@@ -9,6 +9,7 @@ export interface selectionRange {
 }
 
 export async function handleForm(
+  category: string,
   requirementValue: RequirementSubmitProps[],
   childValue: any[],
   petValue: any[],
@@ -21,7 +22,7 @@ export async function handleForm(
 
   if (!responseForm.category || !responseForm.pension) return;
 
-  console.log(responseForm, "auiq");
+  responseForm.category = category;
   const response = await api.getBudget(
     responseForm,
     childValue,

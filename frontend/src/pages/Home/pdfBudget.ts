@@ -4,6 +4,8 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import { usePipe } from "../../hooks/pipedrive/pipeApi";
+import { useApi } from "../../hooks/api";
 
 const months = [
   "Janeiro",
@@ -27,20 +29,6 @@ async function pdfBudget(
   numberPhone: string
 ) {
   (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-  const fonts = {
-    Courier: {
-      normal: "Courier",
-      bold: "Courier-Bold",
-      italics: "Courier-Oblique",
-      bolditalics: "Courier-BoldOblique",
-    },
-    Helvetica: {
-      normal: "Helvetica",
-      bold: "Helvetica-Bold",
-      italics: "Helvetica-Oblique",
-      bolditalics: "Helvetica-BoldOblique",
-    },
-  };
 
   console.log(budgets);
 
@@ -104,6 +92,58 @@ async function pdfBudget(
       total += Number(row.total);
     });
 
+    let requirementString = [];
+    let requirementChild = true;
+    let requirementObsCeu = true;
+    let requirementTourism = true;
+    let requirementDecoration = true;
+    let requirementCheckIn = true;
+
+    for (let rowRequirement of budget.rows) {
+      if (rowRequirement.desc.match(/observação C.E.U/) && requirementObsCeu) {
+        requirementString.push({
+          text: "\n+Observação C.E.U",
+          style: "descRoom",
+        });
+        requirementObsCeu = false;
+      } else if (
+        (rowRequirement.desc.match(/Eco A./) ||
+          rowRequirement.desc.match(/Território/)) &&
+        requirementTourism
+      ) {
+        requirementString.push({ text: "\n+Turismo", style: "descRoom" });
+        requirementTourism = false;
+      } else if (
+        rowRequirement.desc.match(/decoração romântica./) &&
+        requirementDecoration
+      ) {
+        requirementString.push({
+          text: "\n+decoração romântica",
+          style: "descRoom",
+        });
+        requirementDecoration = false;
+      } else if (
+        rowRequirement.desc.match(/check-in às./) &&
+        requirementCheckIn
+      ) {
+        requirementString.push({
+          text: "\n+check-in antecipado",
+          style: "descRoom",
+        });
+        requirementCheckIn = false;
+      } else if (
+        rowRequirement.desc.match(/CHD 1/) &&
+        requirementChild &&
+        (rowRequirement.values[0] === 0 || rowRequirement.values[0] === 90)
+      ) {
+        requirementString.push({
+          text: "\n+criança cortesia",
+          style: "descRoom",
+        });
+        requirementChild = false;
+      }
+    }
+
     rowBudget.push({
       text: [
         {
@@ -111,6 +151,7 @@ async function pdfBudget(
           bold: true,
         },
         adultSting + childString + petString,
+        ...requirementString,
       ],
       style: "tbody",
       border: [false, false, false, true],
@@ -581,6 +622,10 @@ async function pdfBudget(
         fillColor: "white",
         lineHeight: 1.2,
       },
+      descRoom: {
+        color: "#137173",
+        fontSize: 8,
+      },
       descriptions: {
         fontSize: 8,
         lineHeight: 1.2,
@@ -589,7 +634,22 @@ async function pdfBudget(
     },
   };
 
-  pdfMake.createPdf(docDefinitions).open();
+  const pdf = pdfMake.createPdf(docDefinitions);
+  pdf.open();
+
+  // const doc = pdf.getStream();
+  // const stream = doc.pipe(blobStream());
+  // doc.end();
+
+  // stream.on("finish", async function () {
+  //   const blob = stream.toBlob("application/pdf");
+  //   const pipe = usePipe();
+  //   const token = "0b89d278f9d3debfe30b08cb441f295f84832371";
+  //   const deal_id = 75471;
+  //   console.log(blob, "PDF IS HERE");
+  //   const response = await pipe.addFile(token, deal_id, blob);
+  //   console.log(response);
+  // });
 }
 
 export default pdfBudget;
