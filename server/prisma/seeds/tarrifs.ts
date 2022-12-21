@@ -17,4 +17,16 @@ export const TariffSeed = [
     active: true,
     food_id: 1,
   },
+  {
+    name: "Janeiro 2023 - MDS",
+    product_pipe: "390",
+    active: true,
+    food_id: 1,
+  },
+  {
+    name: "Janeiro 2023 - FDS",
+    product_pipe: "391",
+    active: true,
+    food_id: 1,
+  },
 ];

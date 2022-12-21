@@ -31,7 +31,6 @@ const TableCalc = ({ data }: DataProps) => {
   let total = 0;
   if (data.rows)
     data.rows.map((row) => {
-      console.log(row);
       if (row.values)
         row.values.map((value, index) => {
           totalPerRow[index] = totalPerRow[index]
@@ -44,7 +43,6 @@ const TableCalc = ({ data }: DataProps) => {
     total += totalPerRow[i];
   }
 
-  console.log(totalPerRow);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

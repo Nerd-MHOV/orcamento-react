@@ -50,6 +50,15 @@ export const useApi = () => ({
     return response.data;
   },
 
+  getTariffPipe: async (date_in: Date, date_out: Date) => {
+    const response = await api.post("/tariff_pipe", {
+      date_in,
+      date_out,
+    });
+
+    return response.data;
+  },
+
   findUniqueUser: async (id: number) => {
     const response = await api.post("/unique-user", { id });
     return response.data;
@@ -57,6 +66,16 @@ export const useApi = () => ({
 
   findAllHousingUnits: async () => {
     const response = await api.get("/housing-units");
+    return response.data;
+  },
+
+  findHolidays: async () => {
+    const response = await api.get("/specific-date");
+    return response.data;
+  },
+
+  findMonthWithTariff: async () => {
+    const response = await api.get("/common-date");
     return response.data;
   },
 });

@@ -26,8 +26,6 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
       const storageData = localStorage.getItem("authToken");
       if (storageData) {
         const data = await api.validateToken();
-        console.log(data);
-        console.log("da uma olhada aqui", data);
         if (data.user.id) {
           setUserLogin(data.user.id);
           return true;
@@ -58,7 +56,6 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
         type: "error",
       };
     } catch (err) {
-      console.log(err);
       return {
         type: "error",
         message: "Servidor fora do ar",

@@ -10,6 +10,12 @@
         flex-direction: column;
     }
 }
-.occupancy {
+.occupancy, .infoApp {
     font-size: 12px;
+}
+.infoAppBox {
+    display: flex;
+    &>div {
+        margin-right: 15px;
+    }
 }

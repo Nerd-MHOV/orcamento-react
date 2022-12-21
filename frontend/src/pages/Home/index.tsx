@@ -27,9 +27,25 @@ import pdfBudget from "./pdfBudget";
 import { AuthContext } from "../../context/authContext";
 import { ModalRequirement } from "../../components/ModalRequirement";
 import pdfDescription from "./pdfDescription";
+import { useAppApi } from "../../hooks/app";
+import { pipeChangeDeal } from "./functions/pipeChangeDeal";
+
+export interface AppHotelProps {
+  reservas: {
+    unidade: string;
+    [key: string]: any;
+  };
+  qntdReservas: number;
+  processadas: number;
+  confirmadas: number;
+  bloqueios: number;
+  qntdAdt: number;
+  qntdChd: number;
+}
 
 const Home = () => {
   const api = useApi();
+  const app = useAppApi();
   const { userLogin } = useContext(AuthContext);
   const [dataTable, setDataTable] = useState<DataContentProps>({
     rows: [],
@@ -43,11 +59,65 @@ const Home = () => {
     endDate: new Date(),
     key: "selection",
   });
-  const [holidays, setHolidays] = useState<Date[]>([]);
+  const [holidays, setHolidays] = useState<String[]>([]);
+  const [monthsWithTariffs, setMonthsWithTariffs] = useState<String[]>([]);
+  const [stateApp, setStateApp] = useState<AppHotelProps | null>(null);
+  const [unitUsing, setUnitUsing] = useState<string[]>([]);
+
+  async function getHolidays() {
+    await api.findHolidays().then((response) => {
+      let arrayDate: String[] = [];
+      response.map((date: { date: string; tariffs_id: string }) => {
+        arrayDate.push(date.date);
+      });
+
+      setHolidays(arrayDate);
+    });
+  }
+
+  async function getMonthsWithTariffs() {
+    await api.findMonthWithTariff().then((response) => {
+      let arrayMonths: String[] = [];
+      response.map(
+        (date: {
+          date: string;
+          tariff_to_midweek_id: string;
+          tariff_to_weekend: string;
+        }) => {
+          arrayMonths.push(date.date);
+        }
+      );
+      setMonthsWithTariffs(arrayMonths);
+    });
+  }
+
+  async function getUnitUsing(date: {
+    endDate: Date;
+    key: string;
+    startDate: Date;
+  }) {
+    setUnitUsing([]);
+    await app
+      .getHousingUnitsUsing(
+        format(date.startDate, "yyyy-MM-dd"),
+        format(date.endDate, "yyyy-MM-dd")
+      )
+      .then((response) => {
+        let units: string[] = [];
+
+        response.reservas.map((unit: { unidade: string }) => {
+          units.push(unit.unidade);
+        });
+        setStateApp(response);
+
+        setUnitUsing(units);
+      });
+  }
 
   async function handleSelect(ranges: any) {
     setSelectionRange(ranges.selection);
     changeColumnData(ranges.selection);
+    getUnitUsing(ranges.selection);
   }
 
   function changeColumnData(date: {
@@ -73,7 +143,6 @@ const Home = () => {
   }
 
   function addRows(rows: any[], arrComplete: any) {
-    console.log(arrComplete, "arr");
     setDataTable((par) => {
       return {
         rows: rows,
@@ -90,13 +159,21 @@ const Home = () => {
   }
 
   async function generatePdfBudget() {
+    pipeChangeDeal(userLogin, budgets);
     const arrUser = await api.findUniqueUser(userLogin);
-    pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone);
+    pdfBudget(
+      budgets,
+      arrUser.name,
+      arrUser.email,
+      arrUser.phone,
+      arrUser.token_pipe
+    );
   }
 
   async function generatePdfDescription() {
-    console.log(budgets);
-    pdfDescription(budgets);
+    const arrUser = await api.findUniqueUser(userLogin);
+
+    pdfDescription(budgets, arrUser.token_pipe);
   }
 
   async function clearTariffs() {
@@ -105,7 +182,7 @@ const Home = () => {
 
   function customDayContent(day: Date) {
     let extraDot = null;
-    if (isWeekend(day)) {
+    if (holidays.includes(format(day, "yyyy-MM-dd"))) {
       extraDot = (
         <div
           style={{
@@ -128,6 +205,18 @@ const Home = () => {
     );
   }
 
+  function customDisableDays(day: Date) {
+    if (holidays.includes(format(day, "yyyy-MM-dd"))) {
+      return false;
+    }
+
+    if (monthsWithTariffs.includes(format(day, "yyyy-MM"))) {
+      return false;
+    }
+
+    return true;
+  }
+
   const dataInitial = {
     rows: [],
     columns: [],
@@ -135,6 +224,8 @@ const Home = () => {
 
   useEffect(() => {
     setDataTable(dataInitial);
+    getHolidays();
+    getMonthsWithTariffs();
   }, []);
 
   return (
@@ -150,12 +241,18 @@ const Home = () => {
                 onChange={handleSelect}
                 months={2}
                 showDateDisplay={false}
+                disabledDay={customDisableDays}
                 dayContentRenderer={customDayContent}
                 direction="horizontal"
                 locale={ptBR}
               />
 
-              <FormOrc selectionRange={selectionRange} addRows={addRows} />
+              <FormOrc
+                stateApp={stateApp}
+                selectionRange={selectionRange}
+                addRows={addRows}
+                unitUsing={unitUsing}
+              />
             </div>
 
             <div className="bottom">
@@ -169,7 +266,6 @@ const Home = () => {
                     Orçamentos:
                   </Typography>
                   {budgets.map((budget, index) => {
-                    console.log("budget", budget);
                     let countDaily = budget.columns.length - 2;
                     let primary = `${countDaily} diárias no ${budget.arrComplete.responseForm.category}`;
                     let total = 0;
@@ -220,7 +316,6 @@ const Home = () => {
                     setBudgets((old) => {
                       return [...old, { ...dataTable, arrComplete }];
                     });
-                    console.log("budgets", budgets);
                   }}
                 />
                 <Btn

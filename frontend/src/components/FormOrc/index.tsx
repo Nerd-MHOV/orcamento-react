@@ -5,14 +5,17 @@ import "./style.scss";
 import { useApi } from "../../hooks/api";
 import { ModalRequirement } from "../ModalRequirement";
 import serialize from "form-serialize";
+import { AppHotelProps } from "../../pages/Home";
 
 export interface FormProps {
+  stateApp: AppHotelProps | null;
   selectionRange: {
     startDate: Date;
     endDate: Date;
     key: string;
   };
   addRows: (rows: any[], arrComplete: any[]) => void;
+  unitUsing: string[];
 }
 
 export interface RequirementProps {
@@ -49,7 +52,12 @@ export interface CategoriesProps {
   maximum_occupancy: number;
 }
 
-export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
+export const FormOrc = ({
+  stateApp,
+  selectionRange,
+  addRows,
+  unitUsing,
+}: FormProps) => {
   const api = useApi();
 
   const [open, setOpen] = useState(false);
@@ -83,6 +91,7 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
     category: "",
   });
   const [occupancyWrong, setOccupancyWrong] = useState(false);
+  const [infoApp, setInfoApp] = useState<String>("");
 
   async function getListRequirements() {
     await api.getRequirements().then((response) => {
@@ -111,6 +120,11 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
       setCategoryOptions(list);
     });
   }
+
+  function getInfoApp() {
+    setInfoApp("");
+  }
+
   const handleClickOpen = (requirement: string[]) => {
     if (requirement.length < requirementSubmit.length) {
       setRequirementSubmit((old) => {
@@ -160,8 +174,6 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   }
 
   function changeOccupancy(housingUnit: CategoryOptionsProps) {
-    console.log(housingUnit);
-    console.log(allCategories);
     let category = allCategories.filter((arr) => arr.id === housingUnit.unit);
 
     setOccupancy({
@@ -189,7 +201,6 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
     let adult = responseForm.adult;
     let child = childValue.length;
     let paq = Number(adult) + child;
-    console.log("paq", paq, occupancy);
     if (paq > occupancy.max || paq < occupancy.min) {
       setOccupancyWrong(true);
     } else {
@@ -200,6 +211,9 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
   useEffect(() => {
     changeRequirementValue();
   }, [requirementSubmit]);
+  useEffect(() => {
+    getInfoApp();
+  }, [stateApp]);
   useEffect(() => {
     handleForm(
       occupancy.category,
@@ -349,6 +363,19 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
                 setCategoryValue(newValue);
                 if (newValue) changeOccupancy(newValue);
               }}
+              // getOptionDisabled={(option) =>
+              //   unitUsing.includes(`${option.unit}`)
+              // }
+              renderOption={(props, option) => {
+                if (unitUsing.includes(`${option.unit}`))
+                  return (
+                    <span {...props} style={{ color: "lightgray" }}>
+                      {option.label}
+                    </span>
+                  );
+
+                return <span {...props}>{option.label}</span>;
+              }}
               value={categoryValue}
               renderInput={(params) => (
                 <TextField
@@ -424,6 +451,20 @@ export const FormOrc = ({ selectionRange, addRows }: FormProps) => {
           style={occupancyWrong ? { color: "red" } : {}}
         >
           {occupancy.text}
+        </div>
+        <div className="infoApp">
+          {stateApp !== null && stateApp.qntdReservas && (
+            <div className="infoAppBox">
+              <div>
+                <p>Confirmadas: {stateApp.confirmadas}</p>
+                <p>Bloqueios: {stateApp.bloqueios}</p>
+              </div>
+              <div>
+                <p>Processadas: {stateApp.processadas}</p>
+                <p>Total Reservas: {stateApp.qntdReservas}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

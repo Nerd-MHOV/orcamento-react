@@ -16,6 +16,7 @@ import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateS
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
 import { CreateTariffController } from "./controllers/Tariff/CreateTariffController";
 import { FindTariffController } from "./controllers/Tariff/FindTariffController";
+import { GetNumberPipeController } from "./controllers/Tariff/GetNumberPIpeController";
 import { CreateTariffValueController } from "./controllers/TariffValue/CreateTariffValueController";
 import { FindTariffValueController } from "./controllers/TariffValue/FindTariffValueController";
 import { CreateUserController } from "./controllers/Users/CreateUsersController";
@@ -46,6 +47,7 @@ const createPet = new CreatePetController();
 
 const findTariff = new FindTariffController();
 const createTariff = new CreateTariffController();
+const pipeTariff = new GetNumberPipeController();
 
 const findTariffValue = new FindTariffValueController();
 const createTariffValue = new CreateTariffValueController();
@@ -82,6 +84,7 @@ routes.post("/pet", createPet.handle);
 
 routes.get("/tariff", findTariff.handle);
 routes.post("/tariff", createTariff.handle);
+routes.post("/tariff_pipe", pipeTariff.handle);
 
 routes.get("/tariff-value", findTariffValue.handle);
 routes.post("/tariff-value", createTariffValue.handle);

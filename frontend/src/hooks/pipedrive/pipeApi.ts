@@ -5,11 +5,11 @@ const pipeApi = axios.create({
 });
 
 export const usePipe = () => ({
-  addFile: async (token: string, deal_id: number, file: any) => {
-    const response = await pipeApi.post("/files?api_token=" + token, {
-      deal_id,
-      file,
-    });
+  addFile: async (token: string, deal_id: number, file: any, name: string) => {
+    let formData = new FormData();
+    formData.append("deal_id", `${deal_id}`);
+    formData.append("file", file, name);
+    const response = await pipeApi.post("/files?api_token=" + token, formData);
     return response.data;
   },
   addProduct: async (

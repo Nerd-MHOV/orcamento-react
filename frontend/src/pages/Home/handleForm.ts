@@ -22,7 +22,9 @@ export async function handleForm(
 
   if (!responseForm.category || !responseForm.pension) return;
 
+  responseForm.housingUnit = responseForm.category;
   responseForm.category = category;
+
   const response = await api.getBudget(
     responseForm,
     childValue,

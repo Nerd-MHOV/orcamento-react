@@ -22,11 +22,15 @@ const months = [
   "Dezembro",
 ];
 
-async function pdfDescription(budgets: any[]) {
+async function pdfDescription(budgets: any[], token: string) {
   (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
   let realBudget = budgets[0];
 
+  let housingUnit = realBudget.arrComplete.responseForm.housingUnit.substr(
+    0,
+    3
+  );
   let rows = new Array();
 
   for (let budget of realBudget.rows) {
@@ -61,8 +65,6 @@ async function pdfDescription(budgets: any[]) {
   for (let line of lastRow) {
     widthTable.push("*");
   }
-
-  console.log(realBudget.columns, lastRow);
 
   const docDefinitions: TDocumentDefinitions = {
     defaultStyle: {
@@ -101,11 +103,31 @@ async function pdfDescription(budgets: any[]) {
           },
         },
       },
+      {
+        text: `000000${housingUnit}09928`,
+        alignment: "right",
+        fontSize: 8,
+      },
     ],
     styles: {},
   };
 
-  pdfMake.createPdf(docDefinitions).open();
+  const pdf = pdfMake.createPdf(docDefinitions);
+  pdf.open();
+
+  let deal_id = realBudget.arrComplete.responseForm.numberPipe;
+  if (deal_id) {
+    const document = pdf.getBlob(async (blob) => {
+      const pipe = usePipe();
+      const response = await pipe.addFile(
+        token,
+        deal_id,
+        blob,
+        "Descrição.pdf"
+      );
+      console.log(response);
+    });
+  }
 }
 
 export default pdfDescription;

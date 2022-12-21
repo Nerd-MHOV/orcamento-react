@@ -26,11 +26,10 @@ async function pdfBudget(
   budgets: any[],
   name: string,
   email: string,
-  numberPhone: string
+  numberPhone: string,
+  token: string
 ) {
   (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
-  console.log(budgets);
 
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
@@ -38,8 +37,12 @@ async function pdfBudget(
   const titleMonth = months[monthNum - 1];
 
   const arrValues: any[] = [];
+  let dealId = 0;
 
   for (let budget of budgets) {
+    if (budget.arrComplete.responseForm.numberPipe) {
+      dealId = budget.arrComplete.responseForm.numberPipe;
+    }
     const rowBudget = new Array();
     let adultSting =
       Number(budget.arrComplete.responseForm.adult) < 10
@@ -637,19 +640,13 @@ async function pdfBudget(
   const pdf = pdfMake.createPdf(docDefinitions);
   pdf.open();
 
-  // const doc = pdf.getStream();
-  // const stream = doc.pipe(blobStream());
-  // doc.end();
-
-  // stream.on("finish", async function () {
-  //   const blob = stream.toBlob("application/pdf");
-  //   const pipe = usePipe();
-  //   const token = "0b89d278f9d3debfe30b08cb441f295f84832371";
-  //   const deal_id = 75471;
-  //   console.log(blob, "PDF IS HERE");
-  //   const response = await pipe.addFile(token, deal_id, blob);
-  //   console.log(response);
-  // });
+  if (dealId) {
+    const document = pdf.getBlob(async (blob) => {
+      const pipe = usePipe();
+      const response = await pipe.addFile(token, dealId, blob, "Orçamento.pdf");
+      console.log(response);
+    });
+  }
 }
 
 export default pdfBudget;
