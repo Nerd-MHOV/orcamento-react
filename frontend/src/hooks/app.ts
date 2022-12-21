@@ -1,7 +1,7 @@
 import axios from "axios";
 import serialize from "form-serialize";
 import { RequirementSubmitProps } from "../components/FormOrc";
-import { selectionRange } from "../pages/Home/handleForm";
+import { selectionRange } from "../pages/Home/functions/handleForm";
 
 const storageData = localStorage.getItem("authToken");
 

@@ -3,9 +3,9 @@ import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
-import { usePipe } from "../../hooks/pipedrive/pipeApi";
-import { useApi } from "../../hooks/api";
+import { AuthContext } from "../../../context/authContext";
+import { usePipe } from "../../../hooks/pipedrive/pipeApi";
+import { useApi } from "../../../hooks/api";
 
 const months = [
   "Janeiro",

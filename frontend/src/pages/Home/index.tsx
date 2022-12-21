@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { DateRangePicker } from "react-date-range";
+import { useEffect, useState } from "react";
 import { addDays } from "date-fns/esm";
-import { ptBR } from "date-fns/locale";
-import { format, isWeekend } from "date-fns";
+import { format } from "date-fns";
 
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
@@ -11,24 +9,12 @@ import "./style.scss";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FormOrc } from "../../components/FormOrc";
-import Btn from "../../components/Btn";
-import {
-  Avatar,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@mui/material";
-import { Delete, Folder, Paid } from "@mui/icons-material";
+
 import { useApi } from "../../hooks/api";
-import pdfBudget from "./pdfBudget";
-import { AuthContext } from "../../context/authContext";
-import { ModalRequirement } from "../../components/ModalRequirement";
-import pdfDescription from "./pdfDescription";
 import { useAppApi } from "../../hooks/app";
-import { pipeChangeDeal } from "./functions/pipeChangeDeal";
+import { CalendarPicker } from "../../components/CalendarPicker";
+import { InfoTable } from "../../components/InfoTables";
+import { ButtonsBudget } from "../../components/ButtonsBudget";
 
 export interface AppHotelProps {
   reservas: {
@@ -43,10 +29,14 @@ export interface AppHotelProps {
   qntdChd: number;
 }
 
+const dataInitial = {
+  rows: [],
+  columns: [],
+};
+
 const Home = () => {
   const api = useApi();
   const app = useAppApi();
-  const { userLogin } = useContext(AuthContext);
   const [dataTable, setDataTable] = useState<DataContentProps>({
     rows: [],
     columns: [],
@@ -120,6 +110,19 @@ const Home = () => {
     getUnitUsing(ranges.selection);
   }
 
+  async function handleSaveBudget() {
+    if (dataTable.rows.length === 0) {
+      return;
+    }
+    setBudgets((old) => {
+      return [...old, { ...dataTable, arrComplete }];
+    });
+  }
+
+  async function clearTariffs() {
+    setBudgets([]);
+  }
+
   function changeColumnData(date: {
     endDate: Date;
     key: string;
@@ -158,70 +161,6 @@ const Home = () => {
     });
   }
 
-  async function generatePdfBudget() {
-    pipeChangeDeal(userLogin, budgets);
-    const arrUser = await api.findUniqueUser(userLogin);
-    pdfBudget(
-      budgets,
-      arrUser.name,
-      arrUser.email,
-      arrUser.phone,
-      arrUser.token_pipe
-    );
-  }
-
-  async function generatePdfDescription() {
-    const arrUser = await api.findUniqueUser(userLogin);
-
-    pdfDescription(budgets, arrUser.token_pipe);
-  }
-
-  async function clearTariffs() {
-    setBudgets([]);
-  }
-
-  function customDayContent(day: Date) {
-    let extraDot = null;
-    if (holidays.includes(format(day, "yyyy-MM-dd"))) {
-      extraDot = (
-        <div
-          style={{
-            height: "5px",
-            width: "5px",
-            borderRadius: "100%",
-            background: "orange",
-            position: "absolute",
-            top: 2,
-            right: 2,
-          }}
-        />
-      );
-    }
-    return (
-      <div>
-        {extraDot}
-        <span>{format(day, "d")}</span>
-      </div>
-    );
-  }
-
-  function customDisableDays(day: Date) {
-    if (holidays.includes(format(day, "yyyy-MM-dd"))) {
-      return false;
-    }
-
-    if (monthsWithTariffs.includes(format(day, "yyyy-MM"))) {
-      return false;
-    }
-
-    return true;
-  }
-
-  const dataInitial = {
-    rows: [],
-    columns: [],
-  };
-
   useEffect(() => {
     setDataTable(dataInitial);
     getHolidays();
@@ -236,15 +175,11 @@ const Home = () => {
         <div className="p20">
           <div className="containerBx">
             <div className="top">
-              <DateRangePicker
-                ranges={[selectionRange]}
-                onChange={handleSelect}
-                months={2}
-                showDateDisplay={false}
-                disabledDay={customDisableDays}
-                dayContentRenderer={customDayContent}
-                direction="horizontal"
-                locale={ptBR}
+              <CalendarPicker
+                handleSelect={handleSelect}
+                holidays={holidays}
+                monthsWithTariffs={monthsWithTariffs}
+                selectionRange={selectionRange}
               />
 
               <FormOrc
@@ -260,76 +195,12 @@ const Home = () => {
             </div>
 
             <div className="buttons">
-              <div className="infoTable">
-                <>
-                  <Typography sx={{ mb: 2 }} variant="h6" component="div">
-                    Orçamentos:
-                  </Typography>
-                  {budgets.map((budget, index) => {
-                    let countDaily = budget.columns.length - 2;
-                    let primary = `${countDaily} diárias no ${budget.arrComplete.responseForm.category}`;
-                    let total = 0;
-                    budget.rows.map((row) => {
-                      total += Number(row.total);
-                    });
-                    return (
-                      <List dense={true} key={index}>
-                        <ListItem
-                          secondaryAction={
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={() => deleteLine(index)}
-                            >
-                              <Delete />
-                            </IconButton>
-                          }
-                        >
-                          <ListItemAvatar>
-                            <Avatar>
-                              <Paid />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={primary}
-                            secondary={`Pensão: ${
-                              budget.arrComplete.responseForm.pension
-                            } \n Total: R$ ${total.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}`}
-                          />
-                        </ListItem>
-                      </List>
-                    );
-                  })}
-                </>
-              </div>
-              <div className="boxButtons" style={{ marginTop: 32 }}>
-                <Btn
-                  action="Salvar Orçamento"
-                  color="blue"
-                  onClick={() => {
-                    if (dataTable.rows.length === 0) {
-                      return;
-                    }
-                    setBudgets((old) => {
-                      return [...old, { ...dataTable, arrComplete }];
-                    });
-                  }}
-                />
-                <Btn
-                  action="Gerar PDF Orçamento"
-                  color="darkBlue"
-                  onClick={generatePdfBudget}
-                />
-                <Btn
-                  action="Gerar PDF tarifa"
-                  color="dashboard"
-                  onClick={generatePdfDescription}
-                />
-                <Btn action="Limpar" color="red" onClick={clearTariffs} />
-              </div>
+              <InfoTable budgets={budgets} deleteLine={deleteLine} />
+              <ButtonsBudget
+                budgets={budgets}
+                clearTariffs={clearTariffs}
+                handleSaveBudget={handleSaveBudget}
+              />
             </div>
           </div>
         </div>
