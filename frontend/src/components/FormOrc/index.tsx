@@ -1,56 +1,17 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { handleForm } from "../../pages/Home/functions/handleForm";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./style.scss";
 import { useApi } from "../../hooks/api";
 import { ModalRequirement } from "../ModalRequirement";
 import serialize from "form-serialize";
-import { AppHotelProps } from "../../pages/Home";
-
-export interface FormProps {
-  stateApp: AppHotelProps | null;
-  selectionRange: {
-    startDate: Date;
-    endDate: Date;
-    key: string;
-  };
-  addRows: (rows: any[], arrComplete: any[]) => void;
-  unitUsing: string[];
-}
-
-export interface RequirementProps {
-  name: string;
-  price: number;
-}
-
-export type RequirementSubmitProps = {
-  requirement: string;
-  type: string;
-  values: RequirementSubmitValuesProps;
-};
-
-export type RequirementSubmitValuesProps = {
-  adult: number;
-  child: string[];
-  amount: number;
-};
-
-export interface CategoryOptionsProps {
-  label: string;
-  unit: number;
-  category: string;
-}
-
-export interface CategoriesProps {
-  category: {
-    id: string;
-    name: string;
-  };
-  category_id: string;
-  id: number;
-  minimum_occupancy: number;
-  maximum_occupancy: number;
-}
+import {
+  CategoriesProps,
+  CategoryOptionsProps,
+  FormProps,
+  RequirementSubmitProps,
+  RequirementSubmitValuesProps,
+} from "./Interfaces";
 
 export const FormOrc = ({
   stateApp,
@@ -133,7 +94,14 @@ export const FormOrc = ({
       return;
     }
     let lastRequirement = requirement[requirement.length - 1];
-    if (lastRequirement.match(/decoração romântica/)) return;
+    if (lastRequirement.match(/decoração romântica/)) {
+      handleSave(requirement, lastRequirement, "romantic", {
+        adult: 0,
+        child: [],
+        amount: 1,
+      });
+      return;
+    }
     if (lastRequirement.match(/check-in às/)) setTypeModal("person");
     if (lastRequirement.match(/observação C.E.U/)) setTypeModal("ticket");
     if (
