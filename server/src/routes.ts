@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import { CalcBudgetController } from "./controllers/Budget/CalcBudgetController";
+import { CalcBudgetDUController } from "./controllers/Budget/calcBudgetDUcontroller";
 import { CreateCategoryController } from "./controllers/Category/CreateCategoryController";
 import { FindCategoryController } from "./controllers/Category/FindCategoryController";
 import { CreateCommonDateController } from "./controllers/CommonDate/CreateCommonDateController";
@@ -62,12 +63,13 @@ const findRequirements = new FindRequirementsController();
 const findAllHousingUnits = new FindAllHousingUnits();
 
 const calcBudget = new CalcBudgetController();
+const calcBudgetDU = new CalcBudgetDUController();
 // const changeDeal = new ChangeDealController();
 
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
 
-// routes.use(authMiddleware);
+routes.use(authMiddleware);
 routes.delete("/user", deleteUser.handle);
 routes.get("/user", findUser.handle);
 routes.get("/validate", validateUser.handle);
@@ -99,6 +101,7 @@ routes.get("/requirement", findRequirements.handle);
 routes.get("/housing-units", findAllHousingUnits.handle);
 
 routes.post("/budget", calcBudget.handle);
+routes.post("/budget-du", calcBudgetDU.handle);
 
 // routes.post("/pipedrive", changeDeal.handle);
 export default routes;

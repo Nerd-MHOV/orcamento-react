@@ -141,3 +141,24 @@ model HUs {
 
   @@map("housing_units")
 }
+
+model DUTariff {
+  name           String           @id
+  product_pipe   String
+  active         Boolean          @default(true)
+  DUTariffValues DUTariffValues[]
+
+  @@map("du_tariffs")
+}
+
+model DUTariffValues {
+  id        Int    @id @default(autoincrement())
+  tariff_id String
+  adt       Float
+  chd0      Float
+  chd6      Float
+
+  tariffs DUTariff @relation(fields: [tariff_id], references: [name])
+
+  @@map("du_tariff_values")
+}

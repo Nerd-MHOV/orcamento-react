@@ -22,13 +22,26 @@ export const ButtonsBudget = ({
   const api = useApi();
 
   async function generatePdfDescription() {
+    if (
+      budgets.find((budget) =>
+        budget.arrComplete.responseForm.category.match(/Day-Use/)
+      )
+    ) {
+      return;
+    }
     const arrUser = await api.findUniqueUser(userLogin);
-
     pdfDescription(budgets, arrUser.token_pipe);
   }
 
   async function generatePdfBudget() {
     pipeChangeDeal(userLogin, budgets);
+    if (
+      budgets.find((budget) =>
+        budget.arrComplete.responseForm.category.match(/Day-Use/)
+      )
+    ) {
+      return;
+    }
     const arrUser = await api.findUniqueUser(userLogin);
     pdfBudget(
       budgets,

@@ -8,8 +8,10 @@ export class GetNumberPipeController {
     const numberPipe = 0;
     let tariff: any = {};
     let date = new Date(date_in);
+    let dateOut = new Date(date_out);
     let type = "";
-    while (date < new Date(date_out)) {
+
+    while (date < dateOut) {
       let dayMonthYear = format(date, "yyyy-MM-dd");
       let monthYear = format(date, "yyyy-MM");
       let tariffs = await getTariff(dayMonthYear, monthYear);
@@ -28,6 +30,12 @@ export class GetNumberPipeController {
         type = "isCommon";
       }
       date = addDays(date, 1);
+    }
+
+    if (format(date, "yyyy-MM-dd") === format(dateOut, "yyyy-MM-dd")) {
+      tariff = {
+        product_pipe: "46",
+      };
     }
 
     return response.json(tariff);

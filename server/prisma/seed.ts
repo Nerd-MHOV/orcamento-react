@@ -2,6 +2,8 @@ import { prisma, PrismaClient } from "@prisma/client";
 import { CategorySeed } from "./seeds/categories";
 import { CheckSeed } from "./seeds/checkinValues";
 import { CommonDateSeed } from "./seeds/commonDates";
+import { DUtariffSeed } from "./seeds/duTariff";
+import { DUtariffValuesSeed } from "./seeds/duTariffValues";
 import { FoodSeed } from "./seeds/food";
 import { HUsSeed } from "./seeds/housingUnits";
 import { PetSeed } from "./seeds/pets";
@@ -111,6 +113,25 @@ async function main() {
       create: unit,
     });
     console.log("Housing unit created: " + unit.id);
+  }
+
+  for (let dUTariff of DUtariffSeed) {
+    const createdTariff = await prismaClient.dUTariff.upsert({
+      where: { name: dUTariff.name },
+      update: dUTariff,
+      create: dUTariff,
+    });
+    console.log("tariff Day Use" + dUTariff.name + " created");
+  }
+
+  for (let duTariffValue of DUtariffValuesSeed) {
+    const createdValue = await prismaClient.dUTariffValues.upsert({
+      where: { id: duTariffValue.id },
+      update: duTariffValue,
+      create: duTariffValue,
+    });
+
+    console.log("value for " + createdValue.tariff_id + " created");
   }
 }
 

@@ -30,7 +30,7 @@ export type RequirementSubmitValuesProps = {
 
 export interface CategoryOptionsProps {
   label: string;
-  unit: number;
+  unit: string;
   category: string;
 }
 
@@ -40,7 +40,7 @@ export interface CategoriesProps {
     name: string;
   };
   category_id: string;
-  id: number;
+  id: string;
   minimum_occupancy: number;
   maximum_occupancy: number;
 }

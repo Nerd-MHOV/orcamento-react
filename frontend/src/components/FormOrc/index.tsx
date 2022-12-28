@@ -53,6 +53,7 @@ export const FormOrc = ({
   });
   const [occupancyWrong, setOccupancyWrong] = useState(false);
   const [infoApp, setInfoApp] = useState<String>("");
+  const [disabledPension, setDisabledPension] = useState(false);
 
   async function getListRequirements() {
     await api.getRequirements().then((response) => {
@@ -75,6 +76,18 @@ export const FormOrc = ({
           unit: res.id,
           category: res.category.name,
         });
+      });
+
+      list.push({
+        label: "Day-Use Full",
+        unit: "Day-Use Full",
+        category: "Day-Use Full",
+      });
+
+      list.push({
+        label: "Day-Use Tradicional",
+        unit: "Day-Use Tradicional",
+        category: "Day-Use Tradicional",
       });
 
       setAllCategories(response);
@@ -306,6 +319,7 @@ export const FormOrc = ({
             />
             <TextField
               name="discount"
+              disabled={disabledPension}
               label="Desconto"
               type="number"
               className="textField"
@@ -327,8 +341,30 @@ export const FormOrc = ({
               componentName="category"
               options={categoryOptions}
               className="textField"
+              getOptionDisabled={(options) => {
+                if (
+                  selectionRange.startDate === selectionRange.endDate &&
+                  !options.category.match(/Day-Use/)
+                ) {
+                  return true;
+                }
+
+                if (
+                  selectionRange.startDate !== selectionRange.endDate &&
+                  options.category.match(/Day-Use/)
+                ) {
+                  return true;
+                }
+
+                return false;
+              }}
               onChange={(_, newValue) => {
                 setCategoryValue(newValue);
+                setDisabledPension(false);
+                if (newValue && !!newValue.label.match(/Day-Use/)) {
+                  setDisabledPension(true);
+                  return;
+                }
                 if (newValue) changeOccupancy(newValue);
               }}
               // getOptionDisabled={(option) =>
@@ -357,6 +393,7 @@ export const FormOrc = ({
             />
             <Autocomplete
               componentName="pension"
+              disabled={disabledPension}
               options={["simples", "meia", "completa"]}
               className="textField"
               onChange={(_, newValue) => {
