@@ -21,7 +21,7 @@
     "date-fns": "^2.29.3",
     "form-serialize": "^0.7.2",
     "pdfkit": "^0.13.0",
-    "pdfmake": "^0.2.6",
+    "pdfmake": "^0.2.7",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.2.0",
