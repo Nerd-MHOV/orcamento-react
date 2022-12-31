@@ -1,5 +1,6 @@
-import { AppHotelProps } from "../../pages/Home";
+import { AppHotelProps } from "../../hooks/appHotel/interfaces";
 
+export type TypeModalProps = "person" | "ticket" | "tourism";
 export interface FormProps {
   stateApp: AppHotelProps | null;
   selectionRange: {
@@ -16,17 +17,17 @@ export interface RequirementProps {
   price: number;
 }
 
-export type RequirementSubmitProps = {
+export interface RequirementSubmitProps {
   requirement: string;
   type: string;
   values: RequirementSubmitValuesProps;
-};
+}
 
-export type RequirementSubmitValuesProps = {
+export interface RequirementSubmitValuesProps {
   adult: number;
   child: string[];
   amount: number;
-};
+}
 
 export interface CategoryOptionsProps {
   label: string;
@@ -43,4 +44,33 @@ export interface CategoriesProps {
   id: string;
   minimum_occupancy: number;
   maximum_occupancy: number;
+}
+
+export interface ArrCompleteProps {
+  childValue?: String[];
+  petValue?: String[];
+  responseForm?: ResponseFormProps;
+  selectionRange?: SelectionRangeProps;
+}
+
+export interface SelectionRangeProps {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+}
+
+export interface ResponseFormProps {
+  adult?: number;
+  discount?: number;
+  category?: string;
+  housingUnit: string;
+  numberPipe: number;
+  pension: string;
+}
+
+export interface OccupancyProps {
+  text: string;
+  max: number;
+  min: number;
+  category: string;
 }

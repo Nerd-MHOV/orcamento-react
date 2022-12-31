@@ -1,5 +1,5 @@
 import { DataContentProps } from "../../../components/TableCalc";
-import { useApi } from "../../../hooks/api";
+import { useApi } from "../../../hooks/api/api";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
 
 export async function pipeChangeDeal(

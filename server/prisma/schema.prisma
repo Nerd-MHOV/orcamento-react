@@ -58,7 +58,7 @@ model Tariff {
   name         String  @id
   product_pipe String
   active       Boolean
-  order_id     Int     @unique @default(autoincrement())
+  order_id     Int     @default(autoincrement())
   food_id      Int
 
   food Foods @relation(fields: [food_id], references: [id])

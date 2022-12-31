@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { useApi } from "../hooks/api";
+import { useApi } from "../hooks/api/api";
 
 export const AuthContext = createContext<any>({});
 
@@ -31,10 +31,10 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
           return true;
         }
       }
-
       return false;
     } catch (error) {
       console.log(error);
+      return false;
     }
   };
 

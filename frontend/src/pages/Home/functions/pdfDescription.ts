@@ -1,11 +1,8 @@
-import { style } from "@mui/system";
-import { addDays, format } from "date-fns";
 import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfFonts from "./vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { useContext } from "react";
-import { AuthContext } from "../../../context/authContext";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
+(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const months = [
   "Janeiro",
@@ -21,10 +18,7 @@ const months = [
   "Novembro",
   "Dezembro",
 ];
-
 async function pdfDescription(budgets: any[], token: string) {
-  (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
   let realBudget = budgets[0];
 
   let housingUnit = realBudget.arrComplete.responseForm.housingUnit.substr(

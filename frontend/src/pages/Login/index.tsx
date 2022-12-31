@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../context/authContext";
 import "./style.scss";
 import Logo from "../../assets/GrupoperaltasCompleto.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Btn from "../../components/Btn";
 import Message from "../../components/Message";
-import { AuthContext } from "../../context/authContext";
-import { useContext } from "react";
-
-interface CallbackProps {
-  type?: string;
-  message?: string;
-}
+import { CallbackProps } from "../../components/Message/interface";
 
 const Login = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState("");
   const [passwd, setPasswd] = useState("");
   const [callback, setCallback] = useState<CallbackProps>({});
@@ -25,7 +18,8 @@ const Login = () => {
       const response = await auth.login(user, passwd);
       if (response) {
         setCallback(response);
-        navigate("/");
+        location.href = "/";
+        // navigate("/");
       } else {
         setCallback({
           type: "error",

@@ -1,7 +1,8 @@
 import axios from "axios";
 import serialize from "form-serialize";
-import { RequirementSubmitProps } from "../components/FormOrc/Interfaces";
-import { selectionRange } from "../pages/Home/functions/handleForm";
+import { RequirementSubmitProps } from "../../components/FormOrc/Interfaces";
+import { selectionRange } from "../../pages/Home/functions/handleForm";
+import { AllTariffsProps } from "./interfaces";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -76,6 +77,11 @@ export const useApi = () => ({
     return response.data;
   },
 
+  getAllTariffs: async (): Promise<AllTariffsProps[]> => {
+    const response = await api.get("/tariff");
+    return response.data;
+  },
+
   findUniqueUser: async (id: number) => {
     const response = await api.post("/unique-user", { id });
     return response.data;
@@ -93,6 +99,19 @@ export const useApi = () => ({
 
   findMonthWithTariff: async () => {
     const response = await api.get("/common-date");
+    return response.data;
+  },
+
+  changeOrderTariff: async (order_id: number, side: string) => {
+    const response = await api.post("/tariff/order", { order_id, side });
+    return response.data;
+  },
+
+  toggleActiveTariff: async (name: string, active: boolean) => {
+    const response = await api.post("/tariff/active", {
+      name,
+      active,
+    });
     return response.data;
   },
 });

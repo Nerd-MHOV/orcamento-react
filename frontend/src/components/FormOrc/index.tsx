@@ -1,17 +1,36 @@
-import { Autocomplete, TextField } from "@mui/material";
 import { handleForm } from "../../pages/Home/functions/handleForm";
 import { useState, useEffect } from "react";
 import "./style.scss";
-import { useApi } from "../../hooks/api";
+import { useApi } from "../../hooks/api/api";
 import { ModalRequirement } from "../ModalRequirement";
 import serialize from "form-serialize";
 import {
   CategoriesProps,
   CategoryOptionsProps,
   FormProps,
+  OccupancyProps,
   RequirementSubmitProps,
   RequirementSubmitValuesProps,
+  TypeModalProps,
 } from "./Interfaces";
+import { AdultInputForm } from "./partForm/adult";
+import { ChildInputForm } from "./partForm/child";
+import { PetInputForm } from "./partForm/pet";
+import { DiscountInputForm } from "./partForm/discount";
+import { CategoryInputForm } from "./partForm/category";
+import { PensionInputForm } from "./partForm/pension";
+import { PipeNumberInputForm } from "./partForm/pipeNumber";
+import { RequirementInputForm } from "./partForm/requirement";
+import { InfoApp } from "../InfoApp";
+import { getListRequirements } from "./getters/getListRequirements";
+import { getCategoryOptions } from "./getters/getCategoryOptions";
+
+const occupancyInitial = {
+  text: "",
+  max: 0,
+  min: 0,
+  category: "",
+};
 
 export const FormOrc = ({
   stateApp,
@@ -20,18 +39,15 @@ export const FormOrc = ({
   unitUsing,
 }: FormProps) => {
   const api = useApi();
-
   const [open, setOpen] = useState(false);
-  const [childValue, setChildValue] = useState<any[]>([]);
-  const [petValue, setPetValue] = useState<any[]>([]);
+  const [childValue, setChildValue] = useState<Number[]>([]);
+  const [petValue, setPetValue] = useState<string[]>([]);
   const [categoryValue, setCategoryValue] =
     useState<CategoryOptionsProps | null>(null);
   const [pensionValue, setPensionValue] = useState<string | null>(null);
   const [requirementValue, setRequirementValue] = useState<string[]>([]);
   const [listRequirements, setListRequirements] = useState<string[]>([]);
-  const [typeModal, setTypeModal] = useState<
-    "" | "person" | "ticket" | "tourism"
-  >("");
+  const [typeModal, setTypeModal] = useState<TypeModalProps | "">("");
   const [requirementModal, setRequirementModal] = useState<string[]>([]);
   const [requirementSubmit, setRequirementSubmit] = useState<
     RequirementSubmitProps[]
@@ -40,64 +56,9 @@ export const FormOrc = ({
     CategoryOptionsProps[]
   >([]);
   const [allCategories, setAllCategories] = useState<CategoriesProps[]>([]);
-  const [occupancy, setOccupancy] = useState<{
-    text: string;
-    max: number;
-    min: number;
-    category: string;
-  }>({
-    text: "",
-    max: 0,
-    min: 0,
-    category: "",
-  });
+  const [occupancy, setOccupancy] = useState<OccupancyProps>(occupancyInitial);
   const [occupancyWrong, setOccupancyWrong] = useState(false);
-  const [infoApp, setInfoApp] = useState<String>("");
   const [disabledPension, setDisabledPension] = useState(false);
-
-  async function getListRequirements() {
-    await api.getRequirements().then((response) => {
-      let list: string[] = [];
-
-      response.map((res: any) => {
-        list.push(res.name);
-      });
-      setListRequirements(list);
-    });
-  }
-
-  async function getCategoryOptions() {
-    await api.findAllHousingUnits().then((response) => {
-      let list: CategoryOptionsProps[] = [];
-
-      response.map((res: any) => {
-        list.push({
-          label: `${res.id} - ${res.category_id}`,
-          unit: res.id,
-          category: res.category.name,
-        });
-      });
-
-      list.push({
-        label: "Day-Use Full",
-        unit: "Day-Use Full",
-        category: "Day-Use Full",
-      });
-
-      list.push({
-        label: "Day-Use Tradicional",
-        unit: "Day-Use Tradicional",
-        category: "Day-Use Tradicional",
-      });
-
-      setAllCategories(response);
-      setCategoryOptions(list);
-    });
-  }
-
-  function getInfoApp() {
-    setInfoApp("");
-  }
 
   const handleClickOpen = (requirement: string[]) => {
     if (requirement.length < requirementSubmit.length) {
@@ -127,6 +88,16 @@ export const FormOrc = ({
     setOpen(true);
   };
 
+  const handleCategoryInput = (newValue: CategoryOptionsProps | null) => {
+    setCategoryValue(newValue);
+    setDisabledPension(false);
+    if (newValue && !!newValue.label.match(/Day-Use/)) {
+      setDisabledPension(true);
+      return;
+    }
+    if (newValue) changeOccupancy(newValue);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -154,29 +125,29 @@ export const FormOrc = ({
     setRequirementValue(array);
   }
 
+  const callHandleForm = () => {
+    handleForm(
+      occupancy.category,
+      requirementSubmit,
+      childValue,
+      petValue,
+      selectionRange,
+      addRows
+    );
+  };
   function changeOccupancy(housingUnit: CategoryOptionsProps) {
     let category = allCategories.filter((arr) => arr.id === housingUnit.unit);
-
-    setOccupancy({
+    const newValue = {
       text: `${category[0].id} - min: ${category[0].minimum_occupancy}, max: ${category[0].maximum_occupancy}`,
       max: category[0].maximum_occupancy,
       min: category[0].minimum_occupancy,
       category: housingUnit.category,
-    });
-    changeOccupancyWrong({
-      text: `${category[0].id} - min: ${category[0].minimum_occupancy}, max: ${category[0].maximum_occupancy}`,
-      max: category[0].maximum_occupancy,
-      min: category[0].minimum_occupancy,
-      category: housingUnit.category,
-    });
+    };
+    setOccupancy(newValue);
+    changeOccupancyWrong(newValue);
   }
 
-  function changeOccupancyWrong(occupancy: {
-    text: string;
-    max: number;
-    min: number;
-    category: string;
-  }) {
+  function changeOccupancyWrong(occupancy: OccupancyProps) {
     const formUp: HTMLFormElement | any = document.querySelector("#form");
     const responseForm = serialize(formUp, { hash: true });
     let adult = responseForm.adult;
@@ -193,17 +164,7 @@ export const FormOrc = ({
     changeRequirementValue();
   }, [requirementSubmit]);
   useEffect(() => {
-    getInfoApp();
-  }, [stateApp]);
-  useEffect(() => {
-    handleForm(
-      occupancy.category,
-      requirementSubmit,
-      childValue,
-      petValue,
-      selectionRange,
-      addRows
-    );
+    callHandleForm();
   }, [
     requirementValue,
     childValue,
@@ -212,9 +173,15 @@ export const FormOrc = ({
     pensionValue,
     selectionRange,
   ]);
+
+  const getVariables = async () => {
+    const resCategory = await getCategoryOptions();
+    setListRequirements(await getListRequirements());
+    setAllCategories(resCategory.response);
+    setCategoryOptions(resCategory.list);
+  };
   useEffect(() => {
-    getListRequirements();
-    getCategoryOptions();
+    getVariables();
   }, []);
 
   return (
@@ -234,220 +201,52 @@ export const FormOrc = ({
       <div className="boxFormAndInfo">
         <form id="form" className="form">
           <div className="formBox">
-            <TextField
-              label="Adulto"
-              type="number"
-              name="adult"
-              className="textField"
-              variant="standard"
+            <AdultInputForm
               onChange={() => {
-                handleForm(
-                  occupancy.category,
-                  requirementSubmit,
-                  childValue,
-                  petValue,
-                  selectionRange,
-                  addRows
-                );
+                callHandleForm();
                 changeOccupancyWrong(occupancy);
               }}
             />
-            <Autocomplete
-              componentName="child"
-              multiple
-              onChange={(_, newValue) => {
+            <ChildInputForm
+              childValue={childValue}
+              onChange={(newValue) => {
                 setChildValue(newValue);
                 changeOccupancyWrong(occupancy);
+                callHandleForm;
               }}
-              value={childValue}
-              options={[
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11",
-                "12",
-              ]}
-              isOptionEqualToValue={() => false}
-              className="textField"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Criança"
-                  type="text"
-                  placeholder="idade"
-                  variant="standard"
-                  onChange={() =>
-                    handleForm(
-                      occupancy.category,
-                      requirementSubmit,
-                      childValue,
-                      petValue,
-                      selectionRange,
-                      addRows
-                    )
-                  }
-                />
-              )}
             />
-            <Autocomplete
-              componentName="pet"
-              multiple
-              options={["pequeno", "médio", "grande"]}
-              isOptionEqualToValue={() => false}
-              className="textField"
-              onChange={(_, newValue) => {
+            <PetInputForm
+              onChange={(newValue) => {
                 setPetValue(newValue);
               }}
-              value={petValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Pet"
-                  name="pet"
-                  placeholder="porte"
-                  type="text"
-                  variant="standard"
-                />
-              )}
+              petValue={petValue}
             />
-            <TextField
-              name="discount"
-              disabled={disabledPension}
-              label="Desconto"
-              type="number"
-              className="textField"
-              variant="standard"
-              onChange={() =>
-                handleForm(
-                  occupancy.category,
-                  requirementSubmit,
-                  childValue,
-                  petValue,
-                  selectionRange,
-                  addRows
-                )
-              }
+            <DiscountInputForm
+              onChange={callHandleForm}
+              disabledPension={disabledPension}
             />
           </div>
           <div className="formBox">
-            <Autocomplete
-              componentName="category"
-              options={categoryOptions}
-              className="textField"
-              getOptionDisabled={(options) => {
-                if (
-                  selectionRange.startDate === selectionRange.endDate &&
-                  !options.category.match(/Day-Use/)
-                ) {
-                  return true;
-                }
-
-                if (
-                  selectionRange.startDate !== selectionRange.endDate &&
-                  options.category.match(/Day-Use/)
-                ) {
-                  return true;
-                }
-
-                return false;
-              }}
-              onChange={(_, newValue) => {
-                setCategoryValue(newValue);
-                setDisabledPension(false);
-                if (newValue && !!newValue.label.match(/Day-Use/)) {
-                  setDisabledPension(true);
-                  return;
-                }
-                if (newValue) changeOccupancy(newValue);
-              }}
-              // getOptionDisabled={(option) =>
-              //   unitUsing.includes(`${option.unit}`)
-              // }
-              renderOption={(props, option) => {
-                if (unitUsing.includes(`${option.unit}`))
-                  return (
-                    <span {...props} style={{ color: "lightgray" }}>
-                      {option.label}
-                    </span>
-                  );
-
-                return <span {...props}>{option.label}</span>;
-              }}
-              value={categoryValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="category"
-                  label="Categoria"
-                  type="text"
-                  variant="standard"
-                />
-              )}
+            <CategoryInputForm
+              onChange={handleCategoryInput}
+              categoryOptions={categoryOptions}
+              categoryValue={categoryValue}
+              selectionRange={selectionRange}
+              unitUsing={unitUsing}
             />
-            <Autocomplete
-              componentName="pension"
-              disabled={disabledPension}
-              options={["simples", "meia", "completa"]}
-              className="textField"
-              onChange={(_, newValue) => {
+            <PensionInputForm
+              disabledPension={disabledPension}
+              onChange={(newValue) => {
                 setPensionValue(newValue);
               }}
-              value={pensionValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="pension"
-                  label="Pensão"
-                  type="text"
-                  variant="standard"
-                />
-              )}
+              pensionValue={pensionValue}
             />
-            <TextField
-              name="numberPipe"
-              label="Nº Pipe"
-              type="number"
-              onChange={() =>
-                handleForm(
-                  occupancy.category,
-                  requirementSubmit,
-                  childValue,
-                  petValue,
-                  selectionRange,
-                  addRows
-                )
-              }
-              className="textField"
-              variant="standard"
-            />
+            <PipeNumberInputForm onChange={callHandleForm} />
 
-            <Autocomplete
-              componentName="requirement"
-              multiple
-              isOptionEqualToValue={() => false}
-              options={listRequirements}
-              className="textField"
-              onChange={(_, newValue) => {
-                handleClickOpen(newValue);
-              }}
-              value={requirementValue}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Requerimento"
-                  type="text"
-                  name="requirement"
-                  className="textField"
-                  variant="standard"
-                />
-              )}
+            <RequirementInputForm
+              listRequirements={listRequirements}
+              onChange={handleClickOpen}
+              requirementValue={requirementValue}
             />
           </div>
         </form>
@@ -457,20 +256,7 @@ export const FormOrc = ({
         >
           {occupancy.text}
         </div>
-        <div className="infoApp">
-          {stateApp !== null && stateApp.qntdReservas && (
-            <div className="infoAppBox">
-              <div>
-                <p>Confirmadas: {stateApp.confirmadas}</p>
-                <p>Bloqueios: {stateApp.bloqueios}</p>
-              </div>
-              <div>
-                <p>Processadas: {stateApp.processadas}</p>
-                <p>Total Reservas: {stateApp.qntdReservas}</p>
-              </div>
-            </div>
-          )}
-        </div>
+        <InfoApp stateApp={stateApp} />
       </div>
     </>
   );

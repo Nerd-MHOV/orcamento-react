@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 
 export class CreateUserController {
   async handle(request: Request, response: Response) {
-    const { name, email, password, phone, username } = request.body;
+    const { name, email, password, phone, username, token_pipe, user_pipe } =
+      request.body;
 
     await bcrypt
       .hash(password, 10)
@@ -16,6 +17,8 @@ export class CreateUserController {
             password: hashPassword,
             phone,
             username,
+            token_pipe,
+            user_pipe,
           },
         });
       })
@@ -29,7 +32,7 @@ export class CreateUserController {
           err: err,
           message: {
             type: "error",
-            message: "Usuario já existe!",
+            message: "Usuário já existe!",
           },
         });
       });

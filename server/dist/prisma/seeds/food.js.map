@@ -1,0 +1,1 @@
+{"version":3,"file":"food.js","sourceRoot":"","sources":["../../../prisma/seeds/food.ts"],"names":[],"mappings":";;;AAAa,QAAA,QAAQ,GAAG;IACtB;QACE,EAAE,EAAE,CAAC;QACL,GAAG,EAAE,EAAE;QACP,KAAK,EAAE,EAAE;QACT,IAAI,EAAE,CAAC;QACP,IAAI,EAAE,EAAE;QACR,IAAI,EAAE,EAAE;KACT;CACF,CAAC"}

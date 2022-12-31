@@ -1,22 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import React, { useContext } from "react";
-import { AuthContext } from "./context/authContext";
+import { NewTariff } from "./pages/NewTariffs";
+import { TariffsPage } from "./pages/Tariffs";
+import { Private } from "./private";
 function App() {
-  const Private = ({ children }: any) => {
-    const { authenticated, loading } = useContext(AuthContext);
-
-    if (loading) {
-      return <div className="loading">Carregando...</div>;
-    }
-
-    if (!authenticated) {
-      return <Navigate to="/login" />;
-    }
-    return children;
-  };
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -31,6 +19,10 @@ function App() {
                 </Private>
               }
             />
+            <Route path="/tariffs">
+              <Route index element={<TariffsPage />} />
+              <Route path="/tariffs/create" element={<NewTariff />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

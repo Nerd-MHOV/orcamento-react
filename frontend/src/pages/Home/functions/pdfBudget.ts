@@ -1,11 +1,11 @@
 import { addDays, format } from "date-fns";
 import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "./vfs_fonts"; where BUILD
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { useContext } from "react";
-import { AuthContext } from "../../../context/authContext";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
-import { useApi } from "../../../hooks/api";
+
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 const months = [
   "Janeiro",
@@ -29,8 +29,6 @@ async function pdfBudget(
   numberPhone: string,
   token: string
 ) {
-  (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
   const monthNum = Number(budgets[0].columns[1].substr(-2));

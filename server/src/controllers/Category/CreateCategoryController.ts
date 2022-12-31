@@ -3,12 +3,12 @@ import { prismaClient } from "../../database/prismaClient";
 
 export class CreateCategoryController {
   async handle(request: Request, response: Response) {
-    const { initials, name } = request.body;
+    const { id, name }: { id: string; name: string } = request.body;
 
     await prismaClient.categories
       .create({
         data: {
-          initials,
+          id,
           name,
         },
       })

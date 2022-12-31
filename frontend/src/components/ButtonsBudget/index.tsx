@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-import { useApi } from "../../hooks/api";
+import { useApi } from "../../hooks/api/api";
 import pdfBudget from "../../pages/Home/functions/pdfBudget";
 import pdfDescription from "../../pages/Home/functions/pdfDescription";
+import EvitaBug from "../../pages/Home/functions/evitaBugPDF";
 import { pipeChangeDeal } from "../../pages/Home/functions/pipeChangeDeal";
 import Btn from "../Btn";
 import { DataContentProps } from "../TableCalc";
@@ -21,6 +22,9 @@ export const ButtonsBudget = ({
   const { userLogin } = useContext(AuthContext);
   const api = useApi();
 
+  function evitaBug() {
+    EvitaBug(budgets, "token");
+  }
   async function generatePdfDescription() {
     if (
       budgets.find((budget) =>

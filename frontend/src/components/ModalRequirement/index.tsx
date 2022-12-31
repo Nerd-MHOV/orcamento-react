@@ -9,10 +9,7 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { Autocomplete, TextField } from "@mui/material";
 import "./style.scss";
-import {
-  RequirementSubmitProps,
-  RequirementSubmitValuesProps,
-} from "../FormOrc";
+import { RequirementSubmitValuesProps } from "../FormOrc/Interfaces";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

@@ -1,113 +1,63 @@
-import { useEffect, useState } from "react";
-import { addDays } from "date-fns/esm";
-import { format } from "date-fns";
-
+import "./style.scss";
+import { useApi } from "../../hooks/api/api";
+import "react-date-range/dist/styles.css";
+import { useAppApi } from "../../hooks/appHotel/app";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
-import TableCalc, { DataContentProps } from "../../components/TableCalc";
-import "./style.scss";
-import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { FormOrc } from "../../components/FormOrc";
-
-import { useApi } from "../../hooks/api";
-import { useAppApi } from "../../hooks/app";
-import { CalendarPicker } from "../../components/CalendarPicker";
 import { InfoTable } from "../../components/InfoTables";
 import { ButtonsBudget } from "../../components/ButtonsBudget";
-
-export interface AppHotelProps {
-  reservas: {
-    unidade: string;
-    [key: string]: any;
-  };
-  qntdReservas: number;
-  processadas: number;
-  confirmadas: number;
-  bloqueios: number;
-  qntdAdt: number;
-  qntdChd: number;
-}
+import { CalendarPicker } from "../../components/CalendarPicker";
+import TableCalc, { DataContentProps } from "../../components/TableCalc";
+import { AppHotelProps } from "../../hooks/appHotel/interfaces";
+import { ArrCompleteProps } from "../../components/FormOrc/Interfaces";
+import { getHolidays } from "./functions/getters/getHolidays";
+import { getMonthsWithTariffs } from "./functions/getters/getMonthsWithTariffs";
+import { getUnitUsing } from "./functions/getters/getUnitUsing";
+import { getColumnData } from "./functions/getters/getColumnData";
+import { AuthContext } from "../../context/authContext";
 
 const dataInitial = {
   rows: [],
   columns: [],
 };
 
+const selectionRangeInitial = {
+  startDate: new Date(),
+  endDate: new Date(),
+  key: "selection",
+};
+
 const Home = () => {
   const api = useApi();
   const app = useAppApi();
-  const [dataTable, setDataTable] = useState<DataContentProps>({
-    rows: [],
-    columns: [],
-  });
-
+  const [dataTable, setDataTable] = useState<DataContentProps>(dataInitial);
   const [budgets, setBudgets] = useState<DataContentProps[]>([]);
-  const [arrComplete, setArrComplete] = useState<any>([]);
-  const [selectionRange, setSelectionRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
+  const [arrComplete, setArrComplete] = useState<ArrCompleteProps | []>([]);
+  const [selectionRange, setSelectionRange] = useState(selectionRangeInitial);
   const [holidays, setHolidays] = useState<String[]>([]);
   const [monthsWithTariffs, setMonthsWithTariffs] = useState<String[]>([]);
   const [stateApp, setStateApp] = useState<AppHotelProps | null>(null);
   const [unitUsing, setUnitUsing] = useState<string[]>([]);
 
-  async function getHolidays() {
-    await api.findHolidays().then((response) => {
-      let arrayDate: String[] = [];
-      response.map((date: { date: string; tariffs_id: string }) => {
-        arrayDate.push(date.date);
-      });
-
-      setHolidays(arrayDate);
-    });
-  }
-
-  async function getMonthsWithTariffs() {
-    await api.findMonthWithTariff().then((response) => {
-      let arrayMonths: String[] = [];
-      response.map(
-        (date: {
-          date: string;
-          tariff_to_midweek_id: string;
-          tariff_to_weekend: string;
-        }) => {
-          arrayMonths.push(date.date);
-        }
-      );
-      setMonthsWithTariffs(arrayMonths);
-    });
-  }
-
-  async function getUnitUsing(date: {
-    endDate: Date;
-    key: string;
-    startDate: Date;
-  }) {
-    setUnitUsing([]);
-    await app
-      .getHousingUnitsUsing(
-        format(date.startDate, "yyyy-MM-dd"),
-        format(date.endDate, "yyyy-MM-dd")
-      )
-      .then((response) => {
-        let units: string[] = [];
-
-        response.reservas.map((unit: { unidade: string }) => {
-          units.push(unit.unidade);
-        });
-        setStateApp(response);
-
-        setUnitUsing(units);
-      });
-  }
+  const getVariables = async () => {
+    setDataTable(dataInitial);
+    setHolidays(await getHolidays());
+    setMonthsWithTariffs(await getMonthsWithTariffs());
+  };
 
   async function handleSelect(ranges: any) {
     setSelectionRange(ranges.selection);
-    changeColumnData(ranges.selection);
-    getUnitUsing(ranges.selection);
+    setDataTable((par) => ({
+      rows: par.rows,
+      columns: getColumnData(ranges.selection),
+    }));
+    setUnitUsing([]);
+    const response = await getUnitUsing(ranges.selection);
+    setStateApp(response.response);
+    setUnitUsing(response.units);
   }
 
   async function handleSaveBudget() {
@@ -121,28 +71,6 @@ const Home = () => {
 
   async function clearTariffs() {
     setBudgets([]);
-  }
-
-  function changeColumnData(date: {
-    endDate: Date;
-    key: string;
-    startDate: Date;
-  }) {
-    let newColumn: string[] = ["Desc"];
-    let init = date.startDate;
-    let final = date.endDate;
-    final = addDays(final, 1);
-    while (init < final) {
-      newColumn.push(format(init, "dd/MM"));
-      init = addDays(init, 1);
-    }
-
-    setDataTable((par) => {
-      return {
-        rows: par.rows,
-        columns: newColumn,
-      };
-    });
   }
 
   function addRows(rows: any[], arrComplete: any) {
@@ -162,9 +90,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    setDataTable(dataInitial);
-    getHolidays();
-    getMonthsWithTariffs();
+    getVariables();
   }, []);
 
   return (
