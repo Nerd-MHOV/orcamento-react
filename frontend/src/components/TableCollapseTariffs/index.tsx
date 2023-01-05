@@ -13,6 +13,7 @@ interface CollapsibleTableProps {
   handleChangeOrder?: (id: number, side: string) => void;
   handleToggleActive?: (name: string, active: boolean) => void;
   allTariffs: AllTariffsProps[];
+  ButtonsOn?: boolean;
 }
 
 export default function CollapsibleTableTariff({
@@ -20,6 +21,7 @@ export default function CollapsibleTableTariff({
   handleChangeOrder,
   handleToggleActive,
   allTariffs,
+  ButtonsOn = true,
 }: CollapsibleTableProps) {
   return (
     <TableContainer component={Paper}>
@@ -40,6 +42,7 @@ export default function CollapsibleTableTariff({
               handleChangeOrder={handleChangeOrder}
               handleToggleActive={handleToggleActive}
               allTariffs={allTariffs}
+              ButtonsOn={ButtonsOn}
             />
           ))}
         </TableBody>

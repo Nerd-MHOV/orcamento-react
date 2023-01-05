@@ -3,9 +3,15 @@
         "adtex",
         "Agosto",
         "Grupoperaltas",
+        "LUXC",
+        "LUXH",
+        "PADV",
         "pipedrive",
         "qntd",
         "Setembro"
     ],
-    "cSpell.language": "en,pt"
+    "cSpell.language": "en,pt",
+    "code-runner.executorMap": {
+        "typescript": "npx ts-node --files --transpile-only"
+    }
 }

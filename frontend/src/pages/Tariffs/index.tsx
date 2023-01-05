@@ -11,8 +11,8 @@ import "./style.scss";
 
 export const TariffsPage = () => {
   const api = useApi();
-  const [tariffs, setTariffs] = useState<AllTariffsProps[]>([]);
   const [rows, setRows] = useState<ReturnType<typeof createData>[]>([]);
+  const [tariffs, setTariffs] = useState<AllTariffsProps[]>([]);
 
   const getTariffs = async () => {
     const response = await api.getAllTariffs();

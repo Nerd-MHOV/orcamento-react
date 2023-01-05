@@ -6,20 +6,13 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const steps = [
-  "Tipo de tarifário",
-  "Datas a serem aplicadas",
-  "Alimentação e Check-in Antecipado",
-  "Valores R$",
-  "Nome",
-];
-
 interface StepperTariffProps {
   children: JSX.Element;
   activeStep: number;
   handleNext: VoidFunction;
   handleBack: VoidFunction;
   nextActive: boolean;
+  steps: string[];
 }
 
 export const StepperTariff = ({
@@ -28,6 +21,7 @@ export const StepperTariff = ({
   handleNext,
   handleBack,
   nextActive,
+  steps,
 }: StepperTariffProps) => {
   return (
     <Box sx={{ width: "100%", mt: 5 }}>

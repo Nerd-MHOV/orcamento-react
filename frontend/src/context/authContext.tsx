@@ -12,15 +12,6 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
   const api = useApi();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const recoveredUser = localStorage.getItem("authUser");
-
-    if (recoveredUser) {
-      setUserLogin(Number(recoveredUser));
-    }
-    setLoading(false);
-  }, []);
-
   const validateToken = async () => {
     try {
       const storageData = localStorage.getItem("authToken");
@@ -28,13 +19,13 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
         const data = await api.validateToken();
         if (data.user.id) {
           setUserLogin(data.user.id);
-          return true;
+          return;
         }
       }
-      return false;
+      logout();
     } catch (error) {
-      console.log(error);
-      return false;
+      console.log(error, "erro no validate token");
+      logout();
     }
   };
 
@@ -67,6 +58,16 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
     setUserLogin(null);
     setToken("", "");
   };
+
+  useEffect(() => {
+    const recoveredUser = localStorage.getItem("authUser");
+
+    if (recoveredUser) {
+      setUserLogin(Number(recoveredUser));
+      validateToken();
+    }
+    setLoading(false);
+  }, []);
 
   return (
     <AuthContext.Provider

@@ -2,7 +2,11 @@ import axios from "axios";
 import serialize from "form-serialize";
 import { RequirementSubmitProps } from "../../components/FormOrc/Interfaces";
 import { selectionRange } from "../../pages/Home/functions/handleForm";
-import { AllTariffsProps } from "./interfaces";
+import {
+  AllTariffsProps,
+  FindHolidaysProps,
+  FindMonthWithTariffProps,
+} from "./interfaces";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -92,12 +96,12 @@ export const useApi = () => ({
     return response.data;
   },
 
-  findHolidays: async () => {
+  findHolidays: async (): Promise<FindHolidaysProps[]> => {
     const response = await api.get("/specific-date");
     return response.data;
   },
 
-  findMonthWithTariff: async () => {
+  findMonthWithTariff: async (): Promise<FindMonthWithTariffProps[]> => {
     const response = await api.get("/common-date");
     return response.data;
   },

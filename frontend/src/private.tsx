@@ -13,7 +13,5 @@ export const Private = ({ children }: any) => {
     return <Navigate to="/login" />;
   }
 
-  // validateToken();
-
   return children;
 };

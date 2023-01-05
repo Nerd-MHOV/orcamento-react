@@ -62,8 +62,9 @@ export function Row(props: {
   handleChangeOrder?: (id: number, side: string) => void;
   handleToggleActive?: (name: string, active: boolean) => void;
   allTariffs: AllTariffsProps[];
+  ButtonsOn: boolean;
 }) {
-  const { row, handleChangeOrder, handleToggleActive } = props;
+  const { row, handleChangeOrder, handleToggleActive, ButtonsOn } = props;
   const [open, setOpen] = React.useState(false);
   const [rowDays, setRowDays] = React.useState<
     ReturnType<typeof createDataRelationship>[]
@@ -256,18 +257,20 @@ export function Row(props: {
               </Typography>
               <CollapsibleTableTariffRelationsShip rows={rowDays} />
             </Box>
-            <Box
-              style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "end",
-                marginBottom: 15,
-                gap: 10,
-              }}
-            >
-              <Btn action="Editar" color="green" onClick={() => {}} />
-              <Btn action="Deletar" color="red" onClick={() => {}} />
-            </Box>
+            {ButtonsOn && (
+              <Box
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "end",
+                  marginBottom: 15,
+                  gap: 10,
+                }}
+              >
+                <Btn action="Editar" color="green" onClick={() => {}} />
+                <Btn action="Deletar" color="red" onClick={() => {}} />
+              </Box>
+            )}
           </Collapse>
         </TableCell>
       </TableRow>
