@@ -54,6 +54,24 @@ async function main() {
     });
   }
 
+  for (let checkIn of CheckSeed) {
+    const createdCheckIn = await prismaClient.tariffCheckInValues.upsert({
+      where: { id: checkIn.id },
+      update: checkIn,
+      create: checkIn,
+    });
+    console.log("created tariff for" + checkIn.type + checkIn.tariffs_id);
+  }
+
+  for (let tariffValue of TariffValueSeed) {
+    const { id: tariffId, ...restTariff } = tariffValue;
+    const createdValue = await prismaClient.tariffValues.upsert({
+      where: { id: tariffId },
+      update: restTariff,
+      create: restTariff,
+    });
+  }
+
   for (let commonDate of CommonDateSeed) {
     const createdDate = await prismaClient.commonDates.upsert({
       where: { date: commonDate.date },
@@ -71,27 +89,9 @@ async function main() {
     });
   }
 
-  for (let tariffValue of TariffValueSeed) {
-    const { id: tariffId, ...restTariff } = tariffValue;
-    const createdValue = await prismaClient.tariffValues.upsert({
-      where: { id: tariffId },
-      update: restTariff,
-      create: restTariff,
-    });
-  }
-
-  for (let checkIn of CheckSeed) {
-    const createdCheckIn = await prismaClient.tariffCheckInValues.upsert({
-      where: { id: checkIn.id },
-      update: checkIn,
-      create: checkIn,
-    });
-    console.log("created tariff for" + checkIn.type + checkIn.tariffs_id);
-  }
-
   for (let pet of PetSeed) {
     const createdPet = await prismaClient.pet.upsert({
-      where: { id: pet.id },
+      where: { carrying: pet.carrying },
       update: pet,
       create: pet,
     });
@@ -100,7 +100,7 @@ async function main() {
 
   for (let requirement of RequirementSeed) {
     const createdRequirement = await prismaClient.requirement.upsert({
-      where: { id: requirement.id },
+      where: { name: requirement.name },
       update: requirement,
       create: requirement,
     });

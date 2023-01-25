@@ -1,7 +1,8 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { addMonths, addYears, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CreateTariffContext } from "../../../../context/createTariff/createTariff";
 import { useApi } from "../../../../hooks/api/api";
 
 interface CommonMonthOptionsProps {
@@ -10,11 +11,8 @@ interface CommonMonthOptionsProps {
   disabled: boolean;
 }
 
-export const CommonMonths = ({
-  handleSetDates,
-}: {
-  handleSetDates: (dates: string[]) => void;
-}) => {
+export const CommonMonths = () => {
+  const { setDates } = useContext(CreateTariffContext);
   const api = useApi();
   const [options, setOptions] = useState<CommonMonthOptionsProps[]>([]);
 
@@ -49,7 +47,6 @@ export const CommonMonths = ({
   return (
     <div className="common-month">
       <Autocomplete
-        componentName="month"
         multiple
         size="small"
         options={options}
@@ -57,7 +54,8 @@ export const CommonMonths = ({
         sx={{ maxWidth: 400, margin: "0 auto" }}
         onChange={(event, value) => {
           let dates = value.map((date) => date.date);
-          handleSetDates(dates);
+          console.log(dates, "dates here");
+          setDates(dates);
         }}
         renderInput={(params) => (
           <TextField

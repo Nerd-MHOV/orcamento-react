@@ -1,6 +1,6 @@
 export const CheckSeed = [
   {
-    id: 1,
+    id: "1",
     tariffs_id: "Agosto a Setembro 2023 - FDS",
     type: "10h",
     adt: 411,
@@ -10,7 +10,7 @@ export const CheckSeed = [
     chd8: 130,
   },
   {
-    id: 2,
+    id: "2",
     tariffs_id: "Agosto a Setembro 2023 - FDS",
     type: "12h",
     adt: 242,
@@ -20,7 +20,7 @@ export const CheckSeed = [
     chd8: 129,
   },
   {
-    id: 3,
+    id: "3",
     tariffs_id: "Agosto a Setembro 2023 - MDS",
     type: "10h",
     adt: 330,
@@ -30,7 +30,7 @@ export const CheckSeed = [
     chd8: 124,
   },
   {
-    id: 4,
+    id: "4",
     tariffs_id: "Agosto a Setembro 2023 - MDS",
     type: "12h",
     adt: 204,
@@ -40,7 +40,7 @@ export const CheckSeed = [
     chd8: 109,
   },
   {
-    id: 5,
+    id: "5",
     tariffs_id: "Independência 2023",
     type: "10h",
     adt: 525,
@@ -50,7 +50,7 @@ export const CheckSeed = [
     chd8: 158,
   },
   {
-    id: 6,
+    id: "6",
     tariffs_id: "Independência 2023",
     type: "12h",
     adt: 297,
@@ -60,7 +60,7 @@ export const CheckSeed = [
     chd8: 158,
   },
   {
-    id: 7,
+    id: "7",
     tariffs_id: "Janeiro 2023 - MDS",
     type: "10h",
     adt: 525,
@@ -70,7 +70,7 @@ export const CheckSeed = [
     chd8: 158,
   },
   {
-    id: 8,
+    id: "8",
     tariffs_id: "Janeiro 2023 - MDS",
     type: "12h",
     adt: 297,
@@ -80,7 +80,7 @@ export const CheckSeed = [
     chd8: 158,
   },
   {
-    id: 9,
+    id: "9",
     tariffs_id: "Janeiro 2023 - FDS",
     type: "10h",
     adt: 525,
@@ -90,7 +90,7 @@ export const CheckSeed = [
     chd8: 158,
   },
   {
-    id: 10,
+    id: "10",
     tariffs_id: "Janeiro 2023 - FDS",
     type: "12h",
     adt: 297,
@@ -98,5 +98,25 @@ export const CheckSeed = [
     chd0: 0,
     chd4: 158,
     chd8: 158,
+  },
+  {
+    id: "11",
+    tariffs_id: "N SRA Aparecida 2023",
+    type: "10h",
+    adt: 568,
+    adtex: 568,
+    chd0: 0,
+    chd4: 128,
+    chd8: 169,
+  },
+  {
+    id: "12",
+    tariffs_id: "N SRA Aparecida 2023",
+    type: "12h",
+    adt: 317,
+    adtex: 317,
+    chd0: 0,
+    chd4: 169,
+    chd8: 169,
   },
 ];

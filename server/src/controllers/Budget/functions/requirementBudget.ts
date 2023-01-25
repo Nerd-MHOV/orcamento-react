@@ -2,8 +2,6 @@ import { ArrFormProps, RowsProps } from "../CalcBudgetController";
 import { generateBudgetRequirement } from "./generateBudgetRequirement";
 
 export async function requirementBudget(
-  initDate: Date,
-  finalDate: Date,
   arrForm: ArrFormProps,
   arrRequirement: {
     requirement: string;
@@ -13,7 +11,9 @@ export async function requirementBudget(
       child: number[];
       amount: number;
     };
-  }[]
+  }[],
+  initDate: Date,
+  finalDate: Date
 ) {
   let requirementRows: RowsProps[] = [];
 
@@ -56,6 +56,7 @@ export async function requirementBudget(
       desc: uRequirement,
       values: valueRequirement,
       total: totalRequirement,
+      noDiscount: valueRequirement,
     });
   }
 

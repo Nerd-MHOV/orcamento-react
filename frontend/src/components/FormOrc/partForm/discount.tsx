@@ -11,7 +11,7 @@ export const DiscountInputForm = ({
   <TextField
     name="discount"
     disabled={disabledPension}
-    label="Desconto"
+    label="Desconto %"
     type="number"
     className="textField"
     variant="standard"

@@ -14,6 +14,7 @@ interface CollapsibleTableProps {
   handleToggleActive?: (name: string, active: boolean) => void;
   allTariffs: AllTariffsProps[];
   ButtonsOn?: boolean;
+  reloadRows?: VoidFunction;
 }
 
 export default function CollapsibleTableTariff({
@@ -22,6 +23,7 @@ export default function CollapsibleTableTariff({
   handleToggleActive,
   allTariffs,
   ButtonsOn = true,
+  reloadRows = () => {},
 }: CollapsibleTableProps) {
   return (
     <TableContainer component={Paper}>
@@ -43,6 +45,7 @@ export default function CollapsibleTableTariff({
               handleToggleActive={handleToggleActive}
               allTariffs={allTariffs}
               ButtonsOn={ButtonsOn}
+              reloadRows={reloadRows}
             />
           ))}
         </TableBody>

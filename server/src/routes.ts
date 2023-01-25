@@ -17,6 +17,8 @@ import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateS
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
 import { ChangeOrderTariffController } from "./controllers/Tariff/ChangeOrderTariffController";
 import { CreateTariffController } from "./controllers/Tariff/CreateTariffController";
+import { CreateTariffWithTextController } from "./controllers/Tariff/CreateTariffWithTextController";
+import { DeleteTariffController } from "./controllers/Tariff/DeleteTariffController";
 import { FindTariffController } from "./controllers/Tariff/FindTariffController";
 import { GetNumberPipeController } from "./controllers/Tariff/GetNumberPIpeController";
 import { ToggleActiveTariffController } from "./controllers/Tariff/ToggleActiveTariffController";
@@ -50,6 +52,8 @@ const createPet = new CreatePetController();
 
 const findTariff = new FindTariffController();
 const createTariff = new CreateTariffController();
+const createTariffText = new CreateTariffWithTextController();
+const deleteTariff = new DeleteTariffController();
 const pipeTariff = new GetNumberPipeController();
 const changeOrderTariff = new ChangeOrderTariffController();
 const toggleActiveTariff = new ToggleActiveTariffController();
@@ -90,7 +94,9 @@ routes.post("/pet", createPet.handle);
 
 routes.get("/tariff", findTariff.handle);
 routes.post("/tariff", createTariff.handle);
+routes.post("/tariff/text", createTariffText.handle);
 routes.post("/tariff_pipe", pipeTariff.handle);
+routes.post("/tariff/delete", deleteTariff.handle);
 routes.post("/tariff/order", changeOrderTariff.handle);
 routes.post("/tariff/active", toggleActiveTariff.handle);
 

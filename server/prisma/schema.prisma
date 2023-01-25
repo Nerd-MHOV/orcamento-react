@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   email      String @unique
   phone      String
   name       String
@@ -47,8 +47,7 @@ model Categories {
 }
 
 model Pet {
-  id          Int    @id @default(autoincrement())
-  carrying    String @unique
+  carrying    String @id
   daily_price Float
 
   @@map("pets")
@@ -73,7 +72,7 @@ model Tariff {
 }
 
 model TariffValues {
-  id          Int    @id @default(autoincrement())
+  id          String @id @default(uuid())
   tariffs_id  String
   category_id String
   adt         Float
@@ -109,15 +108,14 @@ model CommonDates {
 }
 
 model Requirement {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  name  String @id
   price Float
 
   @@map("requirements")
 }
 
 model TariffCheckInValues {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   tariffs_id String
   type       String
   adt        Float
@@ -152,7 +150,7 @@ model DUTariff {
 }
 
 model DUTariffValues {
-  id        Int    @id @default(autoincrement())
+  id        String @id @default(uuid())
   tariff_id String
   adt       Float
   chd0      Float

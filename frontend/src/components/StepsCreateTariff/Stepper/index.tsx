@@ -5,6 +5,8 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { CompleteSteps } from "../CompleteSteps";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 
 interface StepperTariffProps {
   children: JSX.Element;
@@ -23,6 +25,11 @@ export const StepperTariff = ({
   nextActive,
   steps,
 }: StepperTariffProps) => {
+  const { createTariff } = React.useContext(CreateTariffContext);
+
+  React.useEffect(() => {
+    if (activeStep === steps.length) createTariff();
+  }, [activeStep]);
   return (
     <Box sx={{ width: "100%", mt: 5 }}>
       <Stepper activeStep={activeStep}>
@@ -37,16 +44,16 @@ export const StepperTariff = ({
       </Stepper>
       {activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&pos;re finished
-          </Typography>
+          <Box sx={{ mt: 2, mb: 1 }}>
+            <CompleteSteps />
+          </Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
           </Box>
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}> {children} </Typography>
+          <Box sx={{ mt: 2, mb: 1 }}> {children} </Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"

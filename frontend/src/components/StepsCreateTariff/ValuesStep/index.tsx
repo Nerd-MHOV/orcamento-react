@@ -1,31 +1,20 @@
 import {
   Paper,
   Table,
-  TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
 } from "@mui/material";
-import { GroupValuesProps } from "../../../hooks/api/interfaces";
-import { initValuesUHS } from "../../../pages/NewTariffs";
-import { CurrencyFormat } from "../../CurrencyFormat";
 import { FoodStep } from "../FoodStep";
 import { ValuesRowsStep } from "../ValuesRowsStep";
 
 interface ValuesStepProps {
   title: string;
-  UHsValues: typeof initValuesUHS;
-  handleSetUHsValues: React.Dispatch<
-    React.SetStateAction<typeof initValuesUHS>
-  >;
+  type: "midweek" | "weekend" | "specific";
 }
 
-export const ValuesStep = ({
-  title,
-  UHsValues,
-  handleSetUHsValues,
-}: ValuesStepProps) => {
+export const ValuesStep = ({ title, type }: ValuesStepProps) => {
   return (
     <div className="values-step">
       <div
@@ -46,14 +35,11 @@ export const ValuesStep = ({
               <TableCell align="center"> 8 a 12 </TableCell>
             </TableRow>
           </TableHead>
-          <ValuesRowsStep
-            UHsValues={UHsValues}
-            handleSetUHsValues={handleSetUHsValues}
-          />
+          <ValuesRowsStep type={type} />
         </Table>
       </TableContainer>
 
-      <FoodStep />
+      <FoodStep type={type} />
     </div>
   );
 };

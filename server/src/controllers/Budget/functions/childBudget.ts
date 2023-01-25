@@ -2,14 +2,15 @@ import { ArrFormProps, RowsProps } from "../CalcBudgetController";
 import { generateBudget } from "./generateBudget";
 
 export async function childBudget(
-  arrChild: number[],
   arrForm: ArrFormProps,
+  arrChild: number[],
   initDate: Date,
   finalDate: Date
 ) {
   let amountAdults = arrForm.adult ?? 0;
   let amountChild = arrChild.length;
   let childRows: RowsProps[] = [];
+  let discount = (Number(arrForm.discount) || 0) / 100;
 
   arrChild.sort((a, b) => a - b);
   for (let countChild = 0; countChild < arrChild.length; countChild++) {
@@ -17,6 +18,7 @@ export async function childBudget(
     let valuesChild: number[] = [];
     let totalChild = 0;
     let uChild = Number(arrChild[countChild]);
+    let permitDiscount = true;
 
     if (uChild <= 3 && numChild === 1)
       valuesChild = await generateBudget(initDate, finalDate, arrForm, "chd0");
@@ -25,8 +27,9 @@ export async function childBudget(
     else
       valuesChild = await generateBudget(initDate, finalDate, arrForm, "chd8");
 
-    //COBRAR SO ALIMENTAÇÂO
-    if (numChild === 1 && uChild > 3 && uChild < 10)
+    //COBRAR SO ALIMENTAÇÃO
+    if (numChild === 1 && uChild > 3 && uChild < 10) {
+      permitDiscount = false;
       valuesChild = await generateBudget(
         initDate,
         finalDate,
@@ -34,20 +37,27 @@ export async function childBudget(
         "chd8",
         true
       );
+    }
 
     if (Number(amountAdults) === 1 && countChild === amountChild - 1) {
       valuesChild = await generateBudget(initDate, finalDate, arrForm, "adt");
     }
 
-    for (let i = 0; i < valuesChild.length; i++) {
-      totalChild += valuesChild[i];
-    }
+    const valuesWithDiscountChild = valuesChild.map((child) => {
+      if (!permitDiscount) return child;
+      let resultDiscount = child * discount;
+      let result = Math.round(child - resultDiscount);
+      totalChild += result;
+
+      return result;
+    });
 
     childRows.push({
       id: 200 + numChild,
-      desc: "CHD " + numChild,
-      values: valuesChild,
+      desc: "CHD " + uChild + " ano(s)",
+      values: valuesWithDiscountChild,
       total: totalChild,
+      noDiscount: valuesChild,
     });
   }
 

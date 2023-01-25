@@ -1,27 +1,10 @@
 import { addDays } from "date-fns";
 import { Request, Response } from "express";
-import { childBudget } from "./functions/childBudget";
-import { discountBudget } from "./functions/discountBudget";
+import { ArrFormProps, RowsProps } from "./CalcBudgetController";
 import { duAdultBudget } from "./functions/duAdultBudget";
 import { duChildBudget } from "./functions/duChildBudget";
 import { petBudget } from "./functions/petBudget";
 import { requirementBudget } from "./functions/requirementBudget";
-
-export type RowsProps = {
-  id: number;
-  desc: string;
-  values: number[];
-  total: number;
-};
-
-export interface ArrFormProps {
-  adult?: number;
-  discount?: number;
-  category?: string;
-  pension?: string;
-  numberPipe?: number;
-}
-
 export type PetProps = "pequeno" | "médio" | "grande";
 
 export class CalcBudgetDUController {

@@ -33,6 +33,7 @@ export async function duChildBudget(
       desc: "CHD " + numChild,
       values: valuesChild,
       total: totalChild,
+      noDiscount: valuesChild,
     });
   }
 

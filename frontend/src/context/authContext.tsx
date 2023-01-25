@@ -8,24 +8,27 @@ interface ChildrenProps {
 }
 
 export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
-  const [userLogin, setUserLogin] = useState<Number | null>(null);
   const api = useApi();
+  const [userLogin, setUserLogin] = useState<String | null>(null);
   const [loading, setLoading] = useState(true);
 
   const validateToken = async () => {
-    try {
-      const storageData = localStorage.getItem("authToken");
-      if (storageData) {
-        const data = await api.validateToken();
-        if (data.user.id) {
-          setUserLogin(data.user.id);
-          return;
-        }
-      }
-      logout();
-    } catch (error) {
-      console.log(error, "erro no validate token");
-      logout();
+    const storageData = localStorage.getItem("authToken");
+    if (storageData) {
+      await api
+        .validateToken()
+        .then((data) => {
+          console.log(data);
+          if (data.id) setUserLogin(data.id);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          logout();
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   };
 
@@ -62,11 +65,10 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
   useEffect(() => {
     const recoveredUser = localStorage.getItem("authUser");
 
+    validateToken();
     if (recoveredUser) {
-      setUserLogin(Number(recoveredUser));
-      validateToken();
+      setUserLogin(recoveredUser);
     }
-    setLoading(false);
   }, []);
 
   return (

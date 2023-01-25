@@ -2,10 +2,10 @@ import { ArrFormProps, PetProps, RowsProps } from "../CalcBudgetController";
 import { generateBudgetPet } from "./generateBudgetPet";
 
 export async function petBudget(
+  arrForm: ArrFormProps,
   arrPet: PetProps[],
   initDate: Date,
-  finalDate: Date,
-  arrForm: ArrFormProps
+  finalDate: Date
 ) {
   let petRows: RowsProps[] = [];
 
@@ -26,6 +26,7 @@ export async function petBudget(
       desc: "PET " + uPet,
       values: valuesPet,
       total: totalPet,
+      noDiscount: valuesPet,
     });
   }
 

@@ -67,6 +67,7 @@ export const TariffsPage = () => {
                 handleChangeOrder={handleChangeOrder}
                 handleToggleActive={handleToggleActive}
                 allTariffs={tariffs}
+                reloadRows={getTariffs}
               />
             </div>
           </div>

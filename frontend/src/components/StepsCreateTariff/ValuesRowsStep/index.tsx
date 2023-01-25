@@ -1,87 +1,60 @@
 import { TableBody, TableCell, TableRow } from "@mui/material";
-import { initValuesUHS } from "../../../pages/NewTariffs";
+import { useContext, useEffect } from "react";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 import { CurrencyFormat } from "../../CurrencyFormat";
 
 export const ValuesRowsStep = ({
-  UHsValues,
-  handleSetUHsValues,
+  type,
 }: {
-  UHsValues: typeof initValuesUHS;
-  handleSetUHsValues: React.Dispatch<
-    React.SetStateAction<typeof initValuesUHS>
-  >;
+  type: "midweek" | "weekend" | "specific";
 }) => {
+  const { setUHValues, getValues, arrTariffs } =
+    useContext(CreateTariffContext);
+
+  const log = () => {
+    console.log(arrTariffs);
+  };
   return (
     <TableBody>
       <TableRow>
-        <TableCell>Padrão</TableCell>
+        <TableCell onClick={log}>Padrão</TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PAD.adt}
+            value={getValues(type).UHsValues.PAD.adt}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PAD: {
-                  ...prev.PAD,
-                  adt: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adt", "PAD", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PAD.adtex}
+            value={getValues(type).UHsValues.PAD.adtex}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PAD: {
-                  ...prev.PAD,
-                  adtex: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adtex", "PAD", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PAD.chd0}
+            value={getValues(type).UHsValues.PAD.chd0}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PAD: {
-                  ...prev.PAD,
-                  chd0: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd0", "PAD", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PAD.chd4}
+            value={getValues(type).UHsValues.PAD.chd4}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PAD: {
-                  ...prev.PAD,
-                  chd4: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd4", "PAD", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PAD.chd8}
+            value={getValues(type).UHsValues.PAD.chd8}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PAD: {
-                  ...prev.PAD,
-                  chd8: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd8", "PAD", value.floatValue || 0)
             }
           />
         </TableCell>
@@ -90,71 +63,41 @@ export const ValuesRowsStep = ({
         <TableCell>Padrão Varanda</TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PADV.adt}
+            value={getValues(type).UHsValues.PADV.adt}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PADV: {
-                  ...prev.PADV,
-                  adt: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adt", "PADV", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PADV.adtex}
+            value={getValues(type).UHsValues.PADV.adtex}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PADV: {
-                  ...prev.PADV,
-                  adtex: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adtex", "PADV", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PADV.chd0}
+            value={getValues(type).UHsValues.PADV.chd0}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PADV: {
-                  ...prev.PADV,
-                  chd0: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd0", "PADV", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PADV.chd4}
+            value={getValues(type).UHsValues.PADV.chd4}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PADV: {
-                  ...prev.PADV,
-                  chd4: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd4", "PADV", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.PADV.chd8}
+            value={getValues(type).UHsValues.PADV.chd8}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                PADV: {
-                  ...prev.PADV,
-                  chd8: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd8", "PADV", value.floatValue || 0)
             }
           />
         </TableCell>
@@ -163,71 +106,41 @@ export const ValuesRowsStep = ({
         <TableCell>Luxo</TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUX.adt}
+            value={getValues(type).UHsValues.LUX.adt}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUX: {
-                  ...prev.LUX,
-                  adt: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adt", "LUX", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUX.adtex}
+            value={getValues(type).UHsValues.LUX.adtex}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUX: {
-                  ...prev.LUX,
-                  adtex: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adtex", "LUX", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUX.chd0}
+            value={getValues(type).UHsValues.LUX.chd0}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUX: {
-                  ...prev.LUX,
-                  chd0: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd0", "LUX", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUX.chd4}
+            value={getValues(type).UHsValues.LUX.chd4}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUX: {
-                  ...prev.LUX,
-                  chd4: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd4", "LUX", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUX.chd8}
+            value={getValues(type).UHsValues.LUX.chd8}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUX: {
-                  ...prev.LUX,
-                  chd8: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd8", "LUX", value.floatValue || 0)
             }
           />
         </TableCell>
@@ -236,71 +149,41 @@ export const ValuesRowsStep = ({
         <TableCell>Luxo Conjugado</TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXC.adt}
+            value={getValues(type).UHsValues.LUXC.adt}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXC: {
-                  ...prev.LUXC,
-                  adt: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adt", "LUXC", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXC.adtex}
+            value={getValues(type).UHsValues.LUXC.adtex}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXC: {
-                  ...prev.LUXC,
-                  adtex: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adtex", "LUXC", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXC.chd0}
+            value={getValues(type).UHsValues.LUXC.chd0}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXC: {
-                  ...prev.LUXC,
-                  chd0: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd0", "LUXC", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXC.chd4}
+            value={getValues(type).UHsValues.LUXC.chd4}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXC: {
-                  ...prev.LUXC,
-                  chd4: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd4", "LUXC", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXC.chd8}
+            value={getValues(type).UHsValues.LUXC.chd8}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXC: {
-                  ...prev.LUXC,
-                  chd8: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd8", "LUXC", value.floatValue || 0)
             }
           />
         </TableCell>
@@ -309,71 +192,41 @@ export const ValuesRowsStep = ({
         <TableCell>Luxo c/ Hidro</TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXH.adt}
+            value={getValues(type).UHsValues.LUXH.adt}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXH: {
-                  ...prev.LUXH,
-                  adt: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adt", "LUXH", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXH.adtex}
+            value={getValues(type).UHsValues.LUXH.adtex}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXH: {
-                  ...prev.LUXH,
-                  adtex: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "adtex", "LUXH", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXH.chd0}
+            value={getValues(type).UHsValues.LUXH.chd0}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXH: {
-                  ...prev.LUXH,
-                  chd0: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd0", "LUXH", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXH.chd4}
+            value={getValues(type).UHsValues.LUXH.chd4}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXH: {
-                  ...prev.LUXH,
-                  chd4: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd4", "LUXH", value.floatValue || 0)
             }
           />
         </TableCell>
         <TableCell>
           <CurrencyFormat
-            value={UHsValues.LUXH.chd8}
+            value={getValues(type).UHsValues.LUXH.chd8}
             onValueChange={(value) =>
-              handleSetUHsValues((prev) => ({
-                ...prev,
-                LUXH: {
-                  ...prev.LUXH,
-                  chd8: value.floatValue || 0,
-                },
-              }))
+              setUHValues(type, "chd8", "LUXH", value.floatValue || 0)
             }
           />
         </TableCell>

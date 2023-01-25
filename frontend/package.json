@@ -20,7 +20,7 @@
     "date-fns": "^2.29.3",
     "form-serialize": "^0.7.2",
     "pdfkit": "^0.13.0",
-    "pdfmake": "^0.2.6",
+    "pdfmake": "^0.2.7",
     "react": "^18.2.0",
     "react-currency-input-field": "^3.6.9",
     "react-date-range": "^1.4.0",
@@ -30,7 +30,8 @@
     "react-router-dom": "^6.4.3",
     "react-text-mask": "^5.5.0",
     "sass": "^1.56.1",
-    "text-mask-addons": "^3.8.0"
+    "text-mask-addons": "^3.8.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/blob-stream": "^0.1.30",

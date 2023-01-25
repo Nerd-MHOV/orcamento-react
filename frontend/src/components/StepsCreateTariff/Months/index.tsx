@@ -1,23 +1,14 @@
-import { tariffSelectProps } from "../typeTariff";
+import { useContext } from "react";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 import { CommonMonths } from "./CommonMonth";
 import { SpecificMonth } from "./SpecificMonth";
 
-interface MonthsCommonProps {
-  typeTariff: tariffSelectProps;
-  handleSetDates: (dates: string[]) => void;
-}
-export const MonthsCommon = ({
-  typeTariff,
-  handleSetDates,
-}: MonthsCommonProps) => {
+export const MonthsCommon = () => {
+  const { typeTariff } = useContext(CreateTariffContext);
   return (
     <div className="months-common">
-      {typeTariff === "common" && (
-        <CommonMonths handleSetDates={handleSetDates} />
-      )}
-      {typeTariff === "specific" && (
-        <SpecificMonth handleSetDates={handleSetDates} />
-      )}
+      {typeTariff === "common" && <CommonMonths />}
+      {typeTariff === "specific" && <SpecificMonth />}
     </div>
   );
 };

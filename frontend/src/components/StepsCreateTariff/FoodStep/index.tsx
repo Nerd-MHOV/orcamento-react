@@ -1,5 +1,4 @@
 import {
-  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -7,12 +6,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { GroupValuesProps } from "../../../hooks/api/interfaces";
+import { useContext, useEffect, useState } from "react";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 import { CurrencyFormat } from "../../CurrencyFormat";
 
 export const foodPad = {
@@ -31,55 +29,57 @@ export const initValues = {
   chd8: 0,
 };
 
-interface FoodStepProps {
-  handleSetFoodValues: React.Dispatch<React.SetStateAction<GroupValuesProps>>;
-  handleSetTenHourValues: React.Dispatch<
-    React.SetStateAction<GroupValuesProps>
-  >;
-  handleSetTwentyHourValues: React.Dispatch<
-    React.SetStateAction<GroupValuesProps>
-  >;
-  foodValues: GroupValuesProps;
-  tenHourValues: GroupValuesProps;
-  twentyHourValues: GroupValuesProps;
-}
-
 export const FoodStep = ({
-  handleSetFoodValues,
-  handleSetTenHourValues,
-  handleSetTwentyHourValues,
-  foodValues,
-  tenHourValues,
-  twentyHourValues,
-}: FoodStepProps) => {
+  type,
+}: {
+  type: "midweek" | "weekend" | "specific";
+}) => {
+  const {
+    setFoodValues,
+    setAllFoodValues,
+    getValues,
+    setEarlyEntryValues,
+    setFoodPad,
+    next,
+  } = useContext(CreateTariffContext);
   const [alignment, setAlignment] = useState("pad");
 
   const handleChangeFoodOption = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
-    if (newAlignment === "pad") handleSetFoodValues(foodPad);
-    else handleSetFoodValues(initValues);
+    console.log(newAlignment);
+    if (newAlignment === "pad") setAllFoodValues(type, foodPad);
+    else setAllFoodValues(type, initValues);
     setAlignment(newAlignment);
   };
 
-  useEffect(() => {
-    console.log(foodPad, foodValues);
+  const compareTariffFood = () => {
+    setAlignment("new");
     if (
-      foodValues.adt === foodPad.adt &&
-      foodValues.adtex === foodPad.adtex &&
-      foodValues.chd0 === foodPad.chd0 &&
-      foodValues.chd4 === foodPad.chd4 &&
-      foodValues.chd8 === foodPad.chd8
-    ) {
+      getValues(type).foodValue.adt === foodPad.adt &&
+      getValues(type).foodValue.adtex === foodPad.adtex &&
+      getValues(type).foodValue.chd0 === foodPad.chd0 &&
+      getValues(type).foodValue.chd4 === foodPad.chd4 &&
+      getValues(type).foodValue.chd8 === foodPad.chd8
+    )
       setAlignment("pad");
-    } else {
-      setAlignment("new");
-    }
-  }, [foodValues]);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      compareTariffFood();
+    }, 1000);
+    next(true);
+  }, []);
+
+  useEffect(() => {
+    if (alignment === "pad") setFoodPad(true);
+    else setFoodPad(false);
+  }, [alignment]);
 
   return (
-    <div className="food-step">
+    <div className="food-step" style={{ marginTop: 50 }}>
       <span className="food">Valores da Alimentação: </span>
       <ToggleButtonGroup
         value={alignment}
@@ -109,56 +109,46 @@ export const FoodStep = ({
               <TableCell>alimentação</TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={foodValues.adt}
+                  value={getValues(type).foodValue.adt}
                   onValueChange={(value) => {
-                    handleSetFoodValues((prev) => ({
-                      ...prev,
-                      adt: value.floatValue || 0,
-                    }));
+                    compareTariffFood();
+                    setFoodValues(type, "adt", value.floatValue || 0);
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={foodValues.adtex}
+                  value={getValues(type).foodValue.adtex}
                   onValueChange={(value) => {
-                    handleSetFoodValues((prev) => ({
-                      ...prev,
-                      adtex: value.floatValue || 0,
-                    }));
+                    compareTariffFood();
+                    setFoodValues(type, "adtex", value.floatValue || 0);
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={foodValues.chd0}
+                  value={getValues(type).foodValue.chd0}
                   onValueChange={(value) => {
-                    handleSetFoodValues((prev) => ({
-                      ...prev,
-                      chd0: value.floatValue || 0,
-                    }));
+                    compareTariffFood();
+                    setFoodValues(type, "chd0", value.floatValue || 0);
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={foodValues.chd4}
+                  value={getValues(type).foodValue.chd4}
                   onValueChange={(value) => {
-                    handleSetFoodValues((prev) => ({
-                      ...prev,
-                      adt: value.floatValue || 0,
-                    }));
+                    compareTariffFood();
+                    setFoodValues(type, "chd4", value.floatValue || 0);
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={foodValues.chd8}
+                  value={getValues(type).foodValue.chd8}
                   onValueChange={(value) => {
-                    handleSetFoodValues((prev) => ({
-                      ...prev,
-                      chd8: value.floatValue || 0,
-                    }));
+                    compareTariffFood();
+                    setFoodValues(type, "chd8", value.floatValue || 0);
                   }}
                 />
               </TableCell>
@@ -167,56 +157,66 @@ export const FoodStep = ({
               <TableCell>Check in às 10h</TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={tenHourValues.adt}
+                  value={getValues(type).earlyEntryValues.tenHour.adt}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      adt: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "tenHour",
+                      "adt",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={tenHourValues.adtex}
+                  value={getValues(type).earlyEntryValues.tenHour.adtex}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      adtex: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "tenHour",
+                      "adtex",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={tenHourValues.chd0}
+                  value={getValues(type).earlyEntryValues.tenHour.chd0}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd0: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "tenHour",
+                      "chd0",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={tenHourValues.chd4}
+                  value={getValues(type).earlyEntryValues.tenHour.chd4}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd4: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "tenHour",
+                      "chd4",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={tenHourValues.chd8}
+                  value={getValues(type).earlyEntryValues.tenHour.chd8}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd8: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "tenHour",
+                      "chd8",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
@@ -225,56 +225,66 @@ export const FoodStep = ({
               <TableCell>Check in às 12h</TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={twentyHourValues.adt}
+                  value={getValues(type).earlyEntryValues.twentyHour.adt}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      adt: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "twentyHour",
+                      "adt",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={twentyHourValues.adtex}
+                  value={getValues(type).earlyEntryValues.twentyHour.adtex}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      adtex: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "twentyHour",
+                      "adtex",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={twentyHourValues.chd0}
+                  value={getValues(type).earlyEntryValues.twentyHour.chd0}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd0: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "twentyHour",
+                      "chd0",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={twentyHourValues.chd4}
+                  value={getValues(type).earlyEntryValues.twentyHour.chd4}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd4: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "twentyHour",
+                      "chd4",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>
               <TableCell>
                 <CurrencyFormat
-                  value={twentyHourValues.chd8}
+                  value={getValues(type).earlyEntryValues.twentyHour.chd8}
                   onValueChange={(value) => {
-                    handleSetTenHourValues((prev) => ({
-                      ...prev,
-                      chd8: value.floatValue || 0,
-                    }));
+                    setEarlyEntryValues(
+                      type,
+                      "twentyHour",
+                      "chd8",
+                      value.floatValue || 0
+                    );
                   }}
                 />
               </TableCell>

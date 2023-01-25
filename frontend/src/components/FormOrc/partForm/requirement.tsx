@@ -11,7 +11,6 @@ export const RequirementInputForm = ({
   requirementValue,
 }: RequirementInputFormProps) => (
   <Autocomplete
-    componentName="requirement"
     multiple
     isOptionEqualToValue={() => false}
     options={listRequirements}

@@ -16,8 +16,9 @@ import Btn from "../Btn";
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import CollapsibleTableTariffRelationsShip from "../TableCollapseRelationships";
 import { createDataRelationship } from "../TableCollapseRelationships/helpers";
+import { DialogDeleteTariff } from "../DialogDeleteTariff";
 
-export const head = ["Nome", "Pipe", "up", "down", "ativo"];
+export const head = ["Nome", "Pipe", "ativo"];
 
 export function convertForReal(number?: number) {
   if (typeof number !== "number") {
@@ -63,13 +64,19 @@ export function Row(props: {
   handleToggleActive?: (name: string, active: boolean) => void;
   allTariffs: AllTariffsProps[];
   ButtonsOn: boolean;
+  reloadRows: VoidFunction;
 }) {
-  const { row, handleChangeOrder, handleToggleActive, ButtonsOn } = props;
+  const api = useApi();
+  const { row, handleChangeOrder, handleToggleActive, ButtonsOn, reloadRows } =
+    props;
   const [open, setOpen] = React.useState(false);
   const [rowDays, setRowDays] = React.useState<
     ReturnType<typeof createDataRelationship>[]
   >([]);
-
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [rowToDelete, setRowToDelete] = React.useState<
+    ReturnType<typeof createData> | undefined
+  >(undefined);
   const makeRowDays = () => {
     let rows = [];
 
@@ -109,12 +116,59 @@ export function Row(props: {
     setRowDays(rows);
   };
 
+  const handleDeleteTariff = (rowToDelete: ReturnType<typeof createData>) => {
+    console.log(row);
+    setRowToDelete(row);
+    if (rowToDelete) setOpenDelete(true);
+  };
+
+  const handleDeleteClose = () => {
+    setOpenDelete(false);
+  };
+
+  const deleteTariff = async () => {
+    if (
+      !rowToDelete?.tariffs_to_weekend ||
+      !rowToDelete?.tariffs_to_midweek ||
+      !rowToDelete.SpecificDates
+    ) {
+      handleDeleteClose();
+      return;
+    }
+
+    let common =
+      rowToDelete.tariffs_to_midweek.length > 0
+        ? rowToDelete.tariffs_to_midweek[0]
+        : rowToDelete.tariffs_to_weekend.length > 0
+        ? rowToDelete.tariffs_to_weekend[0]
+        : undefined;
+
+    let specific = rowToDelete.SpecificDates[0];
+
+    let arrTariff = common
+      ? [common.tariff_to_midweek_id, common.tariff_to_weekend_id]
+      : [specific.tariffs_id];
+    const result = await api.deleteTariff(arrTariff);
+    console.log(result);
+    console.log("delete");
+    reloadRows();
+    handleDeleteClose();
+  };
+
   React.useEffect(() => {
     makeRowDays();
   }, []);
 
   return (
     <React.Fragment>
+      {ButtonsOn && (
+        <DialogDeleteTariff
+          open={openDelete}
+          handleClose={handleDeleteClose}
+          handleDelete={deleteTariff}
+          rowDelete={rowToDelete}
+        />
+      )}
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
           <IconButton
@@ -129,7 +183,7 @@ export function Row(props: {
           {row.name}
         </TableCell>
         <TableCell>{row.product_pipe}</TableCell>
-        <TableCell>
+        {/* <TableCell>
           <button
             className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"
             onClick={() => {
@@ -148,7 +202,7 @@ export function Row(props: {
           >
             <KeyboardArrowDownIcon />
           </button>
-        </TableCell>
+        </TableCell> */}
         <TableCell>
           <button
             className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"
@@ -268,7 +322,11 @@ export function Row(props: {
                 }}
               >
                 <Btn action="Editar" color="green" onClick={() => {}} />
-                <Btn action="Deletar" color="red" onClick={() => {}} />
+                <Btn
+                  action="Deletar"
+                  color="red"
+                  onClick={() => handleDeleteTariff(row)}
+                />
               </Box>
             )}
           </Collapse>

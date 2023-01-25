@@ -2,7 +2,6 @@ import { addDays } from "date-fns";
 import { Request, Response } from "express";
 import { adultBudget } from "./functions/adultBudget";
 import { childBudget } from "./functions/childBudget";
-import { discountBudget } from "./functions/discountBudget";
 import { petBudget } from "./functions/petBudget";
 import { requirementBudget } from "./functions/requirementBudget";
 
@@ -11,6 +10,7 @@ export type RowsProps = {
   desc: string;
   values: number[];
   total: number;
+  noDiscount: number[];
 };
 
 export interface ArrFormProps {
@@ -50,39 +50,32 @@ export class CalcBudgetController {
     let petRows: RowsProps[] = [];
 
     let requirementRows: RowsProps[] = [];
-    let discountRow: RowsProps[] = [];
 
     let initDate = new Date(rangeDate.startDate);
     let finalDate = new Date(rangeDate.endDate);
-
-    finalDate = addDays(finalDate, 1);
 
     //adult
     adultRows = await adultBudget(arrForm, arrChild, initDate, finalDate);
 
     //child
-    childRows = await childBudget(arrChild, arrForm, initDate, finalDate);
+    childRows = await childBudget(arrForm, arrChild, initDate, finalDate);
 
     //pet
-    petRows = await petBudget(arrPet, initDate, finalDate, arrForm);
+    petRows = await petBudget(arrForm, arrPet, initDate, finalDate);
 
     //requirement
     requirementRows = await requirementBudget(
-      initDate,
-      finalDate,
       arrForm,
-      arrRequirement
+      arrRequirement,
+      initDate,
+      finalDate
     );
-
-    //discountRow
-    discountRow = await discountBudget(arrForm, arrChild, initDate, finalDate);
 
     let completeRows = [
       ...adultRows,
       ...childRows,
       ...petRows,
       ...requirementRows,
-      ...discountRow,
     ];
 
     return response.json({

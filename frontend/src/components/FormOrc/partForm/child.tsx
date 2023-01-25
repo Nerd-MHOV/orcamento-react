@@ -11,7 +11,6 @@ export const ChildInputForm = ({
   childValue,
 }: ChildInputFormProps) => (
   <Autocomplete
-    componentName="child"
     multiple
     onChange={(_, newValue) => {
       onChange(newValue);

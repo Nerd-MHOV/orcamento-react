@@ -11,7 +11,6 @@ export const PensionInputForm = ({
   pensionValue,
 }: PensionInputFormProps) => (
   <Autocomplete
-    componentName="pension"
     disabled={disabledPension}
     options={["simples", "meia", "completa"]}
     className="textField"

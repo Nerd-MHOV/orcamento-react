@@ -84,7 +84,6 @@ export function ModalRequirement({
           />
           <Autocomplete
             multiple
-            componentName="child"
             onChange={(_, newValue) => {
               setChild(newValue);
             }}

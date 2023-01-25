@@ -49,7 +49,6 @@ export const CategoryInputForm = ({
 
   return (
     <Autocomplete
-      componentName="category"
       options={categoryOptions}
       className="textField"
       getOptionDisabled={optionDisabled}

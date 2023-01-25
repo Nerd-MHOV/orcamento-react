@@ -29,6 +29,7 @@ export async function duAdultBudget(
       desc: "Adulto " + countAdult,
       values: valuesAdult,
       total: totalAdult,
+      noDiscount: valuesAdult,
     });
   }
 

@@ -11,6 +11,8 @@ export async function adultBudget(
   let adultRows: RowsProps[] = [];
   let amountAdults = arrForm.adult ?? 0;
   let countAdult = 0;
+  let discount = (Number(arrForm.discount) || 0) / 100;
+  console.log(discount);
   while (countAdult < amountAdults) {
     countAdult++;
     let valuesAdult: number[] = [];
@@ -26,14 +28,19 @@ export async function adultBudget(
       valuesAdult = valuesAdult.map((value) => value * 2);
     }
 
-    for (let i = 0; i < valuesAdult.length; i++) {
-      totalAdult += valuesAdult[i];
-    }
+    const valueWithDiscountAdult = valuesAdult.map((value) => {
+      let resultDiscount = value * discount;
+      let result = Math.round(value - resultDiscount);
+      totalAdult += result;
+
+      return result;
+    });
     adultRows.push({
       id: 100 + countAdult,
       desc: "Adulto " + countAdult,
-      values: valuesAdult,
+      values: valueWithDiscountAdult,
       total: totalAdult,
+      noDiscount: valuesAdult,
     });
   }
 

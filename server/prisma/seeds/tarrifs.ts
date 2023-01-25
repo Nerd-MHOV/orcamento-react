@@ -29,4 +29,10 @@ export const TariffSeed = [
     active: true,
     food_id: 1,
   },
+  {
+    name: "N SRA Aparecida 2023",
+    product_pipe: "395",
+    active: true,
+    food_id: 1,
+  },
 ];

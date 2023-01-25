@@ -14,7 +14,7 @@ export class FindTariffController {
           SpecificDates: true,
         },
         orderBy: {
-          order_id: "desc",
+          name: "asc",
         },
       })
       .then((tariffs) => {

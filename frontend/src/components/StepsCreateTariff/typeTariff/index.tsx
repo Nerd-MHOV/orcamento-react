@@ -1,32 +1,24 @@
 import { Tooltip } from "@mui/material";
+import { useContext } from "react";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 import Btn from "../../Btn";
 import "./style.scss";
 
-export type tariffSelectProps = "common" | "specific" | null;
+export const TypeTariff = () => {
+  const { setTypeTariff, typeTariff } = useContext(CreateTariffContext);
 
-export const TypeTariff = ({
-  handleSetTariff,
-  selected,
-}: {
-  handleSetTariff: (type: tariffSelectProps) => void;
-  selected: tariffSelectProps;
-}) => {
   return (
     <div className="type-tariff">
-      <Tooltip title="Quando o tarifário abrange um mês todo. ex: Janeiro 2023">
-        <Btn
-          action="Tarifário Comum"
-          color={selected === "common" ? "blue" : ""}
-          onClick={() => handleSetTariff("common")}
-        />
-      </Tooltip>
-      <Tooltip title="Para feriados ou datas especificas">
-        <Btn
-          action="Data Especifica"
-          color={selected === "specific" ? "blue" : ""}
-          onClick={() => handleSetTariff("specific")}
-        />
-      </Tooltip>
+      <Btn
+        action="Tarifário Comum"
+        color={typeTariff === "common" ? "blue" : ""}
+        onClick={() => setTypeTariff("common")}
+      />
+      <Btn
+        action="Data Especifica"
+        color={typeTariff === "specific" ? "blue" : ""}
+        onClick={() => setTypeTariff("specific")}
+      />
     </div>
   );
 };

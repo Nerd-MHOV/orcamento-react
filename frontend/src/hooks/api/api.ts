@@ -106,6 +106,25 @@ export const useApi = () => ({
     return response.data;
   },
 
+  createCommonTariff: async (
+    tariffs: AllTariffsProps[]
+  ): Promise<"success" | "error"> => {
+    const response = await api.post("/common-date", { tariffs: tariffs });
+    return response.data.msg;
+  },
+
+  createSpecificTariff: async (
+    tariffs: AllTariffsProps[]
+  ): Promise<"success" | "error"> => {
+    const response = await api.post("/specific-date", { tariffs: tariffs });
+    return response.data.msg;
+  },
+
+  deleteTariff: async (tariffs: string[]): Promise<"success" | "error"> => {
+    const response = await api.post("/tariff/delete", { tariffs: tariffs });
+    return response.data;
+  },
+
   changeOrderTariff: async (order_id: number, side: string) => {
     const response = await api.post("/tariff/order", { order_id, side });
     return response.data;

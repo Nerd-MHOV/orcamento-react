@@ -1,9 +1,15 @@
-import { GroupValuesProps } from "../../hooks/api/interfaces";
-
+import { GroupValuesProps, TariffTypesProps } from "../../hooks/api/interfaces";
+import { initValuesUHS } from "../../pages/NewTariffs";
 export interface CreateTariffProps {
   dates: string[];
-  tariffs: TariffInformationProps[];
-  type: "specific" | "common" | undefined;
+  tariffs: TariffsDiscriminated;
+  type: TariffTypesProps;
+}
+
+export interface TariffsDiscriminated {
+  specific: TariffInformationProps;
+  midweek: TariffInformationProps;
+  weekend: TariffInformationProps;
 }
 
 export interface TariffInformationProps {
@@ -13,12 +19,13 @@ export interface TariffInformationProps {
 }
 
 export interface TariffInformationValuesProps {
-  UHsValues: GroupValuesProps;
+  UHsValues: typeof initValuesUHS;
   foodValue: GroupValuesProps;
-  earlyEntryValues: EarlyEntryValueProps[];
+  earlyEntryValues: {
+    tenHour: GroupValuesProps;
+    twentyHour: GroupValuesProps;
+  };
 }
 
-export interface EarlyEntryValueProps {
-  values: GroupValuesProps;
-  type: "10h" | "12h";
-}
+export type keyGroup = "adt" | "adtex" | "chd0" | "chd4" | "chd8";
+export type keyUH = "PAD" | "PADV" | "LUX" | "LUXC" | "LUXH";

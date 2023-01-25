@@ -1,42 +1,31 @@
 import { TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import ptBR from "date-fns/esm/locale/pt-BR/index.js";
+import { useContext, useEffect, useState } from "react";
+import { CreateTariffContext } from "../../../context/createTariff/createTariff";
 import { useApi } from "../../../hooks/api/api";
-import {
-  AllTariffsProps,
-  GroupValuesProps,
-} from "../../../hooks/api/interfaces";
-import { initValuesUHS } from "../../../pages/NewTariffs";
+import { AllTariffsProps } from "../../../hooks/api/interfaces";
 import CollapsibleTableTariff from "../../TableCollapseTariffs";
 import { createData } from "../../TableCollapseTariffs/helpers";
-import { tariffSelectProps } from "../typeTariff";
 
-interface NameAndConfirmStepProps {
-  typeTariff: tariffSelectProps;
-  dates: string[];
-  tariffValues: ValuesForCreateTariff;
-}
-
-interface ValuesForCreateTariff {
-  foodValues: GroupValuesProps;
-  tenHourValues: GroupValuesProps;
-  twentyHourValues: GroupValuesProps;
-  FDSValues: typeof initValuesUHS;
-  MDSValues: typeof initValuesUHS;
-  SpecificValues: typeof initValuesUHS;
-}
-
-export const NameAndConfirmStep = ({
-  typeTariff,
-  dates,
-  tariffValues,
-}: NameAndConfirmStepProps) => {
+export const NameAndConfirmStep = () => {
   const api = useApi();
-  const [row, setRow] = useState<ReturnType<typeof createData>[]>([]);
+  const {
+    typeTariff,
+    getValues,
+    arrTariffs,
+    next,
+    setRelationTariffs,
+    foodPad,
+    specificName,
+  } = useContext(CreateTariffContext);
+  const [rows, setRows] = useState<ReturnType<typeof createData>[]>([]);
   const [name, setName] = useState("");
   const [nameMDS, setNameMDS] = useState("");
   const [nameFDS, setNameFDS] = useState("");
-  const [pipeNum, setPipeNum] = useState(0);
-  const [foodID, setFoodID] = useState(0);
+  const [pipeNum, setPipeNum] = useState("");
+  const [pipeNumMDS, setPipeNumMDS] = useState("");
+  const [pipeNumFDS, setPipeNumFDS] = useState("");
   const [tariffs, setTariffs] = useState<AllTariffsProps[]>([]);
 
   const getTariffs = async () => {
@@ -45,49 +34,274 @@ export const NameAndConfirmStep = ({
   };
 
   const makeRow = () => {
-    let createdRow = createData({
-      name: name,
-      product_pipe: `${pipeNum}`,
-      active: true,
-      order_id: 1,
-      food_id: foodID,
-      food: {
-        id: foodID,
-        ...tariffValues.foodValues,
-      },
-      TariffCheckInValues: [
-        {
-          id: 0,
-          type: "10h",
-          tariffs_id: "",
-          ...tariffValues.tenHourValues,
-        },
-        {
-          id: 0,
-          type: "12h",
-          tariffs_id: "",
-          ...tariffValues.twentyHourValues,
-        },
-      ],
-      TariffValues: [
-        {
-          id: 0,
-          category_id: "PAD",
-          tariffs_id: "",
-          ...tariffValues.FDSValues.PAD,
-        },
-      ],
-      tariffs_to_midweek: [],
-      tariffs_to_weekend: [],
-      SpecificDates: [],
+    let rowTariff = [];
+
+    if (typeTariff === "specific") {
+      let dates = arrTariffs.dates.map((date) => ({
+        date: date,
+        tariffs_id: name,
+      }));
+
+      rowTariff.push(
+        createData({
+          name,
+          product_pipe: pipeNum.toString(),
+          active: true,
+          order_id: 0,
+          food_id: foodPad ? 1 : 0,
+          food: {
+            id: foodPad ? 1 : 0,
+            ...getValues("specific").foodValue,
+          },
+          SpecificDates: dates,
+          TariffCheckInValues: [
+            {
+              id: 0,
+              tariffs_id: name,
+              type: "10h",
+              ...getValues("specific").earlyEntryValues.tenHour,
+            },
+            {
+              id: 0,
+              tariffs_id: name,
+              type: "12h",
+              ...getValues("specific").earlyEntryValues.twentyHour,
+            },
+          ],
+          TariffValues: [
+            {
+              id: 0,
+              category_id: "PAD",
+              tariffs_id: name,
+              ...getValues("specific").UHsValues.PAD,
+            },
+            {
+              id: 0,
+              category_id: "PADV",
+              tariffs_id: name,
+              ...getValues("specific").UHsValues.PADV,
+            },
+            {
+              id: 0,
+              category_id: "LUX",
+              tariffs_id: name,
+              ...getValues("specific").UHsValues.LUX,
+            },
+            {
+              id: 0,
+              category_id: "LUXC",
+              tariffs_id: name,
+              ...getValues("specific").UHsValues.LUXC,
+            },
+            {
+              id: 0,
+              category_id: "LUXH",
+              tariffs_id: name,
+              ...getValues("specific").UHsValues.LUXH,
+            },
+          ],
+        })
+      );
+    }
+
+    if (typeTariff === "common") {
+      let dates = arrTariffs.dates.map((date) => ({
+        date: date,
+        tariff_to_midweek_id: nameMDS,
+        tariff_to_weekend_id: nameFDS,
+      }));
+      rowTariff.push(
+        createData({
+          name: nameMDS,
+          product_pipe: pipeNumMDS.toString(),
+          active: true,
+          order_id: 0,
+          food_id: foodPad ? 1 : 0,
+          food: {
+            id: foodPad ? 1 : 0,
+            ...getValues("midweek").foodValue,
+          },
+          tariffs_to_midweek: dates,
+          TariffCheckInValues: [
+            {
+              id: 0,
+              tariffs_id: nameMDS,
+              type: "10h",
+              ...getValues("midweek").earlyEntryValues.tenHour,
+            },
+            {
+              id: 0,
+              tariffs_id: nameMDS,
+              type: "12h",
+              ...getValues("midweek").earlyEntryValues.twentyHour,
+            },
+          ],
+          TariffValues: [
+            {
+              id: 0,
+              category_id: "PAD",
+              tariffs_id: nameMDS,
+              ...getValues("midweek").UHsValues.PAD,
+            },
+            {
+              id: 0,
+              category_id: "PADV",
+              tariffs_id: nameMDS,
+              ...getValues("midweek").UHsValues.PADV,
+            },
+            {
+              id: 0,
+              category_id: "LUX",
+              tariffs_id: nameMDS,
+              ...getValues("midweek").UHsValues.LUX,
+            },
+            {
+              id: 0,
+              category_id: "LUXC",
+              tariffs_id: nameMDS,
+              ...getValues("midweek").UHsValues.LUXC,
+            },
+            {
+              id: 0,
+              category_id: "LUXH",
+              tariffs_id: nameMDS,
+              ...getValues("midweek").UHsValues.LUXH,
+            },
+          ],
+        })
+      );
+      rowTariff.push(
+        createData({
+          name: nameFDS,
+          product_pipe: pipeNumFDS.toString(),
+          active: true,
+          order_id: 0,
+          food_id: foodPad ? 1 : 0,
+          food: {
+            id: foodPad ? 1 : 0,
+            ...getValues("weekend").foodValue,
+          },
+          tariffs_to_weekend: dates,
+          TariffCheckInValues: [
+            {
+              id: 0,
+              tariffs_id: nameFDS,
+              type: "10h",
+              ...getValues("weekend").earlyEntryValues.tenHour,
+            },
+            {
+              id: 0,
+              tariffs_id: nameFDS,
+              type: "12h",
+              ...getValues("weekend").earlyEntryValues.twentyHour,
+            },
+          ],
+          TariffValues: [
+            {
+              id: 0,
+              category_id: "PAD",
+              tariffs_id: nameFDS,
+              ...getValues("weekend").UHsValues.PAD,
+            },
+            {
+              id: 0,
+              category_id: "PADV",
+              tariffs_id: nameFDS,
+              ...getValues("weekend").UHsValues.PADV,
+            },
+            {
+              id: 0,
+              category_id: "LUX",
+              tariffs_id: nameFDS,
+              ...getValues("weekend").UHsValues.LUX,
+            },
+            {
+              id: 0,
+              category_id: "LUXC",
+              tariffs_id: nameFDS,
+              ...getValues("weekend").UHsValues.LUXC,
+            },
+            {
+              id: 0,
+              category_id: "LUXH",
+              tariffs_id: nameFDS,
+              ...getValues("weekend").UHsValues.LUXH,
+            },
+          ],
+        })
+      );
+    }
+
+    setRows(rowTariff);
+  };
+
+  const generateName = () => {
+    let firstDate = format(new Date(arrTariffs.dates[0] + "-02"), "MMMM", {
+      locale: ptBR,
     });
-    setRow([createdRow]);
+    firstDate = firstDate[0].toUpperCase() + firstDate.substring(1);
+
+    let lastDate = format(
+      new Date(arrTariffs.dates[arrTariffs.dates.length - 1] + "-02"),
+      "MMMM",
+      {
+        locale: ptBR,
+      }
+    );
+    lastDate = lastDate[0].toUpperCase() + lastDate.substring(1);
+
+    if (arrTariffs.dates.length > 1) {
+      setNameFDS(
+        `${firstDate} a ${lastDate} ${arrTariffs.dates[
+          arrTariffs.dates.length - 1
+        ].slice(0, 4)} - FDS`
+      );
+      setNameMDS(
+        `${firstDate} a ${lastDate} ${arrTariffs.dates[
+          arrTariffs.dates.length - 1
+        ].slice(0, 4)} - MDS`
+      );
+    } else {
+      setNameFDS(
+        `${firstDate} ${arrTariffs.dates[arrTariffs.dates.length - 1].slice(
+          0,
+          4
+        )} - FDS`
+      );
+      setNameMDS(
+        `${firstDate} ${arrTariffs.dates[arrTariffs.dates.length - 1].slice(
+          0,
+          4
+        )} - MDS`
+      );
+    }
+  };
+
+  const verifyToFinish = () => {
+    next(false);
+    if (typeTariff === "common") {
+      if (nameFDS && nameMDS && pipeNumFDS && pipeNumMDS) next(true);
+    } else {
+      if (name && pipeNum) next(true);
+    }
   };
 
   useEffect(() => {
     makeRow();
     getTariffs();
+    if (typeTariff === "common") generateName();
+    if (typeTariff === "specific") setName(specificName);
   }, []);
+
+  useEffect(() => {
+    makeRow();
+
+    verifyToFinish();
+  }, [name, nameFDS, nameMDS, pipeNum, pipeNumFDS, pipeNumMDS]);
+
+  useEffect(() => {
+    setRelationTariffs(rows);
+  }, [rows]);
   return (
     <div className="name-and-confirm-step">
       <div
@@ -105,8 +319,20 @@ export const NameAndConfirmStep = ({
               gap: 10,
             }}
           >
-            <TextField label="Nome do Tarifário" />
-            <TextField label="Numero Pipedrive" />
+            <TextField
+              label="Nome do Tarifário"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <TextField
+              label="Numero Pipedrive"
+              value={pipeNum}
+              onChange={(e) => {
+                setPipeNum(e.target.value);
+              }}
+            />
           </div>
         ) : (
           <div
@@ -132,7 +358,11 @@ export const NameAndConfirmStep = ({
                 disabled
                 value={nameMDS}
               />
-              <TextField label="Numero Pipedrive" />
+              <TextField
+                label="Numero Pipedrive"
+                value={pipeNumMDS}
+                onChange={(e) => setPipeNumMDS(e.target.value)}
+              />
             </div>
 
             <div
@@ -148,15 +378,25 @@ export const NameAndConfirmStep = ({
                 disabled
                 value={nameFDS}
               />
-              <TextField label="Numero Pipedrive" />
+              <TextField
+                label="Numero Pipedrive"
+                value={pipeNumFDS}
+                onChange={(e) => setPipeNumFDS(e.target.value)}
+              />
             </div>
           </div>
         )}
       </div>
 
       <div className="confirm-information">
+        <div
+          className="titleContainerBx"
+          style={{ fontSize: 18, color: "#1976d2" }}
+        >
+          Confirme as Informações!
+        </div>
         <CollapsibleTableTariff
-          rows={row}
+          rows={rows}
           allTariffs={tariffs}
           ButtonsOn={false}
         />

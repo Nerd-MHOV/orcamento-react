@@ -20,7 +20,6 @@ export async function handleForm(
   const formUp: HTMLFormElement | any = document.querySelector("#form");
   const responseForm = serialize(formUp, { hash: true });
 
-  console.log(responseForm.category);
   if (
     typeof responseForm.category === "string" &&
     responseForm.category.match(/Day-Use/)
@@ -47,6 +46,14 @@ export async function handleForm(
 
   responseForm.housingUnit = responseForm.category;
   responseForm.category = category;
+
+  console.log({
+    responseForm,
+    childValue,
+    petValue,
+    requirementValue,
+    selectionRange,
+  });
 
   const response = await api.getBudget(
     responseForm,

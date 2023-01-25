@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 
 export const UserSeed = [
   {
-    id: 1,
     email: "matheus.henrique4245@gmail.com",
     phone: "14 991578451",
     name: "Matheus Henrique",

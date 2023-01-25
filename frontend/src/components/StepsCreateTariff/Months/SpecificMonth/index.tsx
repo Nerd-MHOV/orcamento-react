@@ -1,7 +1,8 @@
 import { addDays, format, isDate } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
+import { CreateTariffContext } from "../../../../context/createTariff/createTariff";
 import { useApi } from "../../../../hooks/api/api";
 import { FindHolidaysProps } from "../../../../hooks/api/interfaces";
 const initialDays = {
@@ -10,11 +11,8 @@ const initialDays = {
   key: "selection",
 };
 
-export const SpecificMonth = ({
-  handleSetDates,
-}: {
-  handleSetDates: (dates: string[]) => void;
-}) => {
+export const SpecificMonth = () => {
+  const { setDates } = useContext(CreateTariffContext);
   const api = useApi();
   const [days, setDays] = useState<{
     startDate: Date;
@@ -39,7 +37,7 @@ export const SpecificMonth = ({
         stringDates.push(format(init, "yyyy-MM-dd"));
         init = addDays(init, 1);
       }
-      handleSetDates(stringDates);
+      setDates(stringDates);
     }
   };
 

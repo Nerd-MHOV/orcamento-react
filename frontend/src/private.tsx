@@ -1,17 +1,16 @@
+import { Box, CircularProgress } from "@mui/material";
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet, Route } from "react-router-dom";
 import { AuthContext } from "./context/authContext";
 
-export const Private = ({ children }: any) => {
+export const Private = () => {
   const { authenticated, loading, validateToken } = useContext(AuthContext);
-
   if (loading) {
-    return <div className="loading">Carregando...</div>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center" }} m={10}>
+        <CircularProgress />
+      </Box>
+    );
   }
-
-  if (!authenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
+  return authenticated ? <Outlet /> : <Navigate to="/login" />;
 };

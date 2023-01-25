@@ -56,3 +56,5 @@ export interface FindHolidaysProps {
   date: string;
   tariffs_id: string;
 }
+
+export type TariffTypesProps = "specific" | "common";

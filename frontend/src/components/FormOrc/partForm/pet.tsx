@@ -8,7 +8,6 @@ const petOptions = ["pequeno", "médio", "grande"];
 
 export const PetInputForm = ({ onChange, petValue }: PetInputFormProps) => (
   <Autocomplete
-    componentName="pet"
     multiple
     options={petOptions}
     isOptionEqualToValue={() => false}
