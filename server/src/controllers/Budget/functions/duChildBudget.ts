@@ -34,6 +34,8 @@ export async function duChildBudget(
       values: valuesChild,
       total: totalChild,
       noDiscount: valuesChild,
+      totalNoDiscount: totalChild,
+      discountApplied: 0,
     });
   }
 

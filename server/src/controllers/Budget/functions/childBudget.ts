@@ -17,6 +17,8 @@ export async function childBudget(
     const numChild = countChild + 1;
     let valuesChild: number[] = [];
     let totalChild = 0;
+    let totalNoDiscount = 0;
+    let discountApplied = 0;
     let uChild = Number(arrChild[countChild]);
     let permitDiscount = true;
 
@@ -48,7 +50,8 @@ export async function childBudget(
       let resultDiscount = child * discount;
       let result = Math.round(child - resultDiscount);
       totalChild += result;
-
+      totalNoDiscount += child;
+      discountApplied = discount * 100;
       return result;
     });
 
@@ -58,6 +61,8 @@ export async function childBudget(
       values: valuesWithDiscountChild,
       total: totalChild,
       noDiscount: valuesChild,
+      totalNoDiscount,
+      discountApplied,
     });
   }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import serialize from "form-serialize";
 import { RequirementSubmitProps } from "../../components/FormOrc/Interfaces";
-import { selectionRange } from "../../pages/Home/functions/handleForm";
+import { selectionRange } from "../../context/generateTariff/functions/handleForm";
 import {
   AllTariffsProps,
   FindHolidaysProps,

@@ -1,5 +1,5 @@
-import { useApi } from "../../../hooks/api/api";
-import { CategoryOptionsProps } from "../Interfaces";
+import { useApi } from "../../../../hooks/api/api";
+import { CategoryOptionsProps } from "../../interfaces";
 
 export async function getCategoryOptions() {
   const api = useApi();
@@ -30,6 +30,4 @@ export async function getCategoryOptions() {
     response: response,
     list: list,
   };
-  //   setAllCategories(response);
-  //   setCategoryOptions(list);
 }

@@ -1,20 +1,17 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { CategoryOptionsProps, SelectionRangeProps } from "../Interfaces";
+import { useContext } from "react";
+import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces";
 
-interface CategoryInputFormProps {
-  categoryOptions: CategoryOptionsProps[];
-  selectionRange: SelectionRangeProps;
-  onChange: (newValue: CategoryOptionsProps | null) => void;
-  categoryValue: CategoryOptionsProps | null;
-  unitUsing: string[];
-}
-export const CategoryInputForm = ({
-  categoryOptions,
-  selectionRange,
-  onChange,
-  categoryValue,
-  unitUsing,
-}: CategoryInputFormProps) => {
+export const CategoryInputForm = () => {
+  const {
+    handleCategoryInput,
+    categoryOptions,
+    categoryValue,
+    selectionRange,
+    unitUsing,
+  } = useContext(GenerateTariffContext);
+
   const optionDisabled = (options: CategoryOptionsProps) => {
     if (
       selectionRange.startDate === selectionRange.endDate &&
@@ -53,7 +50,7 @@ export const CategoryInputForm = ({
       className="textField"
       getOptionDisabled={optionDisabled}
       onChange={(_, newValue) => {
-        onChange(newValue);
+        handleCategoryInput(newValue);
       }}
       renderOption={renderOption}
       value={categoryValue}

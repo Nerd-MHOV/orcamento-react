@@ -1,21 +1,14 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useContext } from "react";
 import { DateRangePicker } from "react-date-range";
+import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 import { SelectionRangeProps } from "../FormOrc/Interfaces";
 
-interface CalendarPickerProps {
-  handleSelect: (range: any) => Promise<void>;
-  holidays: String[];
-  monthsWithTariffs: String[];
-  selectionRange: SelectionRangeProps;
-}
+export const CalendarPicker = () => {
+  const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } =
+    useContext(GenerateTariffContext);
 
-export const CalendarPicker = ({
-  handleSelect,
-  holidays,
-  monthsWithTariffs,
-  selectionRange,
-}: CalendarPickerProps) => {
   function customDayContent(day: Date) {
     let extraDot = null;
     if (holidays.includes(format(day, "yyyy-MM-dd"))) {
@@ -56,7 +49,7 @@ export const CalendarPicker = ({
   return (
     <DateRangePicker
       ranges={[selectionRange]}
-      onChange={handleSelect}
+      onChange={handleSelectDate}
       months={2}
       showDateDisplay={false}
       disabledDay={customDisableDays}

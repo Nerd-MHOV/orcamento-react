@@ -27,6 +27,8 @@ export async function petBudget(
       values: valuesPet,
       total: totalPet,
       noDiscount: valuesPet,
+      totalNoDiscount: totalPet,
+      discountApplied: 0,
     });
   }
 

@@ -1,4 +1,4 @@
-import { useApi } from "../../../hooks/api/api";
+import { useApi } from "../../../../hooks/api/api";
 
 export async function getListRequirements() {
   const api = useApi();

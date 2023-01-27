@@ -17,6 +17,7 @@ export async function adultBudget(
     countAdult++;
     let valuesAdult: number[] = [];
     let totalAdult = 0;
+    let totalNoDiscount = 0;
     if (countAdult <= 2) {
       valuesAdult = await generateBudget(initDate, finalDate, arrForm, "adt");
     } else {
@@ -29,6 +30,7 @@ export async function adultBudget(
     }
 
     const valueWithDiscountAdult = valuesAdult.map((value) => {
+      totalNoDiscount += value;
       let resultDiscount = value * discount;
       let result = Math.round(value - resultDiscount);
       totalAdult += result;
@@ -41,6 +43,8 @@ export async function adultBudget(
       values: valueWithDiscountAdult,
       total: totalAdult,
       noDiscount: valuesAdult,
+      totalNoDiscount: totalNoDiscount,
+      discountApplied: discount * 100,
     });
   }
 

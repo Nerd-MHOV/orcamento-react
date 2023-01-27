@@ -1,31 +1,30 @@
 import { Autocomplete, TextField } from "@mui/material";
+import { useContext } from "react";
+import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { PensionsOptionsProps } from "../../../context/generateTariff/interfaces";
 
-interface PensionInputFormProps {
-  disabledPension: boolean;
-  onChange: (newValue: string | null) => void;
-  pensionValue: string | null;
-}
-export const PensionInputForm = ({
-  disabledPension,
-  onChange,
-  pensionValue,
-}: PensionInputFormProps) => (
-  <Autocomplete
-    disabled={disabledPension}
-    options={["simples", "meia", "completa"]}
-    className="textField"
-    onChange={(_, newValue) => {
-      onChange(newValue);
-    }}
-    value={pensionValue}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        name="pension"
-        label="Pensão"
-        type="text"
-        variant="standard"
-      />
-    )}
-  />
-);
+export const PensionInputForm = () => {
+  const { disabledPension, setPensionValue, pensionValue } = useContext(
+    GenerateTariffContext
+  );
+  return (
+    <Autocomplete
+      disabled={disabledPension}
+      options={["simples", "meia", "completa"]}
+      className="textField"
+      onChange={(_, newValue) => {
+        setPensionValue(newValue as PensionsOptionsProps | null);
+      }}
+      value={pensionValue}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          name="pension"
+          label="Pensão"
+          type="text"
+          variant="standard"
+        />
+      )}
+    />
+  );
+};

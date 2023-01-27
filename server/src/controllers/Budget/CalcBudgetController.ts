@@ -11,6 +11,8 @@ export type RowsProps = {
   values: number[];
   total: number;
   noDiscount: number[];
+  totalNoDiscount: number;
+  discountApplied: number;
 };
 
 export interface ArrFormProps {

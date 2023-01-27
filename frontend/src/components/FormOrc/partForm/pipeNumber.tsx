@@ -1,15 +1,17 @@
 import { TextField } from "@mui/material";
+import { useContext } from "react";
+import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
 
-interface PipeNumberInputFormProps {
-  onChange: VoidFunction;
-}
-export const PipeNumberInputForm = ({ onChange }: PipeNumberInputFormProps) => (
-  <TextField
-    name="numberPipe"
-    label="Nº Pipe"
-    type="number"
-    onChange={() => onChange()}
-    className="textField"
-    variant="standard"
-  />
-);
+export const PipeNumberInputForm = () => {
+  const { callHandleForm } = useContext(GenerateTariffContext);
+  return (
+    <TextField
+      name="numberPipe"
+      label="Nº Pipe"
+      type="number"
+      onChange={() => callHandleForm()}
+      className="textField"
+      variant="standard"
+    />
+  );
+};

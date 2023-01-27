@@ -1,25 +1,18 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useApi } from "../../hooks/api/api";
-import pdfBudget from "../../pages/Home/functions/pdfBudget";
-import pdfDescription from "../../pages/Home/functions/pdfDescription";
-import EvitaBug from "../../pages/Home/functions/evitaBugPDF";
-import { pipeChangeDeal } from "../../pages/Home/functions/pipeChangeDeal";
+import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
+import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
+import EvitaBug from "../../context/generateTariff/functions/evitaBugPDF";
+import { pipeChangeDeal } from "../../context/generateTariff/functions/pipeChangeDeal";
 import Btn from "../Btn";
-import { DataContentProps } from "../TableCalc";
+import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 
-interface ButtonsBudgetProps {
-  budgets: DataContentProps[];
-  handleSaveBudget: () => Promise<void>;
-  clearTariffs: () => Promise<void>;
-}
-
-export const ButtonsBudget = ({
-  budgets,
-  handleSaveBudget,
-  clearTariffs,
-}: ButtonsBudgetProps) => {
+export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
+  const { budgets, handleSaveBudget, clearTariffs } = useContext(
+    GenerateTariffContext
+  );
   const api = useApi();
 
   function evitaBug() {

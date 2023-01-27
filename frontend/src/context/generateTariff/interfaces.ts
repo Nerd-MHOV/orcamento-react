@@ -1,0 +1,128 @@
+import { AppHotelProps } from "../../hooks/appHotel/interfaces";
+
+export interface GenerateTariffContextProps {
+  handleSelectDate(ranges: any): Promise<void>;
+  holidays: string[];
+  monthsWithTariffs: string[];
+  selectionRange: SelectionRangeProps;
+  stateApp: AppHotelProps | null;
+  addRows(rows: any[], arrComplete: any): void;
+  unitUsing: string[];
+  dataTable: DataContentProps;
+  budgets: DataContentProps[];
+  deleteLine(indexDelete: number): void;
+  handleSaveBudget: () => Promise<void>;
+  clearTariffs: () => Promise<void>;
+  openModalRequirement: boolean;
+  handleCloseModalRequirement: VoidFunction;
+  handleSaveModalRequirement: (
+    requirements: string[],
+    requirement: string,
+    type: string,
+    values: RequirementSubmitValuesProps
+  ) => void;
+  typeModal: "" | TypeModalProps;
+  requirementsModal: string[];
+  callHandleForm: VoidFunction;
+  occupancy: OccupancyProps;
+  occupancyWrong: boolean;
+  changeOccupancyWrong: () => void;
+  childValue: number[];
+  setChildValue: React.Dispatch<React.SetStateAction<number[]>>;
+  petValue: string[];
+  setPetValue: React.Dispatch<React.SetStateAction<string[]>>;
+  disabledPension: boolean;
+  handleCategoryInput: (newValue: CategoryOptionsProps | null) => void;
+  categoryOptions: CategoryOptionsProps[];
+  categoryValue: CategoryOptionsProps | null;
+  setPensionValue: React.Dispatch<
+    React.SetStateAction<PensionsOptionsProps | null>
+  >;
+  pensionValue: PensionsOptionsProps | null;
+  listRequirements: string[];
+  requirementValue: string[];
+  handleClickOpenModalRequirement: (requirement: string[]) => void;
+}
+
+export type SelectionRangeProps = {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+};
+
+export type UnitaryDiscount = {
+  id: number;
+  discount: number;
+};
+
+export type RowsProps = {
+  id: number;
+  desc: string;
+  values: string[] | number[] | any[];
+  total: string | number;
+  noDiscount: string[] | number[] | any[];
+  totalNoDiscount: string | number;
+  discountApplied: string | number;
+};
+
+export type DataContentProps = {
+  rows: Array<RowsProps> | [];
+  columns: string[] | [];
+  arrComplete?: any;
+};
+
+//form
+export interface CategoriesProps {
+  category: {
+    id: string;
+    name: string;
+  };
+  category_id: string;
+  id: string;
+  minimum_occupancy: number;
+  maximum_occupancy: number;
+}
+
+export type TypeModalProps = "person" | "ticket" | "tourism";
+export type PensionsOptionsProps = "simples" | "meia" | "completa";
+
+export interface RequirementSubmitProps {
+  requirement: string;
+  type: string;
+  values: RequirementSubmitValuesProps;
+}
+
+export interface RequirementSubmitValuesProps {
+  adult: number;
+  child: string[];
+  amount: number;
+}
+
+export interface CategoryOptionsProps {
+  label: string;
+  unit: string;
+  category: string;
+}
+
+export interface ArrCompleteProps {
+  childValue?: String[];
+  petValue?: String[];
+  responseForm?: ResponseFormProps;
+  selectionRange?: SelectionRangeProps;
+}
+
+export interface ResponseFormProps {
+  adult?: number;
+  discount?: number;
+  category?: string;
+  housingUnit: string;
+  numberPipe: number;
+  pension: string;
+}
+
+export interface OccupancyProps {
+  text: string;
+  max: number;
+  min: number;
+  category: string;
+}

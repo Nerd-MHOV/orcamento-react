@@ -8,13 +8,11 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { DataContentProps } from "../TableCalc";
+import { useContext } from "react";
+import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 
-interface InfoTableProps {
-  budgets: DataContentProps[];
-  deleteLine: (indexDelete: number) => void;
-}
-export const InfoTable = ({ budgets, deleteLine }: InfoTableProps) => {
+export const InfoTable = () => {
+  const { budgets, deleteLine } = useContext(GenerateTariffContext);
   return (
     <div className="infoTable">
       <>

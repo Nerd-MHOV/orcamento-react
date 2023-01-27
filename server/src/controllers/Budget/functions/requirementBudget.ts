@@ -51,12 +51,25 @@ export async function requirementBudget(
       totalRequirement += valueRequirement[i];
     }
 
+    const quantity = arrRequirement[countRequirement].values;
+
+    let nameRequirement = uRequirement + " [";
+
+    if (quantity.adult > 0) nameRequirement += ` ${quantity.adult} ADT`;
+    if (quantity.child.length > 0)
+      nameRequirement += ` ${quantity.child.length} CHD`;
+    if (quantity.amount > 0) nameRequirement += ` ${quantity.amount}x`;
+
+    nameRequirement += " ]";
+
     requirementRows.push({
       id: 400 + numRequirement,
-      desc: uRequirement,
+      desc: nameRequirement,
       values: valueRequirement,
       total: totalRequirement,
       noDiscount: valueRequirement,
+      totalNoDiscount: totalRequirement,
+      discountApplied: 0,
     });
   }
 

@@ -6,42 +6,90 @@ import {
   Table,
   TableBody,
   Paper,
+  TextField,
+  InputAdornment,
+  Input,
+  FormControl,
+  OutlinedInput,
 } from "@mui/material";
+import { useContext } from "react";
+import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
 
-export type RowsProps = {
-  id: number;
-  desc: string;
-  values: string[] | number[] | any[];
-  total: string | number;
-};
+const relationWithDiscountAndNoDiscount = (
+  a: number | string,
+  b: number | string,
+  white = true
+) => (
+  <>
+    {a === b ? (
+      a
+    ) : (
+      <>
+        <div
+          style={{
+            color: "gray",
+            position: "absolute",
+            left: 2,
+            top: 3,
+            fontSize: 12,
+          }}
+        >
+          {b}
+        </div>
+        <div
+          style={
+            white
+              ? {
+                  background: "white",
+                  fontWeight: "bold",
+                }
+              : {
+                  background: "rgb(248,248,248)",
+                  fontWeight: "bold",
+                }
+          }
+        >
+          {a}
+        </div>
+      </>
+    )}
+  </>
+);
 
-export type DataProps = {
-  data: DataContentProps;
-};
-
-export type DataContentProps = {
-  rows: Array<RowsProps> | [];
-  columns: string[] | [];
-  arrComplete?: any;
-};
-
-const TableCalc = ({ data }: DataProps) => {
-  let totalPerRow: number[] = [];
-  let total = 0;
+const TableCalc = () => {
+  const { dataTable: data } = useContext(GenerateTariffContext);
+  let totalPerRow: {
+    total: number;
+    noDiscount: number;
+  }[] = [];
+  let total = {
+    total: 0,
+    noDiscount: 0,
+  };
   if (data.rows)
-    data.rows.map((row) => {
+    data.rows.map((row, rowIndex) => {
       if (row.values)
         row.values.map((value, index) => {
-          totalPerRow[index] = totalPerRow[index]
-            ? totalPerRow[index] + value
-            : 0 + value;
+          if (totalPerRow[index]) {
+            totalPerRow[index].total += value;
+            totalPerRow[index].noDiscount +=
+              data.rows[rowIndex].noDiscount[index];
+          } else {
+            totalPerRow[index] = {
+              total: value,
+              noDiscount: data.rows[rowIndex].noDiscount[index],
+            };
+          }
         });
     });
 
-  for (let i = 0; i < totalPerRow.length; i++) {
-    total += totalPerRow[i];
-  }
+  total.noDiscount = totalPerRow.reduce(
+    (total, arr) => total + arr.noDiscount,
+    0
+  );
+  total.total = totalPerRow.reduce((total, arr) => total + arr.total, 0);
+  console.log({ total, totalPerRow });
 
   return (
     <TableContainer component={Paper}>
@@ -57,9 +105,17 @@ const TableCalc = ({ data }: DataProps) => {
               </TableCell>
             ))}
             {!!data.columns.length && (
-              <TableCell style={{ color: "white", fontWeight: "bold" }}>
-                TOTAL
-              </TableCell>
+              <>
+                <TableCell
+                  align="center"
+                  style={{ color: "white", fontWeight: "bold", maxWidth: 30 }}
+                >
+                  desconto% unitário
+                </TableCell>
+                <TableCell style={{ color: "white", fontWeight: "bold" }}>
+                  TOTAL
+                </TableCell>
+              </>
             )}
           </TableRow>
         </TableHead>
@@ -75,15 +131,44 @@ const TableCalc = ({ data }: DataProps) => {
               </TableCell>
 
               {row.values.map((value, index) => (
-                <TableCell key={index}>{value}</TableCell>
+                <TableCell key={index} style={{ position: "relative" }}>
+                  {relationWithDiscountAndNoDiscount(
+                    value,
+                    row.noDiscount[index]
+                  )}
+                </TableCell>
               ))}
 
               {!!row.values.length && (
-                <TableCell
-                  style={{ background: "rgb(248,248,248)", fontWeight: "bold" }}
-                >
-                  {row.total}
-                </TableCell>
+                <>
+                  <TableCell
+                    align="center"
+                    style={{ cursor: "pointer" }}
+                    onDoubleClick={() => {
+                      console.log(row.id);
+                    }}
+                  >
+                    {row.discountApplied} %
+                    {/* <OutlinedInput
+                      endAdornment={
+                        <InputAdornment position="end">%</InputAdornment>
+                      }
+                    /> */}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      background: "rgb(248,248,248)",
+                      fontWeight: "bold",
+                      position: "relative",
+                    }}
+                  >
+                    {relationWithDiscountAndNoDiscount(
+                      row.total,
+                      row.totalNoDiscount,
+                      false
+                    )}
+                  </TableCell>
+                </>
               )}
             </TableRow>
           ))}
@@ -93,7 +178,7 @@ const TableCalc = ({ data }: DataProps) => {
               "&:last-child td": { background: "rgb(248,248,248)" },
             }}
           >
-            {!!total && (
+            {!!total.total && (
               <>
                 <TableCell
                   component="th"
@@ -104,13 +189,38 @@ const TableCalc = ({ data }: DataProps) => {
                 </TableCell>
 
                 {totalPerRow.map((value, index) => (
-                  <TableCell key={index}>{value}</TableCell>
+                  <TableCell key={index} style={{ position: "relative" }}>
+                    {relationWithDiscountAndNoDiscount(
+                      value.total,
+                      value.noDiscount,
+                      false
+                    )}
+                  </TableCell>
                 ))}
 
                 <TableCell
-                  style={{ background: "rgb(248,248,248)", fontWeight: "bold" }}
+                  style={{
+                    background: "rgb(248,248,248)",
+                    fontWeight: "bold",
+                    color: "#d34747",
+                  }}
+                  align="center"
                 >
-                  {total}
+                  {total.total - total.noDiscount}
+                </TableCell>
+
+                <TableCell
+                  style={{
+                    background: "rgb(248,248,248)",
+                    fontWeight: "bold",
+                    position: "relative",
+                  }}
+                >
+                  {relationWithDiscountAndNoDiscount(
+                    total.total,
+                    total.noDiscount,
+                    false
+                  )}
                 </TableCell>
               </>
             )}

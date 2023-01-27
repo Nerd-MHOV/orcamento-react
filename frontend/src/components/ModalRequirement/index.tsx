@@ -5,20 +5,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
 import { Autocomplete, TextField } from "@mui/material";
 import "./style.scss";
-import { RequirementSubmitValuesProps } from "../FormOrc/Interfaces";
-
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement<any, any>;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { RequirementSubmitValuesProps } from "../../context/generateTariff/interfaces";
+import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 
 interface ModalRequirementProps {
   handleClickOpen: (requirement: string[]) => void;
@@ -49,14 +39,14 @@ const ageChild = [
   "12",
 ];
 
-export function ModalRequirement({
-  handleClickOpen,
-  handleClose,
-  handleSave,
-  typeModal,
-  requirementsModal,
-  open,
-}: ModalRequirementProps) {
+export function ModalRequirement() {
+  const {
+    openModalRequirement: open,
+    handleCloseModalRequirement: handleClose,
+    requirementsModal,
+    handleSaveModalRequirement: handleSave,
+    typeModal,
+  } = React.useContext(GenerateTariffContext);
   const [child, setChild] = React.useState<any[]>([]);
   const [adult, setAdult] = React.useState<number>(0);
   const [amount, setAmount] = React.useState<number>(0);
