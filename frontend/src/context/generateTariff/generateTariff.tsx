@@ -11,6 +11,7 @@ import { handleForm } from "./functions/handleForm";
 import {
   dataInitial,
   occupancyInitial,
+  rowDiscountInitial,
   selectionRangeInitial,
 } from "./initial";
 import {
@@ -23,8 +24,8 @@ import {
   PensionsOptionsProps,
   RequirementSubmitProps,
   RequirementSubmitValuesProps,
+  RowModalDiscount,
   TypeModalProps,
-  UnitaryDiscount,
 } from "./interfaces";
 
 export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
@@ -65,6 +66,13 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   listRequirements: [],
   requirementValue: [],
   handleClickOpenModalRequirement() {},
+  handleCloseModalDiscount() {},
+  handleSaveModalDiscount() {},
+  handleClickOpenModalDiscount() {},
+  openModalDiscount: false,
+  discountBeingEdited: rowDiscountInitial,
+  addUnitaryDiscount() {},
+  clearUnitaryDiscount() {},
 });
 
 export const GenerateTariffProvider = ({
@@ -80,7 +88,6 @@ export const GenerateTariffProvider = ({
   const [monthsWithTariffs, setMonthsWithTariffs] = useState<string[]>([]);
   const [stateApp, setStateApp] = useState<AppHotelProps | null>(null);
   const [unitUsing, setUnitUsing] = useState<string[]>([]);
-  const [unitaryDiscount, setUnitaryDiscount] = useState<UnitaryDiscount[]>([]);
   const [openModalRequirement, setOpenModalRequirement] = useState(false);
   const [childValue, setChildValue] = useState<number[]>([]);
   const [petValue, setPetValue] = useState<string[]>([]);
@@ -103,6 +110,12 @@ export const GenerateTariffProvider = ({
   const [occupancy, setOccupancy] = useState<OccupancyProps>(occupancyInitial);
   const [occupancyWrong, setOccupancyWrong] = useState(false);
   const [disabledPension, setDisabledPension] = useState(false);
+  const [openModalDiscount, setOpenModalDiscount] = useState(false);
+  const [unitaryDiscount, setUnitaryDiscount] = useState<RowModalDiscount[]>(
+    []
+  );
+  const [discountBeingEdited, setDiscountBeingEdited] =
+    useState(rowDiscountInitial);
 
   const getVariables = async () => {
     setDataTable(dataInitial);
@@ -134,6 +147,8 @@ export const GenerateTariffProvider = ({
     setBudgets((old) => {
       return [...old, { ...dataTable, arrComplete }];
     });
+
+    console.log(dataTable);
   }
 
   async function clearTariffs() {
@@ -157,6 +172,47 @@ export const GenerateTariffProvider = ({
   }
 
   //form
+  const addUnitaryDiscount = (row: RowModalDiscount) => {
+    setUnitaryDiscount((old) => {
+      let editable: RowModalDiscount[] = [];
+      let editableOld = old;
+      let newItem = true;
+
+      editableOld = old.map((item) => {
+        if (item.id === row.id) {
+          newItem = false;
+          item.discount = row.discount;
+        }
+
+        return item;
+      });
+
+      if (newItem) {
+        editable.push(row);
+      }
+
+      return [...editableOld, ...editable];
+    });
+  };
+
+  const clearUnitaryDiscount = () => {
+    setUnitaryDiscount([]);
+  };
+
+  const handleCloseModalDiscount = () => {
+    setOpenModalDiscount(false);
+  };
+
+  const handleClickOpenModalDiscount = (row: RowModalDiscount) => {
+    setDiscountBeingEdited(row);
+    setOpenModalDiscount(true);
+  };
+
+  const handleSaveModalDiscount = () => {
+    console.log(unitaryDiscount);
+
+    setOpenModalDiscount(false);
+  };
   const handleCloseModalRequirement = () => {
     setOpenModalRequirement(false);
   };
@@ -254,7 +310,8 @@ export const GenerateTariffProvider = ({
       childValue,
       petValue,
       selectionRange,
-      addRows
+      addRows,
+      unitaryDiscount
     );
   };
 
@@ -271,7 +328,12 @@ export const GenerateTariffProvider = ({
     categoryValue,
     pensionValue,
     selectionRange,
+    unitaryDiscount,
   ]);
+
+  useEffect(() => {
+    clearUnitaryDiscount();
+  }, [childValue, petValue]);
 
   useEffect(() => {
     getVariables();
@@ -313,6 +375,13 @@ export const GenerateTariffProvider = ({
         listRequirements,
         requirementValue,
         handleClickOpenModalRequirement,
+        handleCloseModalDiscount,
+        handleSaveModalDiscount,
+        handleClickOpenModalDiscount,
+        openModalDiscount,
+        discountBeingEdited,
+        addUnitaryDiscount,
+        clearUnitaryDiscount,
       }}
     >
       {children}

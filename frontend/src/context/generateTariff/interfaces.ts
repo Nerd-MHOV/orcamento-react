@@ -42,17 +42,19 @@ export interface GenerateTariffContextProps {
   listRequirements: string[];
   requirementValue: string[];
   handleClickOpenModalRequirement: (requirement: string[]) => void;
+  handleCloseModalDiscount: VoidFunction;
+  handleSaveModalDiscount: VoidFunction;
+  handleClickOpenModalDiscount: (row: RowModalDiscount) => void;
+  openModalDiscount: boolean;
+  discountBeingEdited: RowModalDiscount;
+  addUnitaryDiscount: (row: RowModalDiscount) => void;
+  clearUnitaryDiscount: VoidFunction;
 }
 
 export type SelectionRangeProps = {
   startDate: Date;
   endDate: Date;
   key: string;
-};
-
-export type UnitaryDiscount = {
-  id: number;
-  discount: number;
 };
 
 export type RowsProps = {
@@ -125,4 +127,10 @@ export interface OccupancyProps {
   max: number;
   min: number;
   category: string;
+}
+
+export interface RowModalDiscount {
+  id: number;
+  name: string;
+  discount: number;
 }

@@ -13,12 +13,13 @@ import { InfoApp } from "../InfoApp";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 
 export const FormOrc = () => {
-  const { stateApp, occupancyWrong, openModalRequirement, occupancy } =
-    useContext(GenerateTariffContext);
+  const { stateApp, occupancyWrong, occupancy } = useContext(
+    GenerateTariffContext
+  );
   return (
     <>
       <div className="modal">
-        {openModalRequirement && <ModalRequirement />}
+        <ModalRequirement />
       </div>
       <div className="boxFormAndInfo">
         <form id="form" className="form">

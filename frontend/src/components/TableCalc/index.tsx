@@ -58,7 +58,9 @@ const relationWithDiscountAndNoDiscount = (
 );
 
 const TableCalc = () => {
-  const { dataTable: data } = useContext(GenerateTariffContext);
+  const { dataTable: data, handleClickOpenModalDiscount } = useContext(
+    GenerateTariffContext
+  );
   let totalPerRow: {
     total: number;
     noDiscount: number;
@@ -145,7 +147,11 @@ const TableCalc = () => {
                     align="center"
                     style={{ cursor: "pointer" }}
                     onDoubleClick={() => {
-                      console.log(row.id);
+                      handleClickOpenModalDiscount({
+                        id: +row.id,
+                        name: row.desc,
+                        discount: +row.discountApplied,
+                      });
                     }}
                   >
                     {row.discountApplied} %

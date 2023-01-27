@@ -1,8 +1,6 @@
-import { addDays, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import serialize from "form-serialize";
 import { useApi } from "../../../hooks/api/api";
-import { RequirementSubmitProps } from "../interfaces";
+import { RequirementSubmitProps, RowModalDiscount } from "../interfaces";
 
 export interface selectionRange {
   startDate: Date;
@@ -16,7 +14,8 @@ export async function handleForm(
   childValue: any[],
   petValue: any[],
   selectionRange: selectionRange,
-  addRows: (rows: any[], arrComplete: any) => void
+  addRows: (rows: any[], arrComplete: any) => void,
+  unitaryDiscount: RowModalDiscount[]
 ) {
   const api = useApi();
 
@@ -32,7 +31,8 @@ export async function handleForm(
       childValue,
       petValue,
       requirementValue,
-      selectionRange
+      selectionRange,
+      unitaryDiscount
     );
 
     addRows(response.rows, {
@@ -63,7 +63,8 @@ export async function handleForm(
     childValue,
     petValue,
     requirementValue,
-    selectionRange
+    selectionRange,
+    unitaryDiscount
   );
 
   addRows(response.rows, {

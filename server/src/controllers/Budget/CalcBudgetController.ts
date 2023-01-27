@@ -23,6 +23,22 @@ export interface ArrFormProps {
   numberPipe?: number;
 }
 
+export interface UnitaryDiscountProps {
+  id: number;
+  name: string;
+  discount: number;
+}
+
+export interface ArrRequirementProps {
+  requirement: string;
+  type: string;
+  values: {
+    adult: number;
+    child: number[];
+    amount: number;
+  };
+}
+
 export type PetProps = "pequeno" | "médio" | "grande";
 
 export class CalcBudgetController {
@@ -33,16 +49,18 @@ export class CalcBudgetController {
       arrPet,
       arrRequirement,
       rangeDate,
+      unitaryDiscount,
     }: {
       arrForm: ArrFormProps;
       arrChild: number[];
       arrPet: PetProps[];
-      arrRequirement: any[];
+      arrRequirement: ArrRequirementProps[];
       rangeDate: {
         startDate: string;
         endDate: string;
         [key: string]: any;
       };
+      unitaryDiscount: UnitaryDiscountProps[];
     } = request.body;
 
     console.log(arrForm.category);
@@ -57,18 +75,37 @@ export class CalcBudgetController {
     let finalDate = new Date(rangeDate.endDate);
 
     //adult
-    adultRows = await adultBudget(arrForm, arrChild, initDate, finalDate);
+    adultRows = await adultBudget(
+      arrForm,
+      arrChild,
+      unitaryDiscount,
+      initDate,
+      finalDate
+    );
 
     //child
-    childRows = await childBudget(arrForm, arrChild, initDate, finalDate);
+    childRows = await childBudget(
+      arrForm,
+      arrChild,
+      unitaryDiscount,
+      initDate,
+      finalDate
+    );
 
     //pet
-    petRows = await petBudget(arrForm, arrPet, initDate, finalDate);
+    petRows = await petBudget(
+      arrForm,
+      arrPet,
+      unitaryDiscount,
+      initDate,
+      finalDate
+    );
 
     //requirement
     requirementRows = await requirementBudget(
       arrForm,
       arrRequirement,
+      unitaryDiscount,
       initDate,
       finalDate
     );

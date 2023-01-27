@@ -3,9 +3,8 @@ import { useContext } from "react";
 import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
 
 export const AdultInputForm = () => {
-  const { changeOccupancyWrong, callHandleForm } = useContext(
-    GenerateTariffContext
-  );
+  const { changeOccupancyWrong, callHandleForm, clearUnitaryDiscount } =
+    useContext(GenerateTariffContext);
   return (
     <TextField
       label="Adulto"
@@ -16,6 +15,7 @@ export const AdultInputForm = () => {
       onChange={() => {
         callHandleForm();
         changeOccupancyWrong();
+        clearUnitaryDiscount();
       }}
     />
   );

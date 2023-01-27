@@ -1,9 +1,15 @@
-import { ArrFormProps, PetProps, RowsProps } from "../CalcBudgetController";
+import {
+  ArrFormProps,
+  PetProps,
+  RowsProps,
+  UnitaryDiscountProps,
+} from "../CalcBudgetController";
 import { generateBudgetPet } from "./generateBudgetPet";
 
 export async function petBudget(
   arrForm: ArrFormProps,
   arrPet: PetProps[],
+  unitaryDiscount: UnitaryDiscountProps[],
   initDate: Date,
   finalDate: Date
 ) {
@@ -13,22 +19,37 @@ export async function petBudget(
     const numPet = countPet + 1;
     let valuesPet: number[] = [];
     let totalPet = 0;
+    let totalNoDiscount = 0;
     let uPet = arrPet[countPet];
+    let discount = 0;
+    const id = 300 + numPet;
+    const desc = "PET " + uPet;
 
     valuesPet = await generateBudgetPet(initDate, finalDate, arrForm, uPet);
 
-    for (let i = 0; i < valuesPet.length; i++) {
-      totalPet += valuesPet[i];
-    }
+    //verify unitary discount
+    unitaryDiscount.map((unit) => {
+      if (unit.id === id && unit.name === desc) {
+        discount = unit.discount / 100;
+      }
+    });
 
+    const valueWithDiscountPet = valuesPet.map((value) => {
+      totalNoDiscount += value;
+      let resultDiscount = value * discount;
+      let result = Math.round(value - resultDiscount);
+      totalPet += result;
+
+      return result;
+    });
     petRows.push({
-      id: 300 + numPet,
-      desc: "PET " + uPet,
-      values: valuesPet,
+      id,
+      desc,
+      values: valueWithDiscountPet,
       total: totalPet,
       noDiscount: valuesPet,
-      totalNoDiscount: totalPet,
-      discountApplied: 0,
+      totalNoDiscount: totalNoDiscount,
+      discountApplied: discount * 100,
     });
   }
 

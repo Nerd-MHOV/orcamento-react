@@ -10,20 +10,6 @@ import "./style.scss";
 import { RequirementSubmitValuesProps } from "../../context/generateTariff/interfaces";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 
-interface ModalRequirementProps {
-  handleClickOpen: (requirement: string[]) => void;
-  handleClose: VoidFunction;
-  handleSave: (
-    requirements: string[],
-    requirement: string,
-    type: string,
-    values: RequirementSubmitValuesProps
-  ) => void;
-  typeModal: string;
-  requirementsModal: string[];
-  open: boolean;
-}
-
 const ageChild = [
   "1",
   "2",

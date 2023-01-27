@@ -9,6 +9,7 @@ import { ButtonsBudget } from "../../components/ButtonsBudget";
 import { CalendarPicker } from "../../components/CalendarPicker";
 import TableCalc from "../../components/TableCalc";
 import { GenerateTariffProvider } from "../../context/generateTariff/generateTariff";
+import { ModalDiscount } from "../../components/ModalDiscount";
 
 const Home = () => {
   return (
@@ -19,6 +20,8 @@ const Home = () => {
           <Navbar />
           <div className="p20">
             <div className="containerBx">
+              {/* modal */}
+              <ModalDiscount />
               <div className="top">
                 <CalendarPicker />
                 <FormOrc />

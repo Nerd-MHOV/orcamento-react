@@ -2,6 +2,7 @@ import axios from "axios";
 import serialize from "form-serialize";
 import { RequirementSubmitProps } from "../../components/FormOrc/Interfaces";
 import { selectionRange } from "../../context/generateTariff/functions/handleForm";
+import { RowModalDiscount } from "../../context/generateTariff/interfaces";
 import {
   AllTariffsProps,
   FindHolidaysProps,
@@ -38,7 +39,8 @@ export const useApi = () => ({
     arrChild: string[],
     arrPet: string[],
     arrRequirement: RequirementSubmitProps[],
-    rangeDate: selectionRange
+    rangeDate: selectionRange,
+    unitaryDiscount: RowModalDiscount[]
   ) => {
     const response = await api.post("/budget", {
       arrForm,
@@ -46,6 +48,7 @@ export const useApi = () => ({
       arrPet,
       arrRequirement,
       rangeDate,
+      unitaryDiscount,
     });
     return response.data;
   },
@@ -55,7 +58,8 @@ export const useApi = () => ({
     arrChild: string[],
     arrPet: string[],
     arrRequirement: RequirementSubmitProps[],
-    rangeDate: selectionRange
+    rangeDate: selectionRange,
+    unitaryDiscount: RowModalDiscount[]
   ) => {
     const response = await api.post("/budget-du", {
       arrForm,
@@ -63,6 +67,7 @@ export const useApi = () => ({
       arrPet,
       arrRequirement,
       rangeDate,
+      unitaryDiscount,
     });
     return response.data;
   },

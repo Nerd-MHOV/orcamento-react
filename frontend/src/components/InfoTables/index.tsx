@@ -20,7 +20,7 @@ export const InfoTable = () => {
           Orçamentos:
         </Typography>
         {budgets.map((budget, index) => {
-          let countDaily = budget.columns.length - 2;
+          let countDaily = budget.columns.length - 1;
           let primary = `${countDaily} diárias no ${budget.arrComplete.responseForm.category}`;
           let total = 0;
           budget.rows.map((row) => {

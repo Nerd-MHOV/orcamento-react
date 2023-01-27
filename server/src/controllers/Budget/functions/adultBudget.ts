@@ -1,9 +1,10 @@
-import { RowsProps } from "../CalcBudgetController";
+import { RowsProps, UnitaryDiscountProps } from "../CalcBudgetController";
 import { generateBudget } from "./generateBudget";
 
 export async function adultBudget(
   arrForm: any,
   arrChild: number[],
+  unitaryDiscount: UnitaryDiscountProps[],
   initDate: Date,
   finalDate: Date
 ) {
@@ -11,9 +12,10 @@ export async function adultBudget(
   let adultRows: RowsProps[] = [];
   let amountAdults = arrForm.adult ?? 0;
   let countAdult = 0;
-  let discount = (Number(arrForm.discount) || 0) / 100;
-  console.log(discount);
   while (countAdult < amountAdults) {
+    let discount = (Number(arrForm.discount) || 0) / 100;
+    const id = 100 + countAdult;
+    const desc = "Adulto " + countAdult;
     countAdult++;
     let valuesAdult: number[] = [];
     let totalAdult = 0;
@@ -29,6 +31,12 @@ export async function adultBudget(
       valuesAdult = valuesAdult.map((value) => value * 2);
     }
 
+    //verify Discount Unitary
+    unitaryDiscount.map((unit) => {
+      if (unit.id === id && unit.name === desc) {
+        discount = unit.discount / 100;
+      }
+    });
     const valueWithDiscountAdult = valuesAdult.map((value) => {
       totalNoDiscount += value;
       let resultDiscount = value * discount;
@@ -38,8 +46,8 @@ export async function adultBudget(
       return result;
     });
     adultRows.push({
-      id: 100 + countAdult,
-      desc: "Adulto " + countAdult,
+      id,
+      desc,
       values: valueWithDiscountAdult,
       total: totalAdult,
       noDiscount: valuesAdult,

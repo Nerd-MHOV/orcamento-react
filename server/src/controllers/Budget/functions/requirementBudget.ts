@@ -1,17 +1,15 @@
-import { ArrFormProps, RowsProps } from "../CalcBudgetController";
+import {
+  ArrFormProps,
+  ArrRequirementProps,
+  RowsProps,
+  UnitaryDiscountProps,
+} from "../CalcBudgetController";
 import { generateBudgetRequirement } from "./generateBudgetRequirement";
 
 export async function requirementBudget(
   arrForm: ArrFormProps,
-  arrRequirement: {
-    requirement: string;
-    type: string;
-    values: {
-      adult: number;
-      child: number[];
-      amount: number;
-    };
-  }[],
+  arrRequirement: ArrRequirementProps[],
+  unitaryDiscount: UnitaryDiscountProps[],
   initDate: Date,
   finalDate: Date
 ) {
@@ -39,6 +37,9 @@ export async function requirementBudget(
     let totalRequirement = 0;
     let uRequirement = arrRequirement[countRequirement].requirement;
     let uType = arrRequirement[countRequirement].type;
+    const id = 400 + numRequirement;
+    let discount = 0;
+    let totalNoDiscount = 0;
 
     valueRequirement = await generateBudgetRequirement(
       initDate,
@@ -47,9 +48,21 @@ export async function requirementBudget(
       arrRequirement[countRequirement]
     );
 
-    for (let i = 0; i < valueRequirement.length; i++) {
-      totalRequirement += valueRequirement[i];
-    }
+    //verify unitary discount
+    unitaryDiscount.map((unit) => {
+      if (unit.id === id && unit.name === nameRequirement) {
+        discount = unit.discount / 100;
+      }
+    });
+
+    const valueWithDiscount = valueRequirement.map((value) => {
+      totalNoDiscount += value;
+      let resultDiscount = value * discount;
+      let result = Math.round(value - resultDiscount);
+      totalRequirement += result;
+
+      return result;
+    });
 
     const quantity = arrRequirement[countRequirement].values;
 
@@ -63,13 +76,13 @@ export async function requirementBudget(
     nameRequirement += " ]";
 
     requirementRows.push({
-      id: 400 + numRequirement,
+      id,
       desc: nameRequirement,
-      values: valueRequirement,
+      values: valueWithDiscount,
       total: totalRequirement,
       noDiscount: valueRequirement,
-      totalNoDiscount: totalRequirement,
-      discountApplied: 0,
+      totalNoDiscount: totalNoDiscount,
+      discountApplied: discount * 100,
     });
   }
 
