@@ -11,14 +11,16 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
-  email      String @unique
-  phone      String
-  name       String
-  username   String @unique
-  password   String
-  user_pipe  String
-  token_pipe String
+  id          String        @id @default(uuid())
+  email       String        @unique
+  phone       String
+  name        String
+  username    String        @unique
+  password    String
+  user_pipe   String
+  token_pipe  String
+  level       Float         @default(1)
+  SaveBudgets SaveBudgets[]
 
   @@map("users")
 }
@@ -141,9 +143,10 @@ model HUs {
 }
 
 model DUTariff {
-  name           String           @id
-  product_pipe   String
-  active         Boolean          @default(true)
+  name         String  @id
+  product_pipe String
+  active       Boolean @default(true)
+
   DUTariffValues DUTariffValues[]
 
   @@map("du_tariffs")
@@ -159,4 +162,14 @@ model DUTariffValues {
   tariffs DUTariff @relation(fields: [tariff_id], references: [name])
 
   @@map("du_tariff_values")
+}
+
+model SaveBudgets {
+  id          String   @id @default(uuid())
+  user_id     String
+  budgets     Json
+  createdAt   DateTime @default(now())
+  responsible User     @relation(fields: [user_id], references: [id])
+
+  @@map("save_budgets")
 }

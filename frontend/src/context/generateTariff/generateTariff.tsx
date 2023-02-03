@@ -147,8 +147,6 @@ export const GenerateTariffProvider = ({
     setBudgets((old) => {
       return [...old, { ...dataTable, arrComplete }];
     });
-
-    console.log(dataTable);
   }
 
   async function clearTariffs() {
@@ -209,8 +207,6 @@ export const GenerateTariffProvider = ({
   };
 
   const handleSaveModalDiscount = () => {
-    console.log(unitaryDiscount);
-
     setOpenModalDiscount(false);
   };
   const handleCloseModalRequirement = () => {
@@ -259,7 +255,6 @@ export const GenerateTariffProvider = ({
   };
   const handleCategoryInput = (newValue: CategoryOptionsProps | null) => {
     setCategoryValue(newValue);
-    console.log(newValue);
     setDisabledPension(false);
     if (newValue && !!newValue.label.match(/Day-Use/)) {
       setDisabledPension(true);

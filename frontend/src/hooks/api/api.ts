@@ -1,8 +1,11 @@
 import axios from "axios";
 import serialize from "form-serialize";
-import { RequirementSubmitProps } from "../../components/FormOrc/Interfaces";
 import { selectionRange } from "../../context/generateTariff/functions/handleForm";
-import { RowModalDiscount } from "../../context/generateTariff/interfaces";
+import {
+  RequirementSubmitProps,
+  RowModalDiscount,
+  DataContentProps,
+} from "../../context/generateTariff/interfaces";
 import {
   AllTariffsProps,
   FindHolidaysProps,
@@ -31,6 +34,11 @@ export const useApi = () => ({
 
   getUsers: async () => {
     const response = await api.get("/user");
+    return response.data;
+  },
+
+  getaUser: async (id: string) => {
+    const response = await api.post("/unique-user", { id });
     return response.data;
   },
 
@@ -140,6 +148,15 @@ export const useApi = () => ({
       name,
       active,
     });
+    return response.data;
+  },
+
+  saveBudget: async (user_id: string, budgets: DataContentProps[]) => {
+    const response = await api.post("/save-budget", {
+      user_id,
+      budgets,
+    });
+
     return response.data;
   },
 });

@@ -14,9 +14,9 @@ export async function adultBudget(
   let countAdult = 0;
   while (countAdult < amountAdults) {
     let discount = (Number(arrForm.discount) || 0) / 100;
+    countAdult++;
     const id = 100 + countAdult;
     const desc = "Adulto " + countAdult;
-    countAdult++;
     let valuesAdult: number[] = [];
     let totalAdult = 0;
     let totalNoDiscount = 0;

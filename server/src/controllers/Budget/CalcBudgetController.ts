@@ -63,7 +63,6 @@ export class CalcBudgetController {
       unitaryDiscount: UnitaryDiscountProps[];
     } = request.body;
 
-    console.log(arrForm.category);
     //vars:
     let adultRows: RowsProps[] = [];
     let childRows: RowsProps[] = [];

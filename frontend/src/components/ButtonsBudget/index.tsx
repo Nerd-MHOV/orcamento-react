@@ -7,6 +7,7 @@ import EvitaBug from "../../context/generateTariff/functions/evitaBugPDF";
 import { pipeChangeDeal } from "../../context/generateTariff/functions/pipeChangeDeal";
 import Btn from "../Btn";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { usePipe } from "../../hooks/pipedrive/pipeApi";
 
 export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
@@ -14,7 +15,7 @@ export const ButtonsBudget = () => {
     GenerateTariffContext
   );
   const api = useApi();
-
+  const pipe = usePipe();
   function evitaBug() {
     EvitaBug(budgets, "token");
   }
@@ -27,7 +28,12 @@ export const ButtonsBudget = () => {
       return;
     }
     const arrUser = await api.findUniqueUser(userLogin);
-    pdfDescription(budgets, arrUser.token_pipe);
+    const deal_id = budgets[0].arrComplete.responseForm.numberPipe;
+
+    let response;
+    if (deal_id) response = await pipe.getaDeal(arrUser.token_pipe, deal_id);
+    let name = response?.data?.person_name || "";
+    pdfDescription(budgets, arrUser.token_pipe, name);
   }
 
   async function generatePdfBudget() {
@@ -47,6 +53,11 @@ export const ButtonsBudget = () => {
       arrUser.phone,
       arrUser.token_pipe
     );
+
+    api
+      .saveBudget(userLogin, budgets)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   }
 
   return (

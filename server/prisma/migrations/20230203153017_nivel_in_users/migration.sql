@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "nivel" DOUBLE PRECISION NOT NULL DEFAULT 1;

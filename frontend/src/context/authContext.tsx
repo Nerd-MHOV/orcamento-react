@@ -18,12 +18,10 @@ export const AuthContextProvider: React.FC<ChildrenProps> = ({ children }) => {
       await api
         .validateToken()
         .then((data) => {
-          console.log(data);
           if (data.id) setUserLogin(data.id);
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
           logout();
           setLoading(false);
         });

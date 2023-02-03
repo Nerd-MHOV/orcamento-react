@@ -36,4 +36,8 @@ export const usePipe = () => ({
 
     return response.data;
   },
+  getaDeal: async (token: string, deal_id: number) => {
+    const response = await pipeApi.get(`/deals/${deal_id}?api_token=${token}`);
+    return response.data;
+  },
 });

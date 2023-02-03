@@ -91,7 +91,6 @@ const TableCalc = () => {
     0
   );
   total.total = totalPerRow.reduce((total, arr) => total + arr.total, 0);
-  console.log({ total, totalPerRow });
 
   return (
     <TableContainer component={Paper}>

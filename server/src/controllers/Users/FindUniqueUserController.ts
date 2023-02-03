@@ -11,7 +11,7 @@ export class FindUniqueUserController {
         where: { id },
       })
       .then((user) => {
-        if (!user) throw new UnauthorizedError("usuario não encontrado");
+        if (!user) throw new UnauthorizedError("Usuário não encontrado");
         const { password: _, ...userLogin } = user;
 
         return response.json(userLogin);

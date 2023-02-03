@@ -48,12 +48,13 @@ export class CalcBudgetDUController {
     childRows = await duChildBudget(arrChild, arrForm, initDate);
 
     //pet
-    petRows = await petBudget(arrForm, arrPet, initDate, finalDate);
+    petRows = await petBudget(arrForm, arrPet, [], initDate, finalDate);
 
     // requirement;
     requirementRows = await requirementBudget(
       arrForm,
       arrRequirement,
+      [],
       initDate,
       finalDate
     );

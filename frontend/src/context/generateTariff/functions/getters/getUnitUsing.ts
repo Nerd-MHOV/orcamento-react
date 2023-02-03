@@ -1,6 +1,6 @@
 import { format } from "date-fns";
-import { SelectionRangeProps } from "../../../../components/FormOrc/Interfaces";
 import { useAppApi } from "../../../../hooks/appHotel/app";
+import { SelectionRangeProps } from "../../interfaces";
 
 export async function getUnitUsing(date: SelectionRangeProps) {
   const app = useAppApi();
@@ -9,7 +9,6 @@ export async function getUnitUsing(date: SelectionRangeProps) {
     format(date.endDate, "yyyy-MM-dd")
   );
   let units: string[] = [];
-  console.log(response);
   response?.reservas?.map((unit: { unidade: string }) => {
     units.push(unit.unidade);
   });

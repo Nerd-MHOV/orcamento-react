@@ -2,6 +2,8 @@ import express from "express";
 import fs from "fs";
 import { CalcBudgetController } from "./controllers/Budget/CalcBudgetController";
 import { CalcBudgetDUController } from "./controllers/Budget/calcBudgetDUcontroller";
+import { GetBudgetController } from "./controllers/Budget/GetBudgetControlle";
+import { SaveBudgetController } from "./controllers/Budget/SaveBudgetController";
 import { CreateCategoryController } from "./controllers/Category/CreateCategoryController";
 import { FindCategoryController } from "./controllers/Category/FindCategoryController";
 import { CreateCommonDateController } from "./controllers/CommonDate/CreateCommonDateController";
@@ -11,7 +13,6 @@ import { FindFoodController } from "./controllers/Food/FindFoodController";
 import { FindAllHousingUnits } from "./controllers/HousingUnits/FindAllHousingUnits";
 import { CreatePetController } from "./controllers/Pet/CreatePetController";
 import { FindPetController } from "./controllers/Pet/FindPetController";
-// import { ChangeDealController } from "./controllers/Pipedrive/ChangeDealController";
 import { FindRequirementsController } from "./controllers/Requirement/FindRequirementsController";
 import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateSpecificDateController";
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
@@ -72,6 +73,8 @@ const findAllHousingUnits = new FindAllHousingUnits();
 
 const calcBudget = new CalcBudgetController();
 const calcBudgetDU = new CalcBudgetDUController();
+const saveBudget = new SaveBudgetController();
+const getBudget = new GetBudgetController();
 // const changeDeal = new ChangeDealController();
 
 routes.post("/user", createUser.handle);
@@ -114,6 +117,8 @@ routes.get("/housing-units", findAllHousingUnits.handle);
 
 routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);
+routes.post("/save-budget", saveBudget.handle);
+routes.get("/budget", getBudget.handle);
 
 // routes.post("/pipedrive", changeDeal.handle);
 export default routes;

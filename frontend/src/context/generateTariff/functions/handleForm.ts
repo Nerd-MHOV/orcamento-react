@@ -50,14 +50,6 @@ export async function handleForm(
   responseForm.housingUnit = responseForm.category;
   responseForm.category = category;
 
-  console.log({
-    responseForm,
-    childValue,
-    petValue,
-    requirementValue,
-    selectionRange,
-  });
-
   const response = await api.getBudget(
     responseForm,
     childValue,

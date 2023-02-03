@@ -21,7 +21,6 @@ export function ModalDiscount() {
   const handleChangeDiscount = (value: number) => {
     console.log(discountBeingEdited);
     if (value < 0) setDiscount(null);
-    else if (value === 0) setDiscount(null);
     else if (value > 100) setDiscount(100);
     else setDiscount(value);
   };
