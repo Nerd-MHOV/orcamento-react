@@ -1,6 +1,6 @@
-import { DataContentProps } from "../../../components/TableCalc";
 import { useApi } from "../../../hooks/api/api";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
+import { DataContentProps } from "../interfaces";
 
 export async function pipeChangeDeal(
   userId: number,

@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 exports.__esModule = true;
 exports.CreateSpecificDateController = void 0;
 var prismaClient_1 = require("../../database/prismaClient");
@@ -43,24 +54,64 @@ var CreateSpecificDateController = /** @class */ (function () {
     }
     CreateSpecificDateController.prototype.handle = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, date, tariffs_id;
+            var tariffs, tariff, _a, foodId, _tariffs, food, earlyWithoutIds, valuesWithoutId, specificWithoutTariffs, specificCreate, err_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = request.body, date = _a.date, tariffs_id = _a.tariffs_id;
-                        return [4 /*yield*/, prismaClient_1.prismaClient.specificDates
-                                .create({
-                                data: {
-                                    date: date,
-                                    tariffs_id: tariffs_id
-                                }
-                            })
-                                .then(function (createdDate) {
-                                return response.json(createdDate);
-                            })["catch"](function (err) { return console.log(err); })];
+                        tariffs = request.body.tariffs;
+                        _b.label = 1;
                     case 1:
-                        _b.sent();
-                        return [2 /*return*/];
+                        _b.trys.push([1, 3, , 4]);
+                        tariff = tariffs[0];
+                        _a = tariff.food, foodId = _a.id, _tariffs = _a.tariffs_id, food = __rest(_a, ["id", "tariffs_id"]);
+                        earlyWithoutIds = tariff.TariffCheckInValues.map(function (value) {
+                            var _ = value.id, _tariffs = value.tariffs_id, rest = __rest(value, ["id", "tariffs_id"]);
+                            return rest;
+                        });
+                        valuesWithoutId = tariff.TariffValues.map(function (value) {
+                            var _ = value.id, _tariffs = value.tariffs_id, rest = __rest(value, ["id", "tariffs_id"]);
+                            return rest;
+                        });
+                        specificWithoutTariffs = tariff.SpecificDates.map(function (value) {
+                            var _ = value.tariffs_id, rest = __rest(value, ["tariffs_id"]);
+                            return rest;
+                        });
+                        return [4 /*yield*/, prismaClient_1.prismaClient.tariff.create({
+                                data: {
+                                    name: tariff.name,
+                                    product_pipe: tariff.product_pipe,
+                                    active: tariff.active,
+                                    food: {
+                                        connectOrCreate: {
+                                            where: { id: foodId },
+                                            create: food
+                                        }
+                                    },
+                                    TariffCheckInValues: {
+                                        createMany: {
+                                            data: earlyWithoutIds
+                                        }
+                                    },
+                                    TariffValues: {
+                                        createMany: {
+                                            data: valuesWithoutId
+                                        }
+                                    },
+                                    SpecificDates: {
+                                        createMany: {
+                                            data: specificWithoutTariffs
+                                        }
+                                    }
+                                }
+                            })];
+                    case 2:
+                        specificCreate = _b.sent();
+                        return [2 /*return*/, response.json({ msg: "success", debug: specificCreate })];
+                    case 3:
+                        err_1 = _b.sent();
+                        console.log(err_1);
+                        return [2 /*return*/, response.json({ msg: "error", debug: err_1 })];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

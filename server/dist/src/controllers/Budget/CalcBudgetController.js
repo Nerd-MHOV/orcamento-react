@@ -46,10 +46,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 exports.__esModule = true;
 exports.CalcBudgetController = void 0;
-var date_fns_1 = require("date-fns");
 var adultBudget_1 = require("./functions/adultBudget");
 var childBudget_1 = require("./functions/childBudget");
-var discountBudget_1 = require("./functions/discountBudget");
 var petBudget_1 = require("./functions/petBudget");
 var requirementBudget_1 = require("./functions/requirementBudget");
 var CalcBudgetController = /** @class */ (function () {
@@ -57,41 +55,34 @@ var CalcBudgetController = /** @class */ (function () {
     }
     CalcBudgetController.prototype.handle = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, arrForm, arrChild, arrPet, arrRequirement, rangeDate, adultRows, childRows, petRows, requirementRows, discountRow, initDate, finalDate, completeRows;
+            var _a, arrForm, arrChild, arrPet, arrRequirement, rangeDate, unitaryDiscount, adultRows, childRows, petRows, requirementRows, initDate, finalDate, completeRows;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = request.body, arrForm = _a.arrForm, arrChild = _a.arrChild, arrPet = _a.arrPet, arrRequirement = _a.arrRequirement, rangeDate = _a.rangeDate;
-                        console.log(arrForm.category);
+                        _a = request.body, arrForm = _a.arrForm, arrChild = _a.arrChild, arrPet = _a.arrPet, arrRequirement = _a.arrRequirement, rangeDate = _a.rangeDate, unitaryDiscount = _a.unitaryDiscount;
                         adultRows = [];
                         childRows = [];
                         petRows = [];
                         requirementRows = [];
-                        discountRow = [];
                         initDate = new Date(rangeDate.startDate);
                         finalDate = new Date(rangeDate.endDate);
-                        finalDate = (0, date_fns_1.addDays)(finalDate, 1);
-                        return [4 /*yield*/, (0, adultBudget_1.adultBudget)(arrForm, arrChild, initDate, finalDate)];
+                        return [4 /*yield*/, (0, adultBudget_1.adultBudget)(arrForm, arrChild, unitaryDiscount, initDate, finalDate)];
                     case 1:
                         //adult
                         adultRows = _b.sent();
-                        return [4 /*yield*/, (0, childBudget_1.childBudget)(arrChild, arrForm, initDate, finalDate)];
+                        return [4 /*yield*/, (0, childBudget_1.childBudget)(arrForm, arrChild, unitaryDiscount, initDate, finalDate)];
                     case 2:
                         //child
                         childRows = _b.sent();
-                        return [4 /*yield*/, (0, petBudget_1.petBudget)(arrPet, initDate, finalDate, arrForm)];
+                        return [4 /*yield*/, (0, petBudget_1.petBudget)(arrForm, arrPet, unitaryDiscount, initDate, finalDate)];
                     case 3:
                         //pet
                         petRows = _b.sent();
-                        return [4 /*yield*/, (0, requirementBudget_1.requirementBudget)(initDate, finalDate, arrForm, arrRequirement)];
+                        return [4 /*yield*/, (0, requirementBudget_1.requirementBudget)(arrForm, arrRequirement, unitaryDiscount, initDate, finalDate)];
                     case 4:
                         //requirement
                         requirementRows = _b.sent();
-                        return [4 /*yield*/, (0, discountBudget_1.discountBudget)(arrForm, arrChild, initDate, finalDate)];
-                    case 5:
-                        //discountRow
-                        discountRow = _b.sent();
-                        completeRows = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], adultRows, true), childRows, true), petRows, true), requirementRows, true), discountRow, true);
+                        completeRows = __spreadArray(__spreadArray(__spreadArray(__spreadArray([], adultRows, true), childRows, true), petRows, true), requirementRows, true);
                         return [2 /*return*/, response.json({
                                 rows: completeRows
                             })];

@@ -1,0 +1,14 @@
+.users {
+    display: flex;
+    .usersBx {
+        width: 100%;
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+        }
+        .table {
+            margin-top: 20px;
+        }
+    }
+}

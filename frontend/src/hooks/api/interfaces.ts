@@ -57,4 +57,16 @@ export interface FindHolidaysProps {
   tariffs_id: string;
 }
 
+export interface ApiUserProps {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  level: number;
+  phone: string;
+  token_pipe: string;
+  user_pipe: string;
+  active: boolean;
+}
+
 export type TariffTypesProps = "specific" | "common";

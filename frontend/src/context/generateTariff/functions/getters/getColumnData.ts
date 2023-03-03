@@ -1,5 +1,5 @@
 import { addDays, format } from "date-fns";
-import { SelectionRangeProps } from "../../../../components/FormOrc/Interfaces";
+import { SelectionRangeProps } from "../../interfaces";
 
 export function getColumnData(date: SelectionRangeProps) {
   let newColumn: string[] = ["Desc"];

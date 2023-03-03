@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { prismaClient } from "../database/prismaClient";
 
 type JwtPayload = {
-  id: number;
+  id: string;
 };
 
 export const authMiddleware = async (

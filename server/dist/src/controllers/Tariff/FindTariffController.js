@@ -56,7 +56,7 @@ var FindTariffController = /** @class */ (function () {
                                 SpecificDates: true
                             },
                             orderBy: {
-                                order_id: "desc"
+                                name: "asc"
                             }
                         })
                             .then(function (tariffs) {

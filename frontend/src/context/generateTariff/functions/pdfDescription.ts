@@ -1,16 +1,17 @@
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { blue } from "@mui/material/colors";
 import { format } from "date-fns";
 
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+// for dev
+// import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "pdfmake/build/vfs_fonts";
+// (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 // for production
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "./vfs_fonts";
-// (<any>pdfMake).vfs = pdfFonts.pdfMake;
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "./vfs_fonts";
+(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const months = [
   "Janeiro",

@@ -3,7 +3,6 @@ import { ptBR } from "date-fns/locale";
 import { useContext } from "react";
 import { DateRangePicker } from "react-date-range";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
-import { SelectionRangeProps } from "../FormOrc/Interfaces";
 
 export const CalendarPicker = () => {
   const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } =

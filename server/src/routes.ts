@@ -81,7 +81,7 @@ routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
 
 routes.use(authMiddleware);
-routes.delete("/user", deleteUser.handle);
+routes.delete("/user/:id", deleteUser.handle);
 routes.get("/user", findUser.handle);
 routes.get("/validate", validateUser.handle);
 routes.post("/unique-user", findUniqueUser.handle);

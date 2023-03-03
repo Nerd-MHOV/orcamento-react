@@ -28,11 +28,19 @@ export class CreateUserController {
         return response.json(user);
       })
       .catch((err) => {
+        let message = "Erro interno do servidor";
+        if (err.meta?.target[0] === "username")
+          message = "Esse username já esta sendo usado!";
+        if (err.meta?.target[0] === "email")
+          message = "Esse email já esta sendo usado!";
+        if (err.meta?.target[0] === "name")
+          message = "Esse colaborador já foi cadastrado!";
+
         return response.status(500).json({
           err: err,
           message: {
             type: "error",
-            message: "Usuário já existe!",
+            message: message,
           },
         });
       });

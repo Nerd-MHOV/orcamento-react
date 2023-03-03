@@ -8,6 +8,7 @@ import {
 } from "../../context/generateTariff/interfaces";
 import {
   AllTariffsProps,
+  ApiUserProps,
   FindHolidaysProps,
   FindMonthWithTariffProps,
 } from "./interfaces";
@@ -32,7 +33,7 @@ export const useApi = () => ({
     return response.data;
   },
 
-  getUsers: async () => {
+  getUsers: async (): Promise<ApiUserProps[]> => {
     const response = await api.get("/user");
     return response.data;
   },
@@ -119,6 +120,28 @@ export const useApi = () => ({
     return response.data;
   },
 
+  createUser: async (
+    name: string,
+    email: string,
+    phone: string,
+    username: string,
+    password: string,
+    token_pipe: string,
+    user_pipe: string
+  ) => {
+    const response = await api.post("/user", {
+      name,
+      email,
+      phone,
+      username,
+      password,
+      token_pipe,
+      user_pipe,
+    });
+
+    return response;
+  },
+
   createCommonTariff: async (
     tariffs: AllTariffsProps[]
   ): Promise<"success" | "error"> => {
@@ -135,6 +158,11 @@ export const useApi = () => ({
 
   deleteTariff: async (tariffs: string[]): Promise<"success" | "error"> => {
     const response = await api.post("/tariff/delete", { tariffs: tariffs });
+    return response.data;
+  },
+
+  deleteUser: async (id: string): Promise<"success" | "error"> => {
+    const response = await api.delete("/user/" + id);
     return response.data;
   },
 

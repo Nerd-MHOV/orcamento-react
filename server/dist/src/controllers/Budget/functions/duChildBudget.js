@@ -76,7 +76,10 @@ function duChildBudget(arrChild, arrForm, initDate) {
                         id: 200 + numChild,
                         desc: "CHD " + numChild,
                         values: valuesChild,
-                        total: totalChild
+                        total: totalChild,
+                        noDiscount: valuesChild,
+                        totalNoDiscount: totalChild,
+                        discountApplied: 0
                     });
                     _b.label = 6;
                 case 6:

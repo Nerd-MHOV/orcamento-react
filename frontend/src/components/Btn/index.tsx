@@ -16,7 +16,7 @@ const Btn = ({
 };
 
 interface BtnProps {
-  color: string;
+  color: "green" | "blue" | "darkBlue" | "orange" | "red" | "dashboard";
   action: string;
   onClick: any;
 }

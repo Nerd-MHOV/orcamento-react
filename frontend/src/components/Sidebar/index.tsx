@@ -1,7 +1,7 @@
 import "./style.scss";
 import Logo from "../../assets/GP.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Dashboard, Logout, Menu, ViewList } from "@mui/icons-material";
+import { Dashboard, Group, Logout, Menu, ViewList } from "@mui/icons-material";
 import { useContext } from "react";
 import { SidebarContext } from "../../context/sidebarContext";
 import { AuthContext } from "../../context/authContext";
@@ -49,6 +49,14 @@ const Sidebar = () => {
                 <ViewList />
               </span>
               <span className="title">Tarifários</span>
+            </Link>
+          </li>
+          <li className={pathname.includes("/users") ? "hovered" : ""}>
+            <Link to="/users" className="link">
+              <span className="icon">
+                <Group />
+              </span>
+              <span className="title">Usuários</span>
             </Link>
           </li>
           <li>

@@ -18,7 +18,7 @@ const Login = () => {
       const response = await auth.login(user, passwd);
       if (response) {
         setCallback(response);
-        location.href = "/";
+        if (response.type === "success") location.href = "/";
         // navigate("/");
       } else {
         setCallback({

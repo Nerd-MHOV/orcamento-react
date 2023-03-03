@@ -7,7 +7,6 @@ exports.UserSeed = void 0;
 var bcrypt_1 = __importDefault(require("bcrypt"));
 exports.UserSeed = [
     {
-        id: 1,
         email: "matheus.henrique4245@gmail.com",
         phone: "14 991578451",
         name: "Matheus Henrique",

@@ -50,7 +50,7 @@ var DeleteUsersController = /** @class */ (function () {
                         id = request.body.id;
                         return [4 /*yield*/, prismaClient_1.prismaClient.user["delete"]({
                                 where: {
-                                    id: Number(id)
+                                    id: id
                                 }
                             })
                                 .then(function (user) {

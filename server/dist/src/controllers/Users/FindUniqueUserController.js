@@ -66,7 +66,7 @@ var FindUniqueUserController = /** @class */ (function () {
                             })
                                 .then(function (user) {
                                 if (!user)
-                                    throw new api_errors_1.UnauthorizedError("usuario não encontrado");
+                                    throw new api_errors_1.UnauthorizedError("Usuário não encontrado");
                                 var _ = user.password, userLogin = __rest(user, ["password"]);
                                 return response.json(userLogin);
                             })["catch"](function (err) {

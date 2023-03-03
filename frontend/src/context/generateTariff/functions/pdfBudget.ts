@@ -1,11 +1,11 @@
 import { addDays, format } from "date-fns";
 import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "./vfs_fonts"; where BUILD
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfFonts from "./vfs_fonts"; //where BUILD
+// import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
 
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const months = [
   "Janeiro",
@@ -34,6 +34,7 @@ async function pdfBudget(
   const monthNum = Number(budgets[0].columns[1].substr(-2));
   const titleMonth = months[monthNum - 1];
 
+  console.log(budgets);
   const arrValues: any[] = [];
   let dealId = 0;
 
@@ -89,9 +90,13 @@ async function pdfBudget(
         : "\n" + arrPet.length + " PET" + carryingPet;
 
     let total = 0;
+    let totalNoDiscount = 0;
     budget.rows.map((row: any) => {
       total += Number(row.total);
+      totalNoDiscount += Number(row.totalNoDiscount);
     });
+
+    let totalIn6x = totalNoDiscount + totalNoDiscount * 0.1;
 
     let requirementString = [];
     let requirementChild = true;
@@ -173,7 +178,7 @@ async function pdfBudget(
     rowBudget.push({
       text:
         "R$ " +
-        total.toLocaleString("pt-BR", {
+        totalIn6x.toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
         }),

@@ -590,4 +590,4 @@ async function pdfDescription(
   pdfMake.createPdf(docDefinitions).open();
 }
 
-export default pdfBudget;
+export default pdfDescription;

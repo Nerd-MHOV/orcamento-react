@@ -49,6 +49,13 @@ export interface GenerateTariffContextProps {
   discountBeingEdited: RowModalDiscount;
   addUnitaryDiscount: (row: RowModalDiscount) => void;
   clearUnitaryDiscount: VoidFunction;
+  isOpenModalPermission: boolean;
+  handleCloseModalPermission: VoidFunction;
+  handleOpenModalPermission: (
+    value: number,
+    setDiscount: React.Dispatch<React.SetStateAction<number | null>>
+  ) => void;
+  handleConfirmModalPermission: (password: string) => Promise<boolean>;
 }
 
 export type SelectionRangeProps = {

@@ -1,3 +1,4 @@
+import { Password } from "@mui/icons-material";
 import serialize from "form-serialize";
 import { createContext, useEffect, useState } from "react";
 import { AppHotelProps } from "../../hooks/appHotel/interfaces";
@@ -73,6 +74,10 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   discountBeingEdited: rowDiscountInitial,
   addUnitaryDiscount() {},
   clearUnitaryDiscount() {},
+  isOpenModalPermission: false,
+  handleCloseModalPermission() {},
+  handleOpenModalPermission() {},
+  handleConfirmModalPermission: async (password) => true,
 });
 
 export const GenerateTariffProvider = ({
@@ -116,6 +121,34 @@ export const GenerateTariffProvider = ({
   );
   const [discountBeingEdited, setDiscountBeingEdited] =
     useState(rowDiscountInitial);
+  const [isOpenModalPermission, setIsOpenModalPermission] = useState(false);
+  const [valuePermissionModal, setValuePermissionModal] = useState(0);
+  const [functionChangeDiscount, setFunctionChangeDiscount] = useState({
+    func: function (value: number) {},
+  });
+
+  const handleOpenModalPermission = (
+    value: number,
+    setDiscount: React.Dispatch<React.SetStateAction<number | null>>
+  ) => {
+    setValuePermissionModal(value);
+    setFunctionChangeDiscount({
+      func: setDiscount,
+    });
+    setIsOpenModalPermission(true);
+  };
+
+  const handleCloseModalPermission = () => {
+    setIsOpenModalPermission(false);
+  };
+
+  const handleConfirmModalPermission = async (password: string) => {
+    if (password === "admin@2355") {
+      functionChangeDiscount.func(valuePermissionModal);
+      return true;
+    }
+    return false;
+  };
 
   const getVariables = async () => {
     setDataTable(dataInitial);
@@ -377,6 +410,10 @@ export const GenerateTariffProvider = ({
         discountBeingEdited,
         addUnitaryDiscount,
         clearUnitaryDiscount,
+        isOpenModalPermission,
+        handleCloseModalPermission,
+        handleOpenModalPermission,
+        handleConfirmModalPermission,
       }}
     >
       {children}

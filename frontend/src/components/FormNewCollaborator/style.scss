@@ -1,0 +1,15 @@
+.new-collaborator {
+    .form {
+        display: flex;
+        flex-direction: column;
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .button {
+            margin-top: 20px;
+        }
+        
+    }
+}

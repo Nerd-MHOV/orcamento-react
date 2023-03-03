@@ -38,10 +38,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.childBudget = void 0;
 var generateBudget_1 = require("./generateBudget");
-function childBudget(arrChild, arrForm, initDate, finalDate) {
+function childBudget(arrForm, arrChild, unitaryDiscount, initDate, finalDate) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var amountAdults, amountChild, childRows, countChild, numChild, valuesChild, totalChild, uChild, i;
+        var amountAdults, amountChild, childRows, _loop_1, countChild;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -49,56 +49,96 @@ function childBudget(arrChild, arrForm, initDate, finalDate) {
                     amountChild = arrChild.length;
                     childRows = [];
                     arrChild.sort(function (a, b) { return a - b; });
+                    _loop_1 = function (countChild) {
+                        var numChild, valuesChild, totalChild, discount, totalNoDiscount, discountApplied, uChild, permitDiscount, id, desc, valuesWithDiscountChild;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
+                                case 0:
+                                    numChild = countChild + 1;
+                                    valuesChild = [];
+                                    totalChild = 0;
+                                    discount = (Number(arrForm.discount) || 0) / 100;
+                                    totalNoDiscount = 0;
+                                    discountApplied = 0;
+                                    uChild = Number(arrChild[countChild]);
+                                    permitDiscount = true;
+                                    id = 200 + numChild;
+                                    desc = "CHD " + uChild + " ano(s)";
+                                    if (!(uChild <= 3 && numChild === 1)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd0")];
+                                case 1:
+                                    valuesChild = _c.sent();
+                                    permitDiscount = false;
+                                    return [3 /*break*/, 6];
+                                case 2:
+                                    if (!((uChild > 3 && uChild < 8) || (uChild < 8 && numChild > 1))) return [3 /*break*/, 4];
+                                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd4")];
+                                case 3:
+                                    valuesChild = _c.sent();
+                                    return [3 /*break*/, 6];
+                                case 4: return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd8")];
+                                case 5:
+                                    valuesChild = _c.sent();
+                                    _c.label = 6;
+                                case 6:
+                                    if (!(numChild === 1 && uChild > 3 && uChild < 10)) return [3 /*break*/, 8];
+                                    permitDiscount = false;
+                                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd8", true)];
+                                case 7:
+                                    valuesChild = _c.sent();
+                                    _c.label = 8;
+                                case 8:
+                                    if (!(Number(amountAdults) === 1 && countChild === amountChild - 1)) return [3 /*break*/, 10];
+                                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adt")];
+                                case 9:
+                                    valuesChild = _c.sent();
+                                    _c.label = 10;
+                                case 10:
+                                    //verify unitary discount
+                                    unitaryDiscount.map(function (unit) {
+                                        if (unit.id === id && unit.name === desc) {
+                                            discount = unit.discount / 100;
+                                            permitDiscount = true;
+                                        }
+                                    });
+                                    valuesWithDiscountChild = valuesChild.map(function (child) {
+                                        if (!permitDiscount) {
+                                            totalChild += child;
+                                            totalNoDiscount += child;
+                                            return child;
+                                        }
+                                        var resultDiscount = child * discount;
+                                        var result = Math.round(child - resultDiscount);
+                                        totalChild += result;
+                                        totalNoDiscount += child;
+                                        discountApplied = discount * 100;
+                                        return result;
+                                    });
+                                    childRows.push({
+                                        id: id,
+                                        desc: desc,
+                                        values: valuesWithDiscountChild,
+                                        total: totalChild,
+                                        noDiscount: valuesChild,
+                                        totalNoDiscount: totalNoDiscount,
+                                        discountApplied: discountApplied
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    };
                     countChild = 0;
                     _b.label = 1;
                 case 1:
-                    if (!(countChild < arrChild.length)) return [3 /*break*/, 13];
-                    numChild = countChild + 1;
-                    valuesChild = [];
-                    totalChild = 0;
-                    uChild = Number(arrChild[countChild]);
-                    if (!(uChild <= 3 && numChild === 1)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd0")];
+                    if (!(countChild < arrChild.length)) return [3 /*break*/, 4];
+                    return [5 /*yield**/, _loop_1(countChild)];
                 case 2:
-                    valuesChild = _b.sent();
-                    return [3 /*break*/, 7];
+                    _b.sent();
+                    _b.label = 3;
                 case 3:
-                    if (!((uChild > 3 && uChild < 8) || (uChild < 8 && numChild > 1))) return [3 /*break*/, 5];
-                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd4")];
-                case 4:
-                    valuesChild = _b.sent();
-                    return [3 /*break*/, 7];
-                case 5: return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd8")];
-                case 6:
-                    valuesChild = _b.sent();
-                    _b.label = 7;
-                case 7:
-                    if (!(numChild === 1 && uChild > 3 && uChild < 10)) return [3 /*break*/, 9];
-                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "chd8", true)];
-                case 8:
-                    valuesChild = _b.sent();
-                    _b.label = 9;
-                case 9:
-                    if (!(Number(amountAdults) === 1 && countChild === amountChild - 1)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adt")];
-                case 10:
-                    valuesChild = _b.sent();
-                    _b.label = 11;
-                case 11:
-                    for (i = 0; i < valuesChild.length; i++) {
-                        totalChild += valuesChild[i];
-                    }
-                    childRows.push({
-                        id: 200 + numChild,
-                        desc: "CHD " + numChild,
-                        values: valuesChild,
-                        total: totalChild
-                    });
-                    _b.label = 12;
-                case 12:
                     countChild++;
                     return [3 /*break*/, 1];
-                case 13: return [2 /*return*/, childRows];
+                case 4: return [2 /*return*/, childRows];
             }
         });
     });

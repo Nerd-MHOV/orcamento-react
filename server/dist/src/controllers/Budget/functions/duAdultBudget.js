@@ -68,7 +68,10 @@ function duAdultBudget(arrForm, arrChild, initDate) {
                         id: 100 + countAdult,
                         desc: "Adulto " + countAdult,
                         values: valuesAdult,
-                        total: totalAdult
+                        total: totalAdult,
+                        noDiscount: valuesAdult,
+                        totalNoDiscount: totalAdult,
+                        discountApplied: 0
                     });
                     return [3 /*break*/, 1];
                 case 3: return [2 /*return*/, adultRows];

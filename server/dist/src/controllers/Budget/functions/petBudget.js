@@ -38,33 +38,62 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.petBudget = void 0;
 var generateBudgetPet_1 = require("./generateBudgetPet");
-function petBudget(arrPet, initDate, finalDate, arrForm) {
+function petBudget(arrForm, arrPet, unitaryDiscount, initDate, finalDate) {
     return __awaiter(this, void 0, void 0, function () {
-        var petRows, countPet, numPet, valuesPet, totalPet, uPet, i;
+        var petRows, _loop_1, countPet;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     petRows = [];
+                    _loop_1 = function (countPet) {
+                        var numPet, valuesPet, totalPet, totalNoDiscount, uPet, discount, id, desc, valueWithDiscountPet;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    numPet = countPet + 1;
+                                    valuesPet = [];
+                                    totalPet = 0;
+                                    totalNoDiscount = 0;
+                                    uPet = arrPet[countPet];
+                                    discount = 0;
+                                    id = 300 + numPet;
+                                    desc = "PET " + uPet;
+                                    return [4 /*yield*/, (0, generateBudgetPet_1.generateBudgetPet)(initDate, finalDate, arrForm, uPet)];
+                                case 1:
+                                    valuesPet = _b.sent();
+                                    //verify unitary discount
+                                    unitaryDiscount.map(function (unit) {
+                                        if (unit.id === id && unit.name === desc) {
+                                            discount = unit.discount / 100;
+                                        }
+                                    });
+                                    valueWithDiscountPet = valuesPet.map(function (value) {
+                                        totalNoDiscount += value;
+                                        var resultDiscount = value * discount;
+                                        var result = Math.round(value - resultDiscount);
+                                        totalPet += result;
+                                        return result;
+                                    });
+                                    petRows.push({
+                                        id: id,
+                                        desc: desc,
+                                        values: valueWithDiscountPet,
+                                        total: totalPet,
+                                        noDiscount: valuesPet,
+                                        totalNoDiscount: totalNoDiscount,
+                                        discountApplied: discount * 100
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    };
                     countPet = 0;
                     _a.label = 1;
                 case 1:
                     if (!(countPet < arrPet.length)) return [3 /*break*/, 4];
-                    numPet = countPet + 1;
-                    valuesPet = [];
-                    totalPet = 0;
-                    uPet = arrPet[countPet];
-                    return [4 /*yield*/, (0, generateBudgetPet_1.generateBudgetPet)(initDate, finalDate, arrForm, uPet)];
+                    return [5 /*yield**/, _loop_1(countPet)];
                 case 2:
-                    valuesPet = _a.sent();
-                    for (i = 0; i < valuesPet.length; i++) {
-                        totalPet += valuesPet[i];
-                    }
-                    petRows.push({
-                        id: 300 + numPet,
-                        desc: "PET " + uPet,
-                        values: valuesPet,
-                        total: totalPet
-                    });
+                    _a.sent();
                     _a.label = 3;
                 case 3:
                     countPet++;

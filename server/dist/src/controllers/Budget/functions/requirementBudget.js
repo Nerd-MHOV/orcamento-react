@@ -38,9 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.requirementBudget = void 0;
 var generateBudgetRequirement_1 = require("./generateBudgetRequirement");
-function requirementBudget(initDate, finalDate, arrForm, arrRequirement) {
+function requirementBudget(arrForm, arrRequirement, unitaryDiscount, initDate, finalDate) {
     return __awaiter(this, void 0, void 0, function () {
-        var requirementRows, countRequirement, numRequirement, valueRequirement, totalRequirement, uRequirement, uType, i;
+        var requirementRows, _loop_1, countRequirement;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -56,27 +56,64 @@ function requirementBudget(initDate, finalDate, arrForm, arrRequirement) {
                                 amount: arrForm.adult
                             }
                         });
+                    _loop_1 = function (countRequirement) {
+                        var numRequirement, valueRequirement, totalRequirement, uRequirement, uType, id, discount, totalNoDiscount, valueWithDiscount, quantity, nameRequirement;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    numRequirement = countRequirement + 1;
+                                    valueRequirement = [];
+                                    totalRequirement = 0;
+                                    uRequirement = arrRequirement[countRequirement].requirement;
+                                    uType = arrRequirement[countRequirement].type;
+                                    id = 400 + numRequirement;
+                                    discount = 0;
+                                    totalNoDiscount = 0;
+                                    return [4 /*yield*/, (0, generateBudgetRequirement_1.generateBudgetRequirement)(initDate, finalDate, arrForm, arrRequirement[countRequirement])];
+                                case 1:
+                                    valueRequirement = _b.sent();
+                                    //verify unitary discount
+                                    unitaryDiscount.map(function (unit) {
+                                        if (unit.id === id && unit.name === nameRequirement) {
+                                            discount = unit.discount / 100;
+                                        }
+                                    });
+                                    valueWithDiscount = valueRequirement.map(function (value) {
+                                        totalNoDiscount += value;
+                                        var resultDiscount = value * discount;
+                                        var result = Math.round(value - resultDiscount);
+                                        totalRequirement += result;
+                                        return result;
+                                    });
+                                    quantity = arrRequirement[countRequirement].values;
+                                    nameRequirement = uRequirement + " [";
+                                    if (quantity.adult > 0)
+                                        nameRequirement += " ".concat(quantity.adult, " ADT");
+                                    if (quantity.child.length > 0)
+                                        nameRequirement += " ".concat(quantity.child.length, " CHD");
+                                    if (quantity.amount > 0)
+                                        nameRequirement += " ".concat(quantity.amount, "x");
+                                    nameRequirement += " ]";
+                                    requirementRows.push({
+                                        id: id,
+                                        desc: nameRequirement,
+                                        values: valueWithDiscount,
+                                        total: totalRequirement,
+                                        noDiscount: valueRequirement,
+                                        totalNoDiscount: totalNoDiscount,
+                                        discountApplied: discount * 100
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    };
                     countRequirement = 0;
                     _a.label = 1;
                 case 1:
                     if (!(countRequirement < arrRequirement.length)) return [3 /*break*/, 4];
-                    numRequirement = countRequirement + 1;
-                    valueRequirement = [];
-                    totalRequirement = 0;
-                    uRequirement = arrRequirement[countRequirement].requirement;
-                    uType = arrRequirement[countRequirement].type;
-                    return [4 /*yield*/, (0, generateBudgetRequirement_1.generateBudgetRequirement)(initDate, finalDate, arrForm, arrRequirement[countRequirement])];
+                    return [5 /*yield**/, _loop_1(countRequirement)];
                 case 2:
-                    valueRequirement = _a.sent();
-                    for (i = 0; i < valueRequirement.length; i++) {
-                        totalRequirement += valueRequirement[i];
-                    }
-                    requirementRows.push({
-                        id: 400 + numRequirement,
-                        desc: uRequirement,
-                        values: valueRequirement,
-                        total: totalRequirement
-                    });
+                    _a.sent();
                     _a.label = 3;
                 case 3:
                     countRequirement++;

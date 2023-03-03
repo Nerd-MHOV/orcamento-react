@@ -35,15 +35,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 exports.__esModule = true;
 exports.ValidateUsersController = void 0;
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var prismaClient_1 = require("../../database/prismaClient");
 var ValidateUsersController = /** @class */ (function () {
     function ValidateUsersController() {
     }
     ValidateUsersController.prototype.handle = function (request, response) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, request.user];
+            var authorization, getToken, token, id, user, _, userLogged, err_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        authorization = request.headers.authorization;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        if (!authorization) {
+                            throw new Error("Não Autorizado");
+                        }
+                        getToken = authorization.split(" ");
+                        token = void 0;
+                        if (getToken.length === 2)
+                            token = getToken[1];
+                        else
+                            token = getToken[0];
+                        id = jsonwebtoken_1["default"].verify(token, (_a = process.env.JWT_PASS) !== null && _a !== void 0 ? _a : "hash").id;
+                        return [4 /*yield*/, prismaClient_1.prismaClient.user.findUniqueOrThrow({
+                                where: {
+                                    id: id
+                                }
+                            })];
+                    case 2:
+                        user = _b.sent();
+                        _ = user.password, userLogged = __rest(user, ["password"]);
+                        request.user = userLogged;
+                        return [2 /*return*/, response.json(userLogged)];
+                    case 3:
+                        err_1 = _b.sent();
+                        return [2 /*return*/, response.status(401).json({
+                                err: err_1,
+                                message: {
+                                    type: "error",
+                                    message: "Não autorizado!"
+                                }
+                            })];
+                    case 4: return [2 /*return*/];
+                }
             });
         });
     };

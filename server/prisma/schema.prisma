@@ -14,13 +14,14 @@ model User {
   id          String        @id @default(uuid())
   email       String        @unique
   phone       String
-  name        String
+  name        String        @unique
   username    String        @unique
   password    String
   user_pipe   String
   token_pipe  String
   level       Float         @default(1)
   SaveBudgets SaveBudgets[]
+  active      Boolean       @default(true)
 
   @@map("users")
 }

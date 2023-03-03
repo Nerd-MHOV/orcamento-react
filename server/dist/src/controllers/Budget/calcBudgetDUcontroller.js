@@ -78,11 +78,11 @@ var CalcBudgetDUController = /** @class */ (function () {
                     case 2:
                         //child
                         childRows = _b.sent();
-                        return [4 /*yield*/, (0, petBudget_1.petBudget)(arrPet, initDate, finalDate, arrForm)];
+                        return [4 /*yield*/, (0, petBudget_1.petBudget)(arrForm, arrPet, [], initDate, finalDate)];
                     case 3:
                         //pet
                         petRows = _b.sent();
-                        return [4 /*yield*/, (0, requirementBudget_1.requirementBudget)(initDate, finalDate, arrForm, arrRequirement)];
+                        return [4 /*yield*/, (0, requirementBudget_1.requirementBudget)(arrForm, arrRequirement, [], initDate, finalDate)];
                     case 4:
                         // requirement;
                         requirementRows = _b.sent();

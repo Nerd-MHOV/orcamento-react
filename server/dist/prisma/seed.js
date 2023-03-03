@@ -64,7 +64,7 @@ var users_1 = require("./seeds/users");
 var prismaClient = new client_1.PrismaClient();
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var _i, UserSeed_1, user, createdUsers, _a, FoodSeed_1, food, createdFood, _b, CategorySeed_1, category, createdCategory, _c, TariffSeed_1, tariff, createdTariff, _d, CommonDateSeed_1, commonDate, createdDate, _e, SpecificDateSeed_1, specificDate, createdDate, _f, TariffValueSeed_1, tariffValue, tariffId, restTariff, createdValue, _g, CheckSeed_1, checkIn, createdCheckIn, _h, PetSeed_1, pet, createdPet, _j, RequirementSeed_1, requirement, createdRequirement, _k, HUsSeed_1, unit, createdHU, _l, DUtariffSeed_1, dUTariff, createdTariff, _m, DUtariffValuesSeed_1, duTariffValue, createdValue;
+        var _i, UserSeed_1, user, createdUsers, _a, FoodSeed_1, food, createdFood, _b, CategorySeed_1, category, createdCategory, _c, TariffSeed_1, tariff, createdTariff, _d, CheckSeed_1, checkIn, createdCheckIn, _e, TariffValueSeed_1, tariffValue, tariffId, restTariff, createdValue, _f, CommonDateSeed_1, commonDate, createdDate, _g, SpecificDateSeed_1, specificDate, createdDate, _h, PetSeed_1, pet, createdPet, _j, RequirementSeed_1, requirement, createdRequirement, _k, HUsSeed_1, unit, createdHU, _l, DUtariffSeed_1, dUTariff, createdTariff, _m, DUtariffValuesSeed_1, duTariffValue, createdValue;
         return __generator(this, function (_o) {
             switch (_o.label) {
                 case 0:
@@ -141,72 +141,72 @@ function main() {
                     _c++;
                     return [3 /*break*/, 13];
                 case 16:
-                    _d = 0, CommonDateSeed_1 = commonDates_1.CommonDateSeed;
+                    _d = 0, CheckSeed_1 = checkinValues_1.CheckSeed;
                     _o.label = 17;
                 case 17:
-                    if (!(_d < CommonDateSeed_1.length)) return [3 /*break*/, 20];
-                    commonDate = CommonDateSeed_1[_d];
-                    return [4 /*yield*/, prismaClient.commonDates.upsert({
-                            where: { date: commonDate.date },
-                            update: commonDate,
-                            create: commonDate
+                    if (!(_d < CheckSeed_1.length)) return [3 /*break*/, 20];
+                    checkIn = CheckSeed_1[_d];
+                    return [4 /*yield*/, prismaClient.tariffCheckInValues.upsert({
+                            where: { id: checkIn.id },
+                            update: checkIn,
+                            create: checkIn
                         })];
                 case 18:
-                    createdDate = _o.sent();
-                    console.log("created common Tariff ", commonDate.date);
+                    createdCheckIn = _o.sent();
+                    console.log("created tariff for" + checkIn.type + checkIn.tariffs_id);
                     _o.label = 19;
                 case 19:
                     _d++;
                     return [3 /*break*/, 17];
                 case 20:
-                    _e = 0, SpecificDateSeed_1 = specificDates_1.SpecificDateSeed;
+                    _e = 0, TariffValueSeed_1 = tariffValues_1.TariffValueSeed;
                     _o.label = 21;
                 case 21:
-                    if (!(_e < SpecificDateSeed_1.length)) return [3 /*break*/, 24];
-                    specificDate = SpecificDateSeed_1[_e];
-                    return [4 /*yield*/, prismaClient.specificDates.upsert({
-                            where: { date: specificDate.date },
-                            update: specificDate,
-                            create: specificDate
-                        })];
-                case 22:
-                    createdDate = _o.sent();
-                    _o.label = 23;
-                case 23:
-                    _e++;
-                    return [3 /*break*/, 21];
-                case 24:
-                    _f = 0, TariffValueSeed_1 = tariffValues_1.TariffValueSeed;
-                    _o.label = 25;
-                case 25:
-                    if (!(_f < TariffValueSeed_1.length)) return [3 /*break*/, 28];
-                    tariffValue = TariffValueSeed_1[_f];
+                    if (!(_e < TariffValueSeed_1.length)) return [3 /*break*/, 24];
+                    tariffValue = TariffValueSeed_1[_e];
                     tariffId = tariffValue.id, restTariff = __rest(tariffValue, ["id"]);
                     return [4 /*yield*/, prismaClient.tariffValues.upsert({
                             where: { id: tariffId },
                             update: restTariff,
                             create: restTariff
                         })];
-                case 26:
+                case 22:
                     createdValue = _o.sent();
+                    _o.label = 23;
+                case 23:
+                    _e++;
+                    return [3 /*break*/, 21];
+                case 24:
+                    _f = 0, CommonDateSeed_1 = commonDates_1.CommonDateSeed;
+                    _o.label = 25;
+                case 25:
+                    if (!(_f < CommonDateSeed_1.length)) return [3 /*break*/, 28];
+                    commonDate = CommonDateSeed_1[_f];
+                    return [4 /*yield*/, prismaClient.commonDates.upsert({
+                            where: { date: commonDate.date },
+                            update: commonDate,
+                            create: commonDate
+                        })];
+                case 26:
+                    createdDate = _o.sent();
+                    console.log("created common Tariff ", commonDate.date);
                     _o.label = 27;
                 case 27:
                     _f++;
                     return [3 /*break*/, 25];
                 case 28:
-                    _g = 0, CheckSeed_1 = checkinValues_1.CheckSeed;
+                    _g = 0, SpecificDateSeed_1 = specificDates_1.SpecificDateSeed;
                     _o.label = 29;
                 case 29:
-                    if (!(_g < CheckSeed_1.length)) return [3 /*break*/, 32];
-                    checkIn = CheckSeed_1[_g];
-                    return [4 /*yield*/, prismaClient.tariffCheckInValues.upsert({
-                            where: { id: checkIn.id },
-                            update: checkIn,
-                            create: checkIn
+                    if (!(_g < SpecificDateSeed_1.length)) return [3 /*break*/, 32];
+                    specificDate = SpecificDateSeed_1[_g];
+                    return [4 /*yield*/, prismaClient.specificDates.upsert({
+                            where: { date: specificDate.date },
+                            update: specificDate,
+                            create: specificDate
                         })];
                 case 30:
-                    createdCheckIn = _o.sent();
-                    console.log("created tariff for" + checkIn.type + checkIn.tariffs_id);
+                    createdDate = _o.sent();
                     _o.label = 31;
                 case 31:
                     _g++;
@@ -218,7 +218,7 @@ function main() {
                     if (!(_h < PetSeed_1.length)) return [3 /*break*/, 36];
                     pet = PetSeed_1[_h];
                     return [4 /*yield*/, prismaClient.pet.upsert({
-                            where: { id: pet.id },
+                            where: { carrying: pet.carrying },
                             update: pet,
                             create: pet
                         })];
@@ -236,7 +236,7 @@ function main() {
                     if (!(_j < RequirementSeed_1.length)) return [3 /*break*/, 40];
                     requirement = RequirementSeed_1[_j];
                     return [4 /*yield*/, prismaClient.requirement.upsert({
-                            where: { id: requirement.id },
+                            where: { name: requirement.name },
                             update: requirement,
                             create: requirement
                         })];

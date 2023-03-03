@@ -15,7 +15,7 @@ var port = process.env.PORT_SERVER || 3333;
 var whiteList = [
   "http://localhost:5173",
   "http://192.168.99.105:5173",
-  "http://127.0.0.1:5500",
+  "http://192.168.10.87:81",
 ];
 app.use(
   (0, cors_1["default"])({

@@ -17,6 +17,10 @@ export function ModalDiscount() {
     discountBeingEdited,
     addUnitaryDiscount,
   } = React.useContext(GenerateTariffContext);
+
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const [discount, setDiscount] = React.useState<number | null>(null);
   const handleChangeDiscount = (value: number) => {
     console.log(discountBeingEdited);
@@ -26,6 +30,12 @@ export function ModalDiscount() {
   };
 
   const handleSave = () => {
+    setError(false);
+    if (password !== "admin@2355") {
+      setError(true);
+      return;
+    }
+
     if (discount === discountBeingEdited.discount) {
       handleClose();
       return;
@@ -62,6 +72,20 @@ export function ModalDiscount() {
               value={discount}
               onChange={(e) => {
                 handleChangeDiscount(+e.target.value);
+              }}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="passwordAdmin"
+              label="Senha Administrativa"
+              type="password"
+              error={error}
+              fullWidth
+              variant="standard"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
             />
           </div>

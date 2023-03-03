@@ -7,13 +7,13 @@ export class LoginUsersController {
   async handle(request: Request, response: Response) {
     const { username, password } = request.body;
 
-    if(!username || !password) {
+    if (!username || !password) {
       return response.status(201).json({
         message: {
-          type: 'error',
-          message: 'Informe o Usuario e a Senha!'
-        }
-      })
+          type: "error",
+          message: "Informe o Usuario e a Senha!",
+        },
+      });
     }
 
     await prismaClient.user
@@ -30,24 +30,27 @@ export class LoginUsersController {
         return user;
       })
       .then(async (user) => {
-        
-        const token = jwt.sign({ id: user.id }, process.env.JWT_PASS || 'hash', {
-          expiresIn: "8h",
-        });
+        const token = jwt.sign(
+          { id: user.id },
+          process.env.JWT_PASS || "hash",
+          {
+            expiresIn: "8h",
+          }
+        );
 
-        const { password: _, ...userLogin} = user
-        
+        const { password: _, ...userLogin } = user;
+
         return response.json({
-            user: userLogin,
-            token: token,
-            message: {
-              type: 'success',
-              message: 'Logado com sucesso!'
-            }
-        })
-
+          user: userLogin,
+          token: token,
+          message: {
+            type: "success",
+            message: "Logado com sucesso!",
+          },
+        });
       })
       .catch((err) => {
+        console.log(err);
         return response.json({
           err: err,
           message: {

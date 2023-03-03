@@ -38,47 +38,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.adultBudget = void 0;
 var generateBudget_1 = require("./generateBudget");
-function adultBudget(arrForm, arrChild, initDate, finalDate) {
+function adultBudget(arrForm, arrChild, unitaryDiscount, initDate, finalDate) {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var adultRows, amountAdults, countAdult, valuesAdult, totalAdult, i;
+        var adultRows, amountAdults, countAdult, _loop_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     adultRows = [];
                     amountAdults = (_a = arrForm.adult) !== null && _a !== void 0 ? _a : 0;
                     countAdult = 0;
+                    _loop_1 = function () {
+                        var discount, id, desc, valuesAdult, totalAdult, totalNoDiscount, valueWithDiscountAdult;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
+                                case 0:
+                                    discount = (Number(arrForm.discount) || 0) / 100;
+                                    countAdult++;
+                                    id = 100 + countAdult;
+                                    desc = "Adulto " + countAdult;
+                                    valuesAdult = [];
+                                    totalAdult = 0;
+                                    totalNoDiscount = 0;
+                                    if (!(countAdult <= 2)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adt")];
+                                case 1:
+                                    valuesAdult = _c.sent();
+                                    return [3 /*break*/, 4];
+                                case 2: return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adtex")];
+                                case 3:
+                                    valuesAdult = _c.sent();
+                                    _c.label = 4;
+                                case 4:
+                                    //single
+                                    if (Number(amountAdults) === 1 && arrChild.length === 0) {
+                                        valuesAdult = valuesAdult.map(function (value) { return value * 2; });
+                                    }
+                                    //verify Discount Unitary
+                                    unitaryDiscount.map(function (unit) {
+                                        if (unit.id === id && unit.name === desc) {
+                                            discount = unit.discount / 100;
+                                        }
+                                    });
+                                    valueWithDiscountAdult = valuesAdult.map(function (value) {
+                                        totalNoDiscount += value;
+                                        var resultDiscount = value * discount;
+                                        var result = Math.round(value - resultDiscount);
+                                        totalAdult += result;
+                                        return result;
+                                    });
+                                    adultRows.push({
+                                        id: id,
+                                        desc: desc,
+                                        values: valueWithDiscountAdult,
+                                        total: totalAdult,
+                                        noDiscount: valuesAdult,
+                                        totalNoDiscount: totalNoDiscount,
+                                        discountApplied: discount * 100
+                                    });
+                                    return [2 /*return*/];
+                            }
+                        });
+                    };
                     _b.label = 1;
                 case 1:
-                    if (!(countAdult < amountAdults)) return [3 /*break*/, 6];
-                    countAdult++;
-                    valuesAdult = [];
-                    totalAdult = 0;
-                    if (!(countAdult <= 2)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adt")];
+                    if (!(countAdult < amountAdults)) return [3 /*break*/, 3];
+                    return [5 /*yield**/, _loop_1()];
                 case 2:
-                    valuesAdult = _b.sent();
-                    return [3 /*break*/, 5];
-                case 3: return [4 /*yield*/, (0, generateBudget_1.generateBudget)(initDate, finalDate, arrForm, "adtex")];
-                case 4:
-                    valuesAdult = _b.sent();
-                    _b.label = 5;
-                case 5:
-                    //single
-                    if (Number(amountAdults) === 1 && arrChild.length === 0) {
-                        valuesAdult = valuesAdult.map(function (value) { return value * 2; });
-                    }
-                    for (i = 0; i < valuesAdult.length; i++) {
-                        totalAdult += valuesAdult[i];
-                    }
-                    adultRows.push({
-                        id: 100 + countAdult,
-                        desc: "Adulto " + countAdult,
-                        values: valuesAdult,
-                        total: totalAdult
-                    });
+                    _b.sent();
                     return [3 /*break*/, 1];
-                case 6: return [2 /*return*/, adultRows];
+                case 3: return [2 /*return*/, adultRows];
             }
         });
     });

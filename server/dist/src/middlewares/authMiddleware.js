@@ -66,13 +66,13 @@ var authMiddleware = function (request, response, next) { return __awaiter(void 
                 if (!authorization) {
                     throw new Error("Não Autorizado");
                 }
-                getToken = authorization.split(' ');
+                getToken = authorization.split(" ");
                 token = void 0;
                 if (getToken.length === 2)
                     token = getToken[1];
                 else
                     token = getToken[0];
-                id = jsonwebtoken_1["default"].verify(token, (_a = process.env.JWT_PASS) !== null && _a !== void 0 ? _a : 'hash').id;
+                id = jsonwebtoken_1["default"].verify(token, (_a = process.env.JWT_PASS) !== null && _a !== void 0 ? _a : "hash").id;
                 return [4 /*yield*/, prismaClient_1.prismaClient.user.findUniqueOrThrow({
                         where: {
                             id: id
@@ -86,7 +86,13 @@ var authMiddleware = function (request, response, next) { return __awaiter(void 
                 return [3 /*break*/, 4];
             case 3:
                 err_1 = _b.sent();
-                return [2 /*return*/, response.redirect('http://localhost:5173/')];
+                return [2 /*return*/, response.status(401).json({
+                        err: err_1,
+                        message: {
+                            type: "error",
+                            message: "Não autorizado!"
+                        }
+                    })];
             case 4: return [2 /*return*/];
         }
     });

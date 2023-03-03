@@ -1,0 +1,15 @@
+.new-user {
+    display: flex;
+    .new-user-bx {
+        width: 100%;
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+        }
+        .form {
+            margin-top: 20px;
+            justify-content: center;
+        }
+    }
+}
