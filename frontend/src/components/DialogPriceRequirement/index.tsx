@@ -19,22 +19,25 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ModalPermissionDiscount() {
-  const {
-    isOpenModalPermission: isOpen,
-    handleCloseModalPermission: close,
-    handleConfirmModalPermission: confirm,
-    callHandleForm,
-  } = React.useContext(GenerateTariffContext);
-
-  const [password, setPassword] = React.useState("");
+export default function DialogPriceRequirement({
+  requirement,
+  open,
+  confirm,
+  close,
+}: {
+  requirement: string;
+  open: boolean;
+  confirm(price: number): Promise<boolean>;
+  close: VoidFunction;
+}) {
+  const [price, setPrice] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
 
   return (
     <div>
       <Dialog
-        open={isOpen}
+        open={open}
         TransitionComponent={Transition}
         keepMounted
         onClose={close}
@@ -43,26 +46,21 @@ export default function ModalPermissionDiscount() {
         {!loading ? (
           <>
             <DialogTitle>
-              {"Descontos nesse valor requerem uma autorização superior!"}
+              Editar o valor do requerimento "{requirement}"?
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                Todo desconto, com valor acima do permitido pela diretoria, deve
-                ser aprovado pela mesma. Se for o caso, procure um responsável
-                para inserir a senha.
-              </DialogContentText>
               <TextField
                 autoFocus
                 margin="dense"
-                id="passwordAdmin"
-                label="Senha Administrativa"
-                type="password"
+                id="price"
+                label="Preço do Requerimento"
+                type="text"
                 error={error}
                 fullWidth
                 variant="standard"
-                value={password}
+                value={price}
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setPrice(e.target.value);
                 }}
               />
             </DialogContent>
@@ -72,13 +70,12 @@ export default function ModalPermissionDiscount() {
                 onClick={() => {
                   setLoading(true);
                   setError(false);
-                  confirm(password).then((response) => {
+                  confirm(Number(price)).then((response) => {
                     setLoading(false);
-
+                    console.log(response);
                     if (response) {
                       close();
-                      setPassword("");
-                      callHandleForm();
+                      setPrice("");
                     } else {
                       setError(true);
                     }

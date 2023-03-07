@@ -1,23 +1,23 @@
 import { useContext, useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
+import Navbar from "../../../components/Navbar";
+import Sidebar from "../../../components/Sidebar";
 import {
   foodPad,
   FoodStep,
   initValues,
-} from "../../components/StepsCreateTariff/FoodStep";
-import { InputTables } from "../../components/StepsCreateTariff/InputTables";
-import { CreateTariffProps } from "../../components/StepsCreateTariff/interfaces";
-import { MonthsCommon } from "../../components/StepsCreateTariff/Months";
-import { NameAndConfirmStep } from "../../components/StepsCreateTariff/NameAndConfirmStep";
-import { StepperTariff } from "../../components/StepsCreateTariff/Stepper";
-import { TypeTariff } from "../../components/StepsCreateTariff/typeTariff";
-import { ValuesStep } from "../../components/StepsCreateTariff/ValuesStep";
+} from "../../../components/StepsCreateTariff/FoodStep";
+import { InputTables } from "../../../components/StepsCreateTariff/InputTables";
+import { CreateTariffProps } from "../../../components/StepsCreateTariff/interfaces";
+import { MonthsCommon } from "../../../components/StepsCreateTariff/Months";
+import { NameAndConfirmStep } from "../../../components/StepsCreateTariff/NameAndConfirmStep";
+import { StepperTariff } from "../../../components/StepsCreateTariff/Stepper";
+import { TypeTariff } from "../../../components/StepsCreateTariff/typeTariff";
+import { ValuesStep } from "../../../components/StepsCreateTariff/ValuesStep";
 import {
   CreateTariffContext,
   CreateTariffContextProvider,
-} from "../../context/createTariff/createTariff";
-import { GroupValuesProps } from "../../hooks/api/interfaces";
+} from "../../../context/createTariff/createTariff";
+import { GroupValuesProps } from "../../../hooks/api/interfaces";
 
 import "./style.scss";
 

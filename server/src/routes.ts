@@ -13,7 +13,12 @@ import { FindFoodController } from "./controllers/Food/FindFoodController";
 import { FindAllHousingUnits } from "./controllers/HousingUnits/FindAllHousingUnits";
 import { CreatePetController } from "./controllers/Pet/CreatePetController";
 import { FindPetController } from "./controllers/Pet/FindPetController";
+import { ActiveRequirementController } from "./controllers/Requirement/ActiveRequirementController";
+import { DeleteRequirementController } from "./controllers/Requirement/DeleteRequirementController";
 import { FindRequirementsController } from "./controllers/Requirement/FindRequirementsController";
+import { GetaRequirementController } from "./controllers/Requirement/GetaRequiremetController";
+import { NewRequirementController } from "./controllers/Requirement/NewRequirementController";
+import { PriceRequirementController } from "./controllers/Requirement/PriceRequirementController";
 import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateSpecificDateController";
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
 import { ChangeOrderTariffController } from "./controllers/Tariff/ChangeOrderTariffController";
@@ -32,6 +37,7 @@ import { FindUserController } from "./controllers/Users/FindUsersController";
 import { LoginUsersController } from "./controllers/Users/LoginUsersController";
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
 import { authMiddleware } from "./middlewares/authMiddleware";
+import { isAdmin } from "./middlewares/isAdmin";
 
 const routes = express.Router();
 
@@ -68,8 +74,13 @@ const createCommonDate = new CreateCommonDateController();
 const findSpecificDate = new FindSpecificDateController();
 const createSpecificDate = new CreateSpecificDateController();
 
+const newRequirement = new NewRequirementController();
 const findRequirements = new FindRequirementsController();
+const findaRequirement = new GetaRequirementController();
+const deleteRequirement = new DeleteRequirementController();
 const findAllHousingUnits = new FindAllHousingUnits();
+const activeRequirement = new ActiveRequirementController();
+const priceRequirement = new PriceRequirementController();
 
 const calcBudget = new CalcBudgetController();
 const calcBudgetDU = new CalcBudgetDUController();
@@ -81,8 +92,8 @@ routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
 
 routes.use(authMiddleware);
-routes.delete("/user/:id", deleteUser.handle);
-routes.get("/user", findUser.handle);
+routes.delete("/user/:id", isAdmin, deleteUser.handle);
+routes.get("/user", isAdmin, findUser.handle);
 routes.get("/validate", validateUser.handle);
 routes.post("/unique-user", findUniqueUser.handle);
 
@@ -99,7 +110,7 @@ routes.get("/tariff", findTariff.handle);
 routes.post("/tariff", createTariff.handle);
 routes.post("/tariff/text", createTariffText.handle);
 routes.post("/tariff_pipe", pipeTariff.handle);
-routes.post("/tariff/delete", deleteTariff.handle);
+routes.post("/tariff/delete", isAdmin, deleteTariff.handle);
 routes.post("/tariff/order", changeOrderTariff.handle);
 routes.post("/tariff/active", toggleActiveTariff.handle);
 
@@ -112,8 +123,13 @@ routes.post("/common-date", createCommonDate.handle);
 routes.get("/specific-date", findSpecificDate.handle);
 routes.post("/specific-date", createSpecificDate.handle);
 
+routes.post("/requirement", newRequirement.handle);
 routes.get("/requirement", findRequirements.handle);
+routes.post("/requirement/unique", findaRequirement.handle);
 routes.get("/housing-units", findAllHousingUnits.handle);
+routes.put("/requirement/active/:name", isAdmin, activeRequirement.handle);
+routes.put("/requirement/price", isAdmin, priceRequirement.handle);
+routes.delete("/requirement/:name", deleteRequirement.handle);
 
 routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);

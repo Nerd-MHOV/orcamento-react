@@ -111,8 +111,9 @@ model CommonDates {
 }
 
 model Requirement {
-  name  String @id
-  price Float
+  name   String  @id
+  price  Float
+  active Boolean @default(true)
 
   @@map("requirements")
 }

@@ -8,6 +8,7 @@ import {
 } from "../../context/generateTariff/interfaces";
 import {
   AllTariffsProps,
+  ApiRequirementsProps,
   ApiUserProps,
   FindHolidaysProps,
   FindMonthWithTariffProps,
@@ -81,8 +82,16 @@ export const useApi = () => ({
     return response.data;
   },
 
-  getRequirements: async () => {
+  getRequirements: async (): Promise<ApiRequirementsProps[]> => {
     const response = await api.get("/requirement");
+    return response.data;
+  },
+
+  getaRequirement: async (name: string): Promise<ApiRequirementsProps> => {
+    const response = await api.post("/requirement/unique", {
+      name,
+    });
+
     return response.data;
   },
 
@@ -156,6 +165,14 @@ export const useApi = () => ({
     return response.data.msg;
   },
 
+  createRequirement: async (name: string, price: number) => {
+    const response = await api.post("/requirement", {
+      name,
+      price,
+    });
+    return response.data;
+  },
+
   deleteTariff: async (tariffs: string[]): Promise<"success" | "error"> => {
     const response = await api.post("/tariff/delete", { tariffs: tariffs });
     return response.data;
@@ -163,6 +180,11 @@ export const useApi = () => ({
 
   deleteUser: async (id: string): Promise<"success" | "error"> => {
     const response = await api.delete("/user/" + id);
+    return response.data;
+  },
+
+  deleteRequirement: async (name: string) => {
+    const response = await api.delete("/requirement/" + name);
     return response.data;
   },
 
@@ -183,6 +205,20 @@ export const useApi = () => ({
     const response = await api.post("/save-budget", {
       user_id,
       budgets,
+    });
+
+    return response.data;
+  },
+
+  activeRequirement: async (name: string) => {
+    const response = await api.put("/requirement/active/" + name);
+    return response.data;
+  },
+
+  priceRequirement: async (name: string, price: number) => {
+    const response = await api.put("/requirement/price", {
+      name,
+      price,
     });
 
     return response.data;

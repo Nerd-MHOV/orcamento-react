@@ -1,5 +1,5 @@
 import { GroupValuesProps, TariffTypesProps } from "../../hooks/api/interfaces";
-import { initValuesUHS } from "../../pages/NewTariffs";
+import { initValuesUHS } from "../../pages/Tariffs/NewTariffs";
 export interface CreateTariffProps {
   dates: string[];
   tariffs: TariffsDiscriminated;

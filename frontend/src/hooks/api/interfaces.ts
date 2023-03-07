@@ -69,4 +69,10 @@ export interface ApiUserProps {
   active: boolean;
 }
 
+export interface ApiRequirementsProps {
+  name: string;
+  price: number;
+  active: boolean;
+}
+
 export type TariffTypesProps = "specific" | "common";

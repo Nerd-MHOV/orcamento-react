@@ -1,7 +1,14 @@
 import "./style.scss";
 import Logo from "../../assets/GP.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Dashboard, Group, Logout, Menu, ViewList } from "@mui/icons-material";
+import {
+  Dashboard,
+  Group,
+  Logout,
+  Menu,
+  PostAdd,
+  ViewList,
+} from "@mui/icons-material";
 import { useContext } from "react";
 import { SidebarContext } from "../../context/sidebarContext";
 import { AuthContext } from "../../context/authContext";
@@ -57,6 +64,14 @@ const Sidebar = () => {
                 <Group />
               </span>
               <span className="title">Usuários</span>
+            </Link>
+          </li>
+          <li className={pathname.includes("/requirements") ? "hovered" : ""}>
+            <Link to="/requirements" className="link">
+              <span className="icon">
+                <PostAdd />
+              </span>
+              <span className="title">Requerimentos</span>
             </Link>
           </li>
           <li>

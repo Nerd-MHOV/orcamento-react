@@ -1,6 +1,6 @@
-import { FormNewCollaborator } from "../../components/FormNewCollaborator";
-import Navbar from "../../components/Navbar";
-import Sidebar from "../../components/Sidebar";
+import { FormNewCollaborator } from "../../../components/FormNewCollaborator";
+import Navbar from "../../../components/Navbar";
+import Sidebar from "../../../components/Sidebar";
 import "./style.scss";
 
 export const NewUsersPage = () => {

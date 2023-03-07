@@ -11,7 +11,7 @@ import {
   initValuesUHS,
   stepsCommon,
   stepsSpecific,
-} from "../../pages/NewTariffs";
+} from "../../pages/Tariffs/NewTariffs";
 import { initialValue, initValues } from "./initials";
 import { ContextTariffProps } from "./interface";
 

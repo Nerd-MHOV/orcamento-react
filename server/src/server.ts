@@ -9,7 +9,11 @@ const app = express();
 const port = process.env.PORT_SERVER || 3333;
 
 //cors
-const whiteList = ["http://localhost:5173", "http://192.168.99.105:5173"];
+const whiteList = [
+  "http://localhost:5173",
+  "http://192.168.99.105:5173",
+  "http://localhost:4173",
+];
 app.use(
   cors({
     origin: (origin, callback) => {

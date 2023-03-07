@@ -57,7 +57,7 @@ export const UsersPage = () => {
               </Link>
             </div>
             <div className="table">
-              <TableUsers rows={rows} />
+              <TableUsers rows={rows} att={getUsers} />
             </div>
           </div>
         </div>
