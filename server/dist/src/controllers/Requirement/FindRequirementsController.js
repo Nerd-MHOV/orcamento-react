@@ -46,7 +46,11 @@ var FindRequirementsController = /** @class */ (function () {
             var requirements;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, prismaClient_1.prismaClient.requirement.findMany()];
+                    case 0: return [4 /*yield*/, prismaClient_1.prismaClient.requirement.findMany({
+                            orderBy: {
+                                name: "desc"
+                            }
+                        })];
                     case 1:
                         requirements = _a.sent();
                         return [2 /*return*/, response.json(requirements)];

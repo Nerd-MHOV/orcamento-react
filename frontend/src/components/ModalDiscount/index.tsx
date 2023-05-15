@@ -47,6 +47,8 @@ export function ModalDiscount() {
     });
     setTimeout(() => {
       handleSaveModalDiscount();
+      setPassword("");
+      setDiscount(0);
     }, 200);
   };
 

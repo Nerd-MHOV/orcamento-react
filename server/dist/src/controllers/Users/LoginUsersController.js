@@ -68,8 +68,8 @@ var LoginUsersController = /** @class */ (function () {
                         if (!username || !password) {
                             return [2 /*return*/, response.status(201).json({
                                     message: {
-                                        type: 'error',
-                                        message: 'Informe o Usuario e a Senha!'
+                                        type: "error",
+                                        message: "Informe o Usuario e a Senha!"
                                     }
                                 })];
                         }
@@ -96,7 +96,7 @@ var LoginUsersController = /** @class */ (function () {
                                 .then(function (user) { return __awaiter(_this, void 0, void 0, function () {
                                 var token, _, userLogin;
                                 return __generator(this, function (_a) {
-                                    token = jsonwebtoken_1["default"].sign({ id: user.id }, process.env.JWT_PASS || 'hash', {
+                                    token = jsonwebtoken_1["default"].sign({ id: user.id }, process.env.JWT_PASS || "hash", {
                                         expiresIn: "8h"
                                     });
                                     _ = user.password, userLogin = __rest(user, ["password"]);
@@ -104,12 +104,13 @@ var LoginUsersController = /** @class */ (function () {
                                             user: userLogin,
                                             token: token,
                                             message: {
-                                                type: 'success',
-                                                message: 'Logado com sucesso!'
+                                                type: "success",
+                                                message: "Logado com sucesso!"
                                             }
                                         })];
                                 });
                             }); })["catch"](function (err) {
+                                console.log(err);
                                 return response.json({
                                     err: err,
                                     message: {

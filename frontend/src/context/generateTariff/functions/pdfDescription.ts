@@ -8,7 +8,7 @@ import { format } from "date-fns";
 // import * as pdfFonts from "pdfmake/build/vfs_fonts";
 // (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
-// for production
+// for build
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "./vfs_fonts";
 (<any>pdfMake).vfs = pdfFonts.pdfMake;

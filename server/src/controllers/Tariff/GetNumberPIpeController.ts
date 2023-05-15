@@ -5,11 +5,16 @@ import { getTariff } from "../Budget/functions/getTariff";
 export class GetNumberPipeController {
   async handle(request: Request, response: Response) {
     const { date_in, date_out } = request.body;
-    const numberPipe = 0;
     let tariff: any = {};
     let date = new Date(date_in);
     let dateOut = new Date(date_out);
     let type = "";
+
+    if (format(date, "yyyy-MM-dd") === format(dateOut, "yyyy-MM-dd")) {
+      tariff = {
+        product_pipe: "46",
+      };
+    }
 
     while (date < dateOut) {
       let dayMonthYear = format(date, "yyyy-MM-dd");
@@ -30,12 +35,6 @@ export class GetNumberPipeController {
         type = "isCommon";
       }
       date = addDays(date, 1);
-    }
-
-    if (format(date, "yyyy-MM-dd") === format(dateOut, "yyyy-MM-dd")) {
-      tariff = {
-        product_pipe: "46",
-      };
     }
 
     return response.json(tariff);

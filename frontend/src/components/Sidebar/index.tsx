@@ -7,6 +7,7 @@ import {
   Logout,
   Menu,
   PostAdd,
+  QueryStats,
   ViewList,
 } from "@mui/icons-material";
 import { useContext } from "react";
@@ -72,6 +73,14 @@ const Sidebar = () => {
                 <PostAdd />
               </span>
               <span className="title">Requerimentos</span>
+            </Link>
+          </li>
+          <li className={pathname.includes("/analytic") ? "hovered" : ""}>
+            <Link to="/analytic" className="link">
+              <span className="icon">
+                <QueryStats />
+              </span>
+              <span className="title">Análise</span>
             </Link>
           </li>
           <li>

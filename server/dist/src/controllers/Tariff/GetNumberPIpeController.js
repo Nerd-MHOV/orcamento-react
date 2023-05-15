@@ -44,16 +44,20 @@ var GetNumberPipeController = /** @class */ (function () {
     }
     GetNumberPipeController.prototype.handle = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, date_in, date_out, numberPipe, tariff, date, dateOut, type, dayMonthYear, monthYear, tariffs;
+            var _a, date_in, date_out, tariff, date, dateOut, type, dayMonthYear, monthYear, tariffs;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = request.body, date_in = _a.date_in, date_out = _a.date_out;
-                        numberPipe = 0;
                         tariff = {};
                         date = new Date(date_in);
                         dateOut = new Date(date_out);
                         type = "";
+                        if ((0, date_fns_1.format)(date, "yyyy-MM-dd") === (0, date_fns_1.format)(dateOut, "yyyy-MM-dd")) {
+                            tariff = {
+                                product_pipe: "46"
+                            };
+                        }
                         _b.label = 1;
                     case 1:
                         if (!(date < dateOut)) return [3 /*break*/, 3];
@@ -76,13 +80,7 @@ var GetNumberPipeController = /** @class */ (function () {
                         }
                         date = (0, date_fns_1.addDays)(date, 1);
                         return [3 /*break*/, 1];
-                    case 3:
-                        if ((0, date_fns_1.format)(date, "yyyy-MM-dd") === (0, date_fns_1.format)(dateOut, "yyyy-MM-dd")) {
-                            tariff = {
-                                product_pipe: "46"
-                            };
-                        }
-                        return [2 /*return*/, response.json(tariff)];
+                    case 3: return [2 /*return*/, response.json(tariff)];
                 }
             });
         });

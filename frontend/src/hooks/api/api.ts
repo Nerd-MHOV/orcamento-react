@@ -1,5 +1,4 @@
 import axios from "axios";
-import serialize from "form-serialize";
 import { selectionRange } from "../../context/generateTariff/functions/handleForm";
 import {
   RequirementSubmitProps,
@@ -101,6 +100,13 @@ export const useApi = () => ({
       date_out,
     });
 
+    return response.data;
+  },
+
+  getaTariff: async (tariff_id: string): Promise<AllTariffsProps> => {
+    const response = await api.post("/tariff/unique", {
+      tariff_id,
+    });
     return response.data;
   },
 

@@ -10,6 +10,8 @@ import { Private } from "./private";
 import { PrivateRole } from "./privateRole";
 import { RequirementsPage } from "./pages/Requirements";
 import { NewRequirementPage } from "./pages/Requirements/NewRequirement";
+import { Analytic } from "./pages/Analytic";
+import { EditTariff } from "./pages/Tariffs/EditTariff";
 function App() {
   return (
     <div className="App">
@@ -23,6 +25,7 @@ function App() {
                 <Route path="/tariffs">
                   <Route index element={<TariffsPage />} />
                   <Route path="/tariffs/create" element={<NewTariff />} />
+                  <Route path="/tariffs/edit/:id" element={<EditTariff />} />
                   <Route path="/tariffs/test" element={<TestPage />} />
                 </Route>
                 <Route path="/users">
@@ -35,6 +38,11 @@ function App() {
                     path="/requirements/create"
                     element={<NewRequirementPage />}
                   />
+                </Route>
+              </Route>
+              <Route element={<PrivateRole level={3} />}>
+                <Route path="/analytic">
+                  <Route index element={<Analytic />} />
                 </Route>
               </Route>
             </Route>

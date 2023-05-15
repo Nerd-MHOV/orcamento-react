@@ -43,19 +43,25 @@ var DeleteUsersController = /** @class */ (function () {
     }
     DeleteUsersController.prototype.handle = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var id;
+            var user, id;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        id = request.body.id;
+                        user = request.user;
+                        id = request.params.id;
+                        if (!user || (user.level && user.level < 3)) {
+                            return [2 /*return*/, response.json("Sem permissão").status(500)];
+                        }
                         return [4 /*yield*/, prismaClient_1.prismaClient.user["delete"]({
                                 where: {
                                     id: id
                                 }
                             })
                                 .then(function (user) {
-                                return response.json(user);
-                            })["catch"](function (err) { return console.log(err); })];
+                                return response.json("success");
+                            })["catch"](function (err) {
+                                return response.json("error");
+                            })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];

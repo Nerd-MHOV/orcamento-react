@@ -1,4 +1,4 @@
-import { prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { CategorySeed } from "./seeds/categories";
 import { CheckSeed } from "./seeds/checkinValues";
 import { CommonDateSeed } from "./seeds/commonDates";

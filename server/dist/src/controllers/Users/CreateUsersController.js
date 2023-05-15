@@ -88,11 +88,20 @@ var CreateUserController = /** @class */ (function () {
                                 var _ = newUser.password, user = __rest(newUser, ["password"]);
                                 return response.json(user);
                             })["catch"](function (err) {
+                                var _a, _b, _c;
+                                var message = "Erro interno do servidor";
+                                if (((_a = err.meta) === null || _a === void 0 ? void 0 : _a.target[0]) === "username")
+                                    message = "Esse username já esta sendo usado!";
+                                if (((_b = err.meta) === null || _b === void 0 ? void 0 : _b.target[0]) === "email")
+                                    message = "Esse email já esta sendo usado!";
+                                if (((_c = err.meta) === null || _c === void 0 ? void 0 : _c.target[0]) === "name")
+                                    message = "Esse colaborador já foi cadastrado!";
                                 return response.status(500).json({
                                     err: err,
                                     message: {
                                         type: "error",
-                                        message: "Usuário já existe!"
+                                        message: message,
+                                        debug: err
                                     }
                                 });
                             })];

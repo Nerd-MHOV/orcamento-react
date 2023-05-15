@@ -41,6 +41,7 @@ export class CreateUserController {
           message: {
             type: "error",
             message: message,
+            debug: err,
           },
         });
       });

@@ -17,6 +17,7 @@ import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import CollapsibleTableTariffRelationsShip from "../TableCollapseRelationships";
 import { createDataRelationship } from "../TableCollapseRelationships/helpers";
 import { DialogDeleteTariff } from "../DialogDeleteTariff";
+import { Link } from "react-router-dom";
 
 export const head = ["Nome", "Pipe", "ativo"];
 
@@ -321,7 +322,9 @@ export function Row(props: {
                   gap: 10,
                 }}
               >
-                <Btn action="Editar" color="green" onClick={() => {}} />
+                <Link to={"/tariffs/edit/" + row.name}>
+                  <Btn action="Editar" color="green" onClick={() => {}} />
+                </Link>
                 <Btn
                   action="Deletar"
                   color="red"

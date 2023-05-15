@@ -26,6 +26,7 @@ import { CreateTariffController } from "./controllers/Tariff/CreateTariffControl
 import { CreateTariffWithTextController } from "./controllers/Tariff/CreateTariffWithTextController";
 import { DeleteTariffController } from "./controllers/Tariff/DeleteTariffController";
 import { FindTariffController } from "./controllers/Tariff/FindTariffController";
+import { GetaTariffController } from "./controllers/Tariff/GetaTariffController";
 import { GetNumberPipeController } from "./controllers/Tariff/GetNumberPIpeController";
 import { ToggleActiveTariffController } from "./controllers/Tariff/ToggleActiveTariffController";
 import { CreateTariffValueController } from "./controllers/TariffValue/CreateTariffValueController";
@@ -58,6 +59,7 @@ const findPet = new FindPetController();
 const createPet = new CreatePetController();
 
 const findTariff = new FindTariffController();
+const getaTariff = new GetaTariffController();
 const createTariff = new CreateTariffController();
 const createTariffText = new CreateTariffWithTextController();
 const deleteTariff = new DeleteTariffController();
@@ -108,6 +110,7 @@ routes.post("/pet", createPet.handle);
 
 routes.get("/tariff", findTariff.handle);
 routes.post("/tariff", createTariff.handle);
+routes.post("/tariff/unique", getaTariff.handle);
 routes.post("/tariff/text", createTariffText.handle);
 routes.post("/tariff_pipe", pipeTariff.handle);
 routes.post("/tariff/delete", isAdmin, deleteTariff.handle);
