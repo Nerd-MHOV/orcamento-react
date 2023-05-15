@@ -1,8 +1,11 @@
-import React, { createContext } from "react";
-import { foodPad } from "../../components/StepsEditTariff/FoodStep";
+import { createContext, useState } from "react";
+import { useApi } from "../../hooks/api/api";
 import {
+  CheckInValuesProps,
+  FoodProps,
   GroupValuesProps,
   SpecificTariffProps,
+  TariffValuesProps,
 } from "../../hooks/api/interfaces";
 import { initTariffContext } from "./initials";
 import {
@@ -35,6 +38,9 @@ export const EditTariffContext = createContext<EditTariffContextProps>({
   getFoodID() {
     return undefined;
   },
+  updateTariff: async () => {},
+  loading: false,
+  stateResponse: "error",
 });
 
 export const EditTariffContextProvider = ({
@@ -43,6 +49,12 @@ export const EditTariffContextProvider = ({
   next,
   activeStep,
 }: EditTariffContextProviderProps) => {
+  const api = useApi();
+  const [loading, setLoading] = useState(true);
+  const [stateResponse, setStateResponse] = useState<"success" | "error">(
+    "success"
+  );
+
   const getTariffType = () => {
     return tariff?.SpecificDates && tariff?.SpecificDates?.length > 0
       ? "specific"
@@ -179,6 +191,34 @@ export const EditTariffContextProvider = ({
       });
   };
 
+  const updateTariff = async () => {
+    if (tariff === undefined) return;
+    if (getTariffType() !== "specific") {
+      const response = await api.updateCommonTariff(
+        tariff.name,
+        tariff.product_pipe,
+        tariff.TariffValues as TariffValuesProps[],
+        tariff.TariffCheckInValues as CheckInValuesProps[],
+        tariff.food as FoodProps
+      );
+
+      console.log(response);
+      setStateResponse(response.msg);
+      setLoading(false);
+    } else {
+      const response = await api.updateSpecificTariff(
+        tariff.name,
+        tariff.product_pipe,
+        tariff.TariffValues as TariffValuesProps[],
+        tariff.TariffCheckInValues as CheckInValuesProps[],
+        tariff.food as FoodProps,
+        tariff.SpecificDates as SpecificTariffProps[]
+      );
+      setStateResponse(response.msg);
+      setLoading(false);
+    }
+  };
+
   return (
     <EditTariffContext.Provider
       value={{
@@ -196,6 +236,9 @@ export const EditTariffContextProvider = ({
         setFoodValue,
         setAllFoodValue,
         setEarlyEntryValue,
+        updateTariff,
+        loading,
+        stateResponse,
       }}
     >
       {children}

@@ -27,6 +27,9 @@ export interface EditTariffContextProps {
   ) => void;
   getEarlyValue: (time: "10h" | "12h") => CheckInValuesProps | undefined;
   getFoodID: () => number | undefined;
+  updateTariff: () => Promise<void>;
+  loading: boolean;
+  stateResponse: "success" | "error";
 }
 
 export interface EditTariffContextProviderProps {

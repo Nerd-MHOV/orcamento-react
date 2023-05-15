@@ -12,7 +12,7 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { useNavigate } from "react-router-dom";
 import { ApiUserProps } from "../../hooks/api/interfaces";
 
-export const FormNewCollaborator = () => {
+export const FormEditCollaborator = ({ fields }: { fields: ApiUserProps }) => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const api = useApi();
@@ -22,12 +22,13 @@ export const FormNewCollaborator = () => {
     console.log(data);
     const name = `${data.firstname} ${data.lastname}`;
     api
-      .createUser(
+      .updateUser(
+        fields.id,
         name,
         data.email,
         data.phone,
         data.username,
-        data.password,
+        data.password === "padrao" ? "" : data.password,
         data.token,
         data.user_pipe
       )
@@ -54,6 +55,7 @@ export const FormNewCollaborator = () => {
             label="Nome"
             type="text"
             variant="outlined"
+            defaultValue={fields.name.split(" ")[0]}
           />
           <TextField
             required
@@ -62,6 +64,9 @@ export const FormNewCollaborator = () => {
             label="Sobrenome"
             type="text"
             variant="outlined"
+            defaultValue={fields.name.substring(
+              fields.name.split(" ")[0].length + 1
+            )}
           />
           <TextField
             required
@@ -70,6 +75,7 @@ export const FormNewCollaborator = () => {
             label="E-mail"
             type="email"
             variant="outlined"
+            defaultValue={fields.email}
           />
 
           <TextField
@@ -80,6 +86,7 @@ export const FormNewCollaborator = () => {
             type="text"
             variant="outlined"
             InputProps={<InputMask mask="(99) 99999 - 9999" />}
+            defaultValue={fields.phone}
           />
 
           <TextField
@@ -89,6 +96,7 @@ export const FormNewCollaborator = () => {
             label="Username"
             type="text"
             variant="outlined"
+            defaultValue={fields.username}
           />
           <TextField
             required
@@ -97,6 +105,7 @@ export const FormNewCollaborator = () => {
             label="Senha"
             type="password"
             variant="outlined"
+            defaultValue="padrao"
           />
           <TextField
             required
@@ -105,6 +114,7 @@ export const FormNewCollaborator = () => {
             label="Token Pipe"
             type="text"
             variant="outlined"
+            defaultValue={fields.token_pipe}
           />
           <TextField
             required
@@ -113,11 +123,12 @@ export const FormNewCollaborator = () => {
             label="nº do Usuário Pipe"
             type="text"
             variant="outlined"
+            defaultValue={fields.user_pipe}
           />
         </div>
 
         <div className="button">
-          <Btn action="Cadastrar" color="darkBlue" onClick={() => {}} />
+          <Btn action="Atualizar" color="darkBlue" onClick={() => {}} />
         </div>
       </form>
     </div>

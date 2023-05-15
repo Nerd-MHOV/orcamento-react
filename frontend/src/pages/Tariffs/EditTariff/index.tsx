@@ -9,7 +9,7 @@ import { StepperTariff } from "../../../components/StepsEditTariff/Stepper";
 import { ValuesStep } from "../../../components/StepsEditTariff/ValuesStep";
 import { EditTariffContextProvider } from "../../../context/editTariff/editTariff";
 import { useApi } from "../../../hooks/api/api";
-import { AllTariffsProps } from "../../../hooks/api/interfaces";
+import { AllTariffsProps, ApiUserProps } from "../../../hooks/api/interfaces";
 
 import "./style.scss";
 

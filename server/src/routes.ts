@@ -8,6 +8,7 @@ import { CreateCategoryController } from "./controllers/Category/CreateCategoryC
 import { FindCategoryController } from "./controllers/Category/FindCategoryController";
 import { CreateCommonDateController } from "./controllers/CommonDate/CreateCommonDateController";
 import { FindCommonDateController } from "./controllers/CommonDate/FindCommonDateController";
+import { UpdateCommonDateController } from "./controllers/CommonDate/UpdateCommonDateController";
 import { CreateFoodController } from "./controllers/Food/CreateFoodController";
 import { FindFoodController } from "./controllers/Food/FindFoodController";
 import { FindAllHousingUnits } from "./controllers/HousingUnits/FindAllHousingUnits";
@@ -21,6 +22,7 @@ import { NewRequirementController } from "./controllers/Requirement/NewRequireme
 import { PriceRequirementController } from "./controllers/Requirement/PriceRequirementController";
 import { CreateSpecificDateController } from "./controllers/SpecificDate/CreateSpecificDateController";
 import { FindSpecificDateController } from "./controllers/SpecificDate/FindSpecificDateController";
+import { UpdateSpecificDateController } from "./controllers/SpecificDate/UpdateCommonDateController";
 import { ChangeOrderTariffController } from "./controllers/Tariff/ChangeOrderTariffController";
 import { CreateTariffController } from "./controllers/Tariff/CreateTariffController";
 import { CreateTariffWithTextController } from "./controllers/Tariff/CreateTariffWithTextController";
@@ -36,6 +38,7 @@ import { DeleteUsersController } from "./controllers/Users/DeleteUsersController
 import { FindUniqueUserController } from "./controllers/Users/FindUniqueUserController";
 import { FindUserController } from "./controllers/Users/FindUsersController";
 import { LoginUsersController } from "./controllers/Users/LoginUsersController";
+import { UpdateUserController } from "./controllers/Users/UpdateUsersController";
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { isAdmin } from "./middlewares/isAdmin";
@@ -46,6 +49,7 @@ const createUser = new CreateUserController();
 const findUser = new FindUserController();
 const findUniqueUser = new FindUniqueUserController();
 const deleteUser = new DeleteUsersController();
+const updateUser = new UpdateUserController();
 const loginUser = new LoginUsersController();
 const validateUser = new ValidateUsersController();
 
@@ -72,9 +76,11 @@ const createTariffValue = new CreateTariffValueController();
 
 const findCommonDate = new FindCommonDateController();
 const createCommonDate = new CreateCommonDateController();
+const updateCommonData = new UpdateCommonDateController();
 
 const findSpecificDate = new FindSpecificDateController();
 const createSpecificDate = new CreateSpecificDateController();
+const updateSpecificDate = new UpdateSpecificDateController();
 
 const newRequirement = new NewRequirementController();
 const findRequirements = new FindRequirementsController();
@@ -95,6 +101,7 @@ routes.post("/login", loginUser.handle);
 
 routes.use(authMiddleware);
 routes.delete("/user/:id", isAdmin, deleteUser.handle);
+routes.put("/user/:id", isAdmin, updateUser.handle);
 routes.get("/user", isAdmin, findUser.handle);
 routes.get("/validate", validateUser.handle);
 routes.post("/unique-user", findUniqueUser.handle);
@@ -122,9 +129,11 @@ routes.post("/tariff-value", createTariffValue.handle);
 
 routes.get("/common-date", findCommonDate.handle);
 routes.post("/common-date", createCommonDate.handle);
+routes.put("/common-date/:name", isAdmin, updateCommonData.handle);
 
 routes.get("/specific-date", findSpecificDate.handle);
 routes.post("/specific-date", createSpecificDate.handle);
+routes.put("/specific-date/:name", isAdmin, updateSpecificDate.handle);
 
 routes.post("/requirement", newRequirement.handle);
 routes.get("/requirement", findRequirements.handle);

@@ -9,8 +9,12 @@ import {
   AllTariffsProps,
   ApiRequirementsProps,
   ApiUserProps,
+  CheckInValuesProps,
   FindHolidaysProps,
   FindMonthWithTariffProps,
+  FoodProps,
+  SpecificTariffProps,
+  TariffValuesProps,
 } from "./interfaces";
 
 const storageData = localStorage.getItem("authToken");
@@ -38,7 +42,7 @@ export const useApi = () => ({
     return response.data;
   },
 
-  getaUser: async (id: string) => {
+  getaUser: async (id: string): Promise<ApiUserProps> => {
     const response = await api.post("/unique-user", { id });
     return response.data;
   },
@@ -191,6 +195,62 @@ export const useApi = () => ({
 
   deleteRequirement: async (name: string) => {
     const response = await api.delete("/requirement/" + name);
+    return response.data;
+  },
+
+  updateUser: async (
+    id: string,
+    name: string,
+    email: string,
+    phone: string,
+    username: string,
+    password: string,
+    token_pipe: string,
+    user_pipe: string
+  ): Promise<ApiUserProps> => {
+    const response = await api.put("/user/" + id, {
+      name,
+      email,
+      phone,
+      username,
+      password,
+      token_pipe,
+      user_pipe,
+    });
+    return response.data;
+  },
+
+  updateCommonTariff: async (
+    name: string,
+    product_pipe: string,
+    values: TariffValuesProps[],
+    checkIn: CheckInValuesProps[],
+    food: FoodProps
+  ) => {
+    const response = await api.put("/common-date/" + name, {
+      product_pipe,
+      values,
+      checkIn,
+      food,
+    });
+    return response.data;
+  },
+
+  updateSpecificTariff: async (
+    name: string,
+    product_pipe: string,
+    values: TariffValuesProps[],
+    checkIn: CheckInValuesProps[],
+    food: FoodProps,
+    dates: SpecificTariffProps[]
+  ) => {
+    const response = await api.put("/specific-date/" + name, {
+      product_pipe,
+      values,
+      checkIn,
+      food,
+      dates,
+    });
     return response.data;
   },
 

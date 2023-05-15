@@ -12,6 +12,7 @@ export const NameAndConfirmStep = () => {
   const api = useApi();
   const { getTariffType, getFoodID, getFoodValue, tariff, getDates, next } =
     useContext(EditTariffContext);
+  console.log(tariff);
   const [rows, setRows] = useState<ReturnType<typeof createData>[]>([]);
   const [name, setName] = useState("");
   const [pipeNum, setPipeNum] = useState("");

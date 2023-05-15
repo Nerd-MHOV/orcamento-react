@@ -101,6 +101,7 @@ export const CommonMonths = () => {
             variant="standard"
           />
         )}
+        disabled
       />
     </div>
   );

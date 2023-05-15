@@ -3,11 +3,11 @@ import { Box } from "@mui/system";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateTariffContext } from "../../../context/createTariff/createTariff";
+import { EditTariffContext } from "../../../context/editTariff/editTariff";
 
 export const CompleteSteps = () => {
   const navigate = useNavigate();
-  const { loading, stateResponse, activeStep } =
-    useContext(CreateTariffContext);
+  const { loading, stateResponse, activeStep } = useContext(EditTariffContext);
 
   return (
     <div className="complete-steps">

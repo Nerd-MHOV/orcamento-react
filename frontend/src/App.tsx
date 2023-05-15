@@ -12,6 +12,8 @@ import { RequirementsPage } from "./pages/Requirements";
 import { NewRequirementPage } from "./pages/Requirements/NewRequirement";
 import { Analytic } from "./pages/Analytic";
 import { EditTariff } from "./pages/Tariffs/EditTariff";
+import { EditUsers } from "./pages/Users/EditUsers";
+
 function App() {
   return (
     <div className="App">
@@ -31,6 +33,7 @@ function App() {
                 <Route path="/users">
                   <Route index element={<UsersPage />} />
                   <Route path="/users/create" element={<NewUsersPage />} />
+                  <Route path="/users/:id" element={<EditUsers />} />
                 </Route>
                 <Route path="/requirements">
                   <Route index element={<RequirementsPage />} />

@@ -6,10 +6,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { CheckBox, CheckBoxOutlineBlank, Delete } from "@mui/icons-material";
+import {
+  CheckBox,
+  CheckBoxOutlineBlank,
+  Delete,
+  Edit,
+} from "@mui/icons-material";
 import { useApi } from "../../hooks/api/api";
 import { deleteUser } from "../../pages/Users/deleteUser";
 import { DialogDeleteUser } from "../DialogDeleteUser";
+import { Link } from "react-router-dom";
 
 export interface dataUserProps {
   id: string;
@@ -62,6 +68,7 @@ export default function TableUsers({
             <TableCell align="right">Pipe</TableCell>
             <TableCell align="right">Ativo</TableCell>
             <TableCell align="right">Apagar</TableCell>
+            <TableCell align="right">Editar</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -95,6 +102,18 @@ export default function TableUsers({
                 >
                   <Delete />
                 </button>
+              </TableCell>
+
+              <TableCell align="right">
+                <Link to={`/users/${row.id}`}>
+                  <button
+                    style={{ cursor: "pointer" }}
+                    className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"
+                    onClick={() => {}}
+                  >
+                    <Edit />
+                  </button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

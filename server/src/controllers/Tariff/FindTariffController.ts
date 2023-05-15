@@ -8,7 +8,11 @@ export class FindTariffController {
         include: {
           food: true,
           TariffCheckInValues: true,
-          TariffValues: true,
+          TariffValues: {
+            orderBy: {
+              adt: "asc",
+            },
+          },
           tariffs_to_midweek: true,
           tariffs_to_weekend: true,
           SpecificDates: true,
