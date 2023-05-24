@@ -5,6 +5,7 @@ export async function adultBudget(
   arrForm: any,
   arrChild: number[],
   unitaryDiscount: UnitaryDiscountProps[],
+  daily_courtesy: boolean,
   initDate: Date,
   finalDate: Date
 ) {
@@ -21,9 +22,23 @@ export async function adultBudget(
     let totalAdult = 0;
     let totalNoDiscount = 0;
     if (countAdult <= 2) {
-      valuesAdult = await generateBudget(initDate, finalDate, arrForm, "adt");
+      valuesAdult = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "adt",
+        false,
+        daily_courtesy
+      );
     } else {
-      valuesAdult = await generateBudget(initDate, finalDate, arrForm, "adtex");
+      valuesAdult = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "adtex",
+        false,
+        daily_courtesy
+      );
     }
 
     //single

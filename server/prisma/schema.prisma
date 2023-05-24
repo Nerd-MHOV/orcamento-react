@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  email       String        @unique
+  id          String             @id @default(uuid())
+  email       String             @unique
   phone       String
-  name        String        @unique
-  username    String        @unique
+  name        String             @unique
+  username    String             @unique
   password    String
   user_pipe   String
   token_pipe  String
-  level       Float         @default(1)
+  level       Float              @default(1)
+  active      Boolean            @default(true)
   SaveBudgets SaveBudgets[]
-  active      Boolean       @default(true)
+  Favorites   BudgetsFavorites[]
 
   @@map("users")
 }
@@ -167,11 +168,42 @@ model DUTariffValues {
 }
 
 model SaveBudgets {
-  id          String   @id @default(uuid())
+  id          String             @id @default(uuid())
   user_id     String
   budgets     Json
-  createdAt   DateTime @default(now())
-  responsible User     @relation(fields: [user_id], references: [id])
+  createdAt   DateTime           @default(now())
+  responsible User               @relation(fields: [user_id], references: [id])
+  favorites   BudgetsFavorites[]
 
   @@map("save_budgets")
+}
+
+model BudgetsFavorites {
+  id        String      @id @default(uuid())
+  user_id   String
+  budget_id String
+  users     User        @relation(fields: [user_id], references: [id])
+  budget    SaveBudgets @relation(fields: [budget_id], references: [id])
+
+  @@map("budgets_favorites")
+}
+
+model Discounts {
+  id              String          @id @default(uuid())
+  name            String
+  percent_general Float
+  percent_unitary Float
+  daily_courtesy  Boolean
+  active          Boolean         @default(true)
+  dates           DiscountDates[]
+
+  @@map("discounts")
+}
+
+model DiscountDates {
+  date        String    @id
+  discount_id String
+  discount    Discounts @relation(fields: [discount_id], references: [id], onDelete: Cascade)
+
+  @@map("discount_dates")
 }

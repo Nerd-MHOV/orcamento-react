@@ -10,7 +10,8 @@ export async function generateBudget(
   finalDate: Date,
   arrForm: any,
   ageGroup: "adt" | "adtex" | "chd0" | "chd4" | "chd8",
-  onlyFood: boolean = false
+  onlyFood: boolean,
+  daily_courtesy: boolean
 ) {
   const valuesBudget = [];
 
@@ -54,6 +55,12 @@ export async function generateBudget(
       tariffBudget = tariffDay[ageGroup] + tariffFood;
 
       if (onlyFood) tariffBudget = 90;
+    }
+
+    console.log(daily_courtesy);
+
+    if (daily_courtesy && addDays(initDate, 2) > finalDate) {
+      tariffBudget = 0;
     }
 
     valuesBudget.push(tariffBudget);

@@ -9,6 +9,7 @@ export async function childBudget(
   arrForm: ArrFormProps,
   arrChild: number[],
   unitaryDiscount: UnitaryDiscountProps[],
+  daily_courtesy: boolean,
   initDate: Date,
   finalDate: Date
 ) {
@@ -30,12 +31,33 @@ export async function childBudget(
     const desc = "CHD " + uChild + " ano(s)";
 
     if (uChild <= 3 && numChild === 1) {
-      valuesChild = await generateBudget(initDate, finalDate, arrForm, "chd0");
+      valuesChild = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "chd0",
+        false,
+        daily_courtesy
+      );
       permitDiscount = false;
     } else if ((uChild > 3 && uChild < 8) || (uChild < 8 && numChild > 1))
-      valuesChild = await generateBudget(initDate, finalDate, arrForm, "chd4");
+      valuesChild = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "chd4",
+        false,
+        daily_courtesy
+      );
     else
-      valuesChild = await generateBudget(initDate, finalDate, arrForm, "chd8");
+      valuesChild = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "chd8",
+        false,
+        daily_courtesy
+      );
 
     //COBRAR SO ALIMENTAÇÃO
     if (numChild === 1 && uChild > 3 && uChild < 10) {
@@ -45,12 +67,20 @@ export async function childBudget(
         finalDate,
         arrForm,
         "chd8",
-        true
+        true,
+        daily_courtesy
       );
     }
 
     if (Number(amountAdults) === 1 && countChild === amountChild - 1) {
-      valuesChild = await generateBudget(initDate, finalDate, arrForm, "adt");
+      valuesChild = await generateBudget(
+        initDate,
+        finalDate,
+        arrForm,
+        "adt",
+        false,
+        daily_courtesy
+      );
     }
 
     //verify unitary discount

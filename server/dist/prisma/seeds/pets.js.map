@@ -1,1 +1,0 @@
-{"version":3,"file":"pets.js","sourceRoot":"","sources":["../../../prisma/seeds/pets.ts"],"names":[],"mappings":";;;AAAa,QAAA,OAAO,GAAG;IACrB;QACE,QAAQ,EAAE,SAAS;QACnB,WAAW,EAAE,EAAE;KAChB;IACD;QACE,QAAQ,EAAE,OAAO;QACjB,WAAW,EAAE,EAAE;KAChB;IACD;QACE,QAAQ,EAAE,QAAQ;QAClB,WAAW,EAAE,GAAG;KACjB;CACF,CAAC"}

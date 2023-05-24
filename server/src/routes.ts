@@ -2,13 +2,20 @@ import express from "express";
 import fs from "fs";
 import { CalcBudgetController } from "./controllers/Budget/CalcBudgetController";
 import { CalcBudgetDUController } from "./controllers/Budget/calcBudgetDUcontroller";
-import { GetBudgetController } from "./controllers/Budget/GetBudgetControlle";
+import { GetBudgetController } from "./controllers/Budget/GetBudgetController";
 import { SaveBudgetController } from "./controllers/Budget/SaveBudgetController";
 import { CreateCategoryController } from "./controllers/Category/CreateCategoryController";
 import { FindCategoryController } from "./controllers/Category/FindCategoryController";
 import { CreateCommonDateController } from "./controllers/CommonDate/CreateCommonDateController";
 import { FindCommonDateController } from "./controllers/CommonDate/FindCommonDateController";
 import { UpdateCommonDateController } from "./controllers/CommonDate/UpdateCommonDateController";
+import { CreateDiscountController } from "./controllers/Discounts/CreateDiscountController";
+import { DeleteDiscountController } from "./controllers/Discounts/DeleteDiscountController";
+import { GetDiscountController } from "./controllers/Discounts/GetDiscountController";
+import { ToggleActiveDiscountController } from "./controllers/Discounts/ToggleActiveDiscountController";
+import { ToggleDailyCourtesyController } from "./controllers/Discounts/ToggleDailyCourtesyController";
+import { UpdateDiscountController } from "./controllers/Discounts/UpdateDiscountController";
+import { ToggleFavoriteController } from "./controllers/Favorites/ToggleFavoriteController";
 import { CreateFoodController } from "./controllers/Food/CreateFoodController";
 import { FindFoodController } from "./controllers/Food/FindFoodController";
 import { FindAllHousingUnits } from "./controllers/HousingUnits/FindAllHousingUnits";
@@ -96,6 +103,15 @@ const saveBudget = new SaveBudgetController();
 const getBudget = new GetBudgetController();
 // const changeDeal = new ChangeDealController();
 
+const favoriteBudget = new ToggleFavoriteController();
+
+const createDiscount = new CreateDiscountController();
+const getDiscount = new GetDiscountController();
+const updateDiscount = new UpdateDiscountController();
+const activeDiscount = new ToggleActiveDiscountController();
+const daily_courtesy = new ToggleDailyCourtesyController();
+const deleteDiscount = new DeleteDiscountController();
+
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
 
@@ -147,6 +163,15 @@ routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);
 routes.post("/save-budget", saveBudget.handle);
 routes.get("/budget", getBudget.handle);
+
+routes.put("/favorite/:id", authMiddleware, favoriteBudget.handle);
+
+routes.get("/discount", getDiscount.handle);
+routes.post("/discount", isAdmin, createDiscount.handle);
+routes.put("/discount/:id", isAdmin, updateDiscount.handle);
+routes.put("/discount/:id/active", isAdmin, activeDiscount.handle);
+routes.put("/discount/:id/daily_courtesy", isAdmin, daily_courtesy.handle);
+routes.delete("/discount/:id", isAdmin, deleteDiscount.handle);
 
 // routes.post("/pipedrive", changeDeal.handle);
 export default routes;

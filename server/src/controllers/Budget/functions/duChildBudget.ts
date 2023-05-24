@@ -1,6 +1,5 @@
 import { ArrFormProps, RowsProps } from "../CalcBudgetController";
 import { duGenerateBudget } from "./duGenerateBudget";
-import { generateBudget } from "./generateBudget";
 
 export async function duChildBudget(
   arrChild: number[],

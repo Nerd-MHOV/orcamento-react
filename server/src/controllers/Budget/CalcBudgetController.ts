@@ -50,6 +50,7 @@ export class CalcBudgetController {
       arrRequirement,
       rangeDate,
       unitaryDiscount,
+      dailyCourtesy,
     }: {
       arrForm: ArrFormProps;
       arrChild: number[];
@@ -61,6 +62,7 @@ export class CalcBudgetController {
         [key: string]: any;
       };
       unitaryDiscount: UnitaryDiscountProps[];
+      dailyCourtesy: boolean;
     } = request.body;
 
     //vars:
@@ -73,11 +75,13 @@ export class CalcBudgetController {
     let initDate = new Date(rangeDate.startDate);
     let finalDate = new Date(rangeDate.endDate);
 
+    console.log(dailyCourtesy, "chegada");
     //adult
     adultRows = await adultBudget(
       arrForm,
       arrChild,
       unitaryDiscount,
+      dailyCourtesy,
       initDate,
       finalDate
     );
@@ -87,6 +91,7 @@ export class CalcBudgetController {
       arrForm,
       arrChild,
       unitaryDiscount,
+      dailyCourtesy,
       initDate,
       finalDate
     );
