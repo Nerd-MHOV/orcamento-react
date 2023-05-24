@@ -1,3 +1,9 @@
+import {
+  BudgetsContentProps,
+  BudgetsFavoritesProps,
+  BudgetsProps,
+} from "../../components/TableCollapseBudgets/helpers";
+
 export interface AllTariffsProps {
   name: string;
   product_pipe: string;
@@ -10,6 +16,21 @@ export interface AllTariffsProps {
   tariffs_to_midweek?: CommonTariffProps[];
   tariffs_to_weekend?: CommonTariffProps[];
   SpecificDates?: SpecificTariffProps[];
+}
+
+export interface ApiDiscountProps {
+  id: string;
+  name: string;
+  percent_general: number;
+  percent_unitary: number;
+  daily_courtesy: boolean;
+  active: boolean;
+  dates: ApiDiscountDateProps[];
+}
+
+export interface ApiDiscountDateProps {
+  date: string;
+  discount_id: string;
 }
 
 export interface GroupValuesProps {
@@ -67,6 +88,15 @@ export interface ApiUserProps {
   token_pipe: string;
   user_pipe: string;
   active: boolean;
+}
+
+export interface ApiSavedBudgetsProps {
+  id: string;
+  user_id: string;
+  responsible: ApiUserProps;
+  createdAt: Date;
+  budgets: BudgetsContentProps[];
+  favorites: BudgetsFavoritesProps[];
 }
 
 export interface ApiRequirementsProps {

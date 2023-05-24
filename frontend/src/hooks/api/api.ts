@@ -7,7 +7,9 @@ import {
 } from "../../context/generateTariff/interfaces";
 import {
   AllTariffsProps,
+  ApiDiscountProps,
   ApiRequirementsProps,
+  ApiSavedBudgetsProps,
   ApiUserProps,
   CheckInValuesProps,
   FindHolidaysProps,
@@ -47,13 +49,22 @@ export const useApi = () => ({
     return response.data;
   },
 
+  getSavedBudgets: async (
+    query: string,
+    favorites: boolean
+  ): Promise<ApiSavedBudgetsProps[]> => {
+    const response = await api.get("/budget?q=" + query + "&f=" + favorites);
+    return response.data;
+  },
+
   getBudget: async (
     arrForm: any,
     arrChild: string[],
     arrPet: string[],
     arrRequirement: RequirementSubmitProps[],
     rangeDate: selectionRange,
-    unitaryDiscount: RowModalDiscount[]
+    unitaryDiscount: RowModalDiscount[],
+    dailyCourtesy: boolean
   ) => {
     const response = await api.post("/budget", {
       arrForm,
@@ -62,6 +73,7 @@ export const useApi = () => ({
       arrRequirement,
       rangeDate,
       unitaryDiscount,
+      dailyCourtesy,
     });
     return response.data;
   },
@@ -116,6 +128,11 @@ export const useApi = () => ({
 
   getAllTariffs: async (): Promise<AllTariffsProps[]> => {
     const response = await api.get("/tariff");
+    return response.data;
+  },
+
+  getAllDiscounts: async (): Promise<ApiDiscountProps[]> => {
+    const response = await api.get("/discount");
     return response.data;
   },
 
@@ -183,6 +200,21 @@ export const useApi = () => ({
     return response.data;
   },
 
+  createDiscount: async (
+    name: string,
+    percent_general: number,
+    percent_unitary: number,
+    dates: { date: string }[]
+  ): Promise<"success" | "error"> => {
+    const response = await api.post("/discount", {
+      name,
+      percent_general,
+      percent_unitary,
+      dates,
+    });
+    return response.data.msg;
+  },
+
   deleteTariff: async (tariffs: string[]): Promise<"success" | "error"> => {
     const response = await api.post("/tariff/delete", { tariffs: tariffs });
     return response.data;
@@ -195,6 +227,11 @@ export const useApi = () => ({
 
   deleteRequirement: async (name: string) => {
     const response = await api.delete("/requirement/" + name);
+    return response.data;
+  },
+
+  deleteDiscount: async (id: string) => {
+    const response = await api.delete("/discount/" + id);
     return response.data;
   },
 
@@ -254,6 +291,30 @@ export const useApi = () => ({
     return response.data;
   },
 
+  updateDiscount: async (
+    id: string,
+    percent_general: number,
+    percent_unitary: number,
+    dates: { date: string }[]
+  ): Promise<"success" | "error"> => {
+    const response = await api.put("/discount/" + id, {
+      percent_general,
+      percent_unitary,
+      dates,
+    });
+    return response.data.msg;
+  },
+
+  toggleActiveDiscount: async (id: string) => {
+    const response = await api.put(`/discount/${id}/active`);
+    return response.data;
+  },
+
+  toggleDailyCourtesy: async (id: string) => {
+    const response = await api.put(`/discount/${id}/daily_courtesy`);
+    return response.data;
+  },
+
   changeOrderTariff: async (order_id: number, side: string) => {
     const response = await api.post("/tariff/order", { order_id, side });
     return response.data;
@@ -287,6 +348,11 @@ export const useApi = () => ({
       price,
     });
 
+    return response.data;
+  },
+
+  favoriteBudget: async (id: string) => {
+    const response = await api.put("/favorite/" + id);
     return response.data;
   },
 });

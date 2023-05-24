@@ -1,7 +1,7 @@
 import { addDays, format } from "date-fns";
 import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "./vfs_fonts"; //where BUILD
-// import * as pdfFonts from "pdfmake/build/vfs_fonts";
+// import * as pdfFonts from "./vfs_fonts"; //where BUILD
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
 

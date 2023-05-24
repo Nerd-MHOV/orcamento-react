@@ -1,17 +1,17 @@
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { usePipe } from "../../../hooks/pipedrive/pipeApi";
-import { blue } from "@mui/material/colors";
+import { blue, red } from "@mui/material/colors";
 import { format } from "date-fns";
 
 // for dev
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "pdfmake/build/vfs_fonts";
-// (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
-// for build
 import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "./vfs_fonts";
-(<any>pdfMake).vfs = pdfFonts.pdfMake;
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
+// // for build
+// import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "./vfs_fonts";
+// (<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const months = [
   "Janeiro",
@@ -64,6 +64,16 @@ async function pdfDescription(
       });
     }
     lineRows.push({
+      text: `R$ ${(budget.total - budget.totalNoDiscount).toLocaleString(
+        "pt-BR",
+        {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }
+      )}`,
+      bold: true,
+    });
+    lineRows.push({
       text: `R$ ${budget.total.toLocaleString("pt-BR", {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
@@ -76,10 +86,37 @@ async function pdfDescription(
   }
   let lastRow_days = [];
   let lastRow_extras = [];
-  for (let count = 0; count <= realBudget.columns.length; count++) {
+  for (let count = 0; count <= realBudget.columns.length + 1; count++) {
     if (count === 0) {
       lastRow_days.push({ text: "TOTAL", bold: true });
       lastRow_extras.push({ text: "TOTAL", bold: true });
+    } else if (count === realBudget.columns.length) {
+      let total_days = 0;
+      let total_extras = 0;
+      for (let day of rows_days) {
+        total_days += onlyNumber(day[count].text);
+      }
+
+      for (let extra of rows_extra) {
+        total_extras += onlyNumber(extra[count].text);
+      }
+
+      lastRow_days.push({
+        text: `R$ -${total_days.toLocaleString("pt-BR", {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}`,
+        bold: true,
+        color: "#d05c45",
+      });
+      lastRow_extras.push({
+        text: `R$ ${total_extras.toLocaleString("pt-BR", {
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        })}`,
+        bold: true,
+        color: "#d05c45",
+      });
     } else {
       let total_days = 0;
       let total_extras = 0;
@@ -105,13 +142,6 @@ async function pdfDescription(
         })}`,
         bold: true,
       });
-
-      console.log(
-        `R$ ${total_extras.toLocaleString("pt-BR", {
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2,
-        })}`
-      );
     }
   }
 
@@ -119,6 +149,7 @@ async function pdfDescription(
     text: title,
     bold: true,
   }));
+  columns.push({ text: "desconto aplicado", bold: true });
   columns.push({ text: "TOTAL", bold: true });
 
   let total =

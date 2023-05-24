@@ -56,6 +56,8 @@ export interface GenerateTariffContextProps {
     setDiscount: React.Dispatch<React.SetStateAction<number | null>>
   ) => void;
   handleConfirmModalPermission: (password: string) => Promise<boolean>;
+  setDailyCourtesy: React.Dispatch<React.SetStateAction<boolean>>;
+  dailyCourtesy: boolean;
 }
 
 export type SelectionRangeProps = {
@@ -78,6 +80,10 @@ export type DataContentProps = {
   rows: Array<RowsProps> | [];
   columns: string[] | [];
   arrComplete?: any;
+  total?: {
+    total: number;
+    noDiscount: number;
+  };
 };
 
 //form
@@ -94,6 +100,12 @@ export interface CategoriesProps {
 
 export type TypeModalProps = "person" | "ticket" | "tourism";
 export type PensionsOptionsProps = "simples" | "meia" | "completa";
+export type CategoryOptionsStringProps =
+  | "padrão"
+  | "padrão varanda"
+  | "luxo"
+  | "luxo conjugado"
+  | "luxo com hidro";
 
 export interface RequirementSubmitProps {
   requirement: string;

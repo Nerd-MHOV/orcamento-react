@@ -1,0 +1,96 @@
+import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
+import { Box } from "@mui/system";
+import { useContext, useEffect, useState } from "react";
+import { LayoutBudget } from "../../components/Layout";
+import { SearchInputBudget } from "../../components/SearchBudget";
+import CollapsibleTableBudgets from "../../components/TableCollapseBudgets";
+import { createData } from "../../components/TableCollapseBudgets/helpers";
+import { AuthContext } from "../../context/authContext";
+import { useApi } from "../../hooks/api/api";
+import { ApiSavedBudgetsProps } from "../../hooks/api/interfaces";
+
+import "./style.scss";
+
+export const BudgetsPage = () => {
+  const api = useApi();
+  const [rows, setRows] = useState<ReturnType<typeof createData>[]>([]);
+  const [budgets, setBudgets] = useState<ApiSavedBudgetsProps[]>([]);
+  const [search, setSearch] = useState("");
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+
+  const getBudgets = async () => {
+    const response = await api.getSavedBudgets(search, onlyFavorites);
+    console.log(response);
+    setBudgets(response);
+  };
+
+  const makeRows = async () => {
+    let rows: ReturnType<typeof createData>[] = [];
+
+    budgets.map((bud) => {
+      let pipeNumber = 0;
+      let total = 0;
+      let uhs = 0;
+      bud.budgets.forEach((row) => {
+        pipeNumber =
+          row.arrComplete.responseForm?.numberPipe !== undefined
+            ? Number(row.arrComplete.responseForm?.numberPipe)
+            : pipeNumber;
+
+        total += row.total.total;
+        uhs++;
+      });
+      rows.push(
+        createData({
+          budgets: bud.budgets,
+          date: new Date(bud.createdAt),
+          product_pipe: pipeNumber,
+          total: total,
+          id: bud.id,
+          user: bud.responsible.name,
+          uhs: uhs,
+          favorites: bud.favorites,
+        })
+      );
+    });
+
+    setRows(rows);
+  };
+
+  useEffect(() => {
+    makeRows();
+  }, [budgets]);
+
+  useEffect(() => {
+    getBudgets();
+  }, [search, onlyFavorites]);
+
+  return (
+    <LayoutBudget>
+      <div className="p20">
+        <div className="containerBx">
+          <div className="top">
+            <div className="titleContainerBx">Gerenciar Orçamentos</div>
+            <Box>
+              <SearchInputBudget setWord={setSearch} />
+              <Box display="flex" alignItems="center">
+                <p style={{ color: "gray" }}>Somente favoritos</p>
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOnlyFavorites(!onlyFavorites)}
+                >
+                  {onlyFavorites ? <CheckBox /> : <CheckBoxOutlineBlank />}
+                </IconButton>
+              </Box>
+            </Box>
+          </div>
+          <div className="table">
+            <CollapsibleTableBudgets rows={rows} reloadRows={getBudgets} />
+          </div>
+        </div>
+      </div>
+    </LayoutBudget>
+  );
+};

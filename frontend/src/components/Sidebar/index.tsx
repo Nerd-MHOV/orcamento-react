@@ -2,7 +2,9 @@ import "./style.scss";
 import Logo from "../../assets/GP.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
+  ContentPasteSearch,
   Dashboard,
+  Discount,
   Group,
   Logout,
   Menu,
@@ -59,6 +61,14 @@ const Sidebar = () => {
               <span className="title">Tarifários</span>
             </Link>
           </li>
+          <li className={pathname.includes("/budgets") ? "hovered" : ""}>
+            <Link to="/budgets" className="link">
+              <span className="icon">
+                <ContentPasteSearch />
+              </span>
+              <span className="title">Orçamentos</span>
+            </Link>
+          </li>
           <li className={pathname.includes("/users") ? "hovered" : ""}>
             <Link to="/users" className="link">
               <span className="icon">
@@ -75,14 +85,22 @@ const Sidebar = () => {
               <span className="title">Requerimentos</span>
             </Link>
           </li>
-          <li className={pathname.includes("/analytic") ? "hovered" : ""}>
+          <li className={pathname.includes("/discounts") ? "hovered" : ""}>
+            <Link to="/discounts" className="link">
+              <span className="icon">
+                <Discount />
+              </span>
+              <span className="title">Descontos</span>
+            </Link>
+          </li>
+          {/* <li className={pathname.includes("/analytic") ? "hovered" : ""}>
             <Link to="/analytic" className="link">
               <span className="icon">
                 <QueryStats />
               </span>
               <span className="title">Análise</span>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link to="/login" className="link" onClick={handleLogout}>
               <span className="icon">

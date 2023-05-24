@@ -34,6 +34,13 @@
         background: #4b74b7;
       }
     }
+    &.whiteBlue {
+      color: #ffffff;
+      background: #3d91ff;
+      &:hover {
+        background: #3c5d96;
+      }
+    }
     &.red {
     color: #ffffff;
     background: #d05c45;

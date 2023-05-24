@@ -29,7 +29,6 @@ export const ButtonsBudget = () => {
     }
     const arrUser = await api.findUniqueUser(userLogin);
     const deal_id = budgets[0].arrComplete.responseForm.numberPipe;
-
     let response;
     if (deal_id) response = await pipe.getaDeal(arrUser.token_pipe, deal_id);
     let name = response?.data?.person_name || "";
@@ -37,6 +36,9 @@ export const ButtonsBudget = () => {
   }
 
   async function generatePdfBudget() {
+    if (budgets.length < 1) {
+      return;
+    }
     pipeChangeDeal(userLogin, budgets);
     if (
       budgets.find((budget) =>
@@ -69,7 +71,7 @@ export const ButtonsBudget = () => {
         onClick={generatePdfBudget}
       />
       <Btn
-        action="Gerar PDF tarifa"
+        action="Memória de Cálculo"
         color="dashboard"
         onClick={generatePdfDescription}
       />

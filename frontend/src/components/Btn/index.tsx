@@ -16,7 +16,15 @@ const Btn = ({
 };
 
 interface BtnProps {
-  color: "green" | "blue" | "darkBlue" | "orange" | "red" | "dashboard" | "";
+  color:
+    | "green"
+    | "blue"
+    | "darkBlue"
+    | "whiteBlue"
+    | "orange"
+    | "red"
+    | "dashboard"
+    | "";
   action: string;
   onClick: any;
 }

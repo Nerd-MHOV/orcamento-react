@@ -13,6 +13,9 @@ import { NewRequirementPage } from "./pages/Requirements/NewRequirement";
 import { Analytic } from "./pages/Analytic";
 import { EditTariff } from "./pages/Tariffs/EditTariff";
 import { EditUsers } from "./pages/Users/EditUsers";
+import { BudgetsPage } from "./pages/Budgets";
+import { DiscountsPage } from "./pages/Discounts";
+import { NewDiscountPage } from "./pages/Discounts/NewDiscount";
 
 function App() {
   return (
@@ -23,6 +26,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route element={<Private />}>
               <Route index element={<Home />} />
+
+              <Route path="/budgets">
+                <Route index element={<BudgetsPage />} />
+              </Route>
+
               <Route element={<PrivateRole level={2} />}>
                 <Route path="/tariffs">
                   <Route index element={<TariffsPage />} />
@@ -40,6 +48,14 @@ function App() {
                   <Route
                     path="/requirements/create"
                     element={<NewRequirementPage />}
+                  />
+                </Route>
+
+                <Route path="/discounts">
+                  <Route index element={<DiscountsPage />} />
+                  <Route
+                    path="/discounts/create"
+                    element={<NewDiscountPage />}
                   />
                 </Route>
               </Route>

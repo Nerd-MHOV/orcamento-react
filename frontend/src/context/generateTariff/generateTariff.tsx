@@ -9,6 +9,7 @@ import { getListRequirements } from "./functions/getters/getListRequirements";
 import { getMonthsWithTariffs } from "./functions/getters/getMonthsWithTariffs";
 import { getUnitUsing } from "./functions/getters/getUnitUsing";
 import { handleForm } from "./functions/handleForm";
+import { calcTotal } from "./functions/calcTotal";
 import {
   dataInitial,
   occupancyInitial,
@@ -28,6 +29,8 @@ import {
   RowModalDiscount,
   TypeModalProps,
 } from "./interfaces";
+import { useApi } from "../../hooks/api/api";
+import { addDays, format } from "date-fns";
 
 export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   handleSelectDate: async () => {},
@@ -78,6 +81,8 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   handleCloseModalPermission() {},
   handleOpenModalPermission() {},
   handleConfirmModalPermission: async (password) => true,
+  setDailyCourtesy() {},
+  dailyCourtesy: false,
 });
 
 export const GenerateTariffProvider = ({
@@ -85,6 +90,8 @@ export const GenerateTariffProvider = ({
 }: {
   children: JSX.Element;
 }) => {
+  const api = useApi();
+  const [dailyCourtesy, setDailyCourtesy] = useState(false);
   const [dataTable, setDataTable] = useState<DataContentProps>(dataInitial);
   const [budgets, setBudgets] = useState<DataContentProps[]>([]);
   const [arrComplete, setArrComplete] = useState<ArrCompleteProps | []>([]);
@@ -177,8 +184,9 @@ export const GenerateTariffProvider = ({
     if (dataTable.rows.length === 0) {
       return;
     }
+    const total = calcTotal(dataTable).total;
     setBudgets((old) => {
-      return [...old, { ...dataTable, arrComplete }];
+      return [...old, { ...dataTable, arrComplete, total }];
     });
   }
 
@@ -339,7 +347,8 @@ export const GenerateTariffProvider = ({
       petValue,
       selectionRange,
       addRows,
-      unitaryDiscount
+      unitaryDiscount,
+      dailyCourtesy
     );
   };
 
@@ -357,6 +366,7 @@ export const GenerateTariffProvider = ({
     pensionValue,
     selectionRange,
     unitaryDiscount,
+    dailyCourtesy,
   ]);
 
   useEffect(() => {
@@ -366,6 +376,11 @@ export const GenerateTariffProvider = ({
   useEffect(() => {
     getVariables();
   }, []);
+
+  useEffect(() => {
+    setDailyCourtesy(false);
+  }, [selectionRange]);
+
   return (
     <GenerateTariffContext.Provider
       value={{
@@ -414,6 +429,8 @@ export const GenerateTariffProvider = ({
         handleCloseModalPermission,
         handleOpenModalPermission,
         handleConfirmModalPermission,
+        dailyCourtesy,
+        setDailyCourtesy,
       }}
     >
       {children}

@@ -6,13 +6,9 @@ import {
   Table,
   TableBody,
   Paper,
-  TextField,
-  InputAdornment,
-  Input,
-  FormControl,
-  OutlinedInput,
 } from "@mui/material";
 import { useContext } from "react";
+import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
 
@@ -61,36 +57,10 @@ const TableCalc = () => {
   const { dataTable: data, handleClickOpenModalDiscount } = useContext(
     GenerateTariffContext
   );
-  let totalPerRow: {
-    total: number;
-    noDiscount: number;
-  }[] = [];
-  let total = {
-    total: 0,
-    noDiscount: 0,
-  };
-  if (data.rows)
-    data.rows.map((row, rowIndex) => {
-      if (row.values)
-        row.values.map((value, index) => {
-          if (totalPerRow[index]) {
-            totalPerRow[index].total += value;
-            totalPerRow[index].noDiscount +=
-              data.rows[rowIndex].noDiscount[index];
-          } else {
-            totalPerRow[index] = {
-              total: value,
-              noDiscount: data.rows[rowIndex].noDiscount[index],
-            };
-          }
-        });
-    });
 
-  total.noDiscount = totalPerRow.reduce(
-    (total, arr) => total + arr.noDiscount,
-    0
-  );
-  total.total = totalPerRow.reduce((total, arr) => total + arr.total, 0);
+  let calc = calcTotal(data);
+  let totalPerRow = calc.totalPerRow;
+  let total = calc.total;
 
   return (
     <TableContainer component={Paper}>

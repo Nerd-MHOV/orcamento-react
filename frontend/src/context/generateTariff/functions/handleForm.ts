@@ -15,7 +15,8 @@ export async function handleForm(
   petValue: any[],
   selectionRange: selectionRange,
   addRows: (rows: any[], arrComplete: any) => void,
-  unitaryDiscount: RowModalDiscount[]
+  unitaryDiscount: RowModalDiscount[],
+  dailyCourtesy: boolean
 ) {
   const api = useApi();
 
@@ -56,7 +57,8 @@ export async function handleForm(
     petValue,
     requirementValue,
     selectionRange,
-    unitaryDiscount
+    unitaryDiscount,
+    dailyCourtesy
   );
 
   addRows(response.rows, {

@@ -8,22 +8,33 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { TextField } from "@mui/material";
 import "./style.scss";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { getAllowedDiscount } from "../../context/generateTariff/functions/getters/getAllowedDiscount";
 
 export function ModalDiscount() {
   const {
     handleCloseModalDiscount: handleClose,
     handleSaveModalDiscount,
     openModalDiscount: open,
+    selectionRange,
     discountBeingEdited,
     addUnitaryDiscount,
   } = React.useContext(GenerateTariffContext);
 
   const [password, setPassword] = React.useState("");
+  const [passIsRequired, setPassIsRequired] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [discount, setDiscount] = React.useState<number | null>(null);
-  const handleChangeDiscount = (value: number) => {
-    console.log(discountBeingEdited);
+  const handleChangeDiscount = async (value: number) => {
+    let limit = await getAllowedDiscount(selectionRange);
+
+    if (value > limit.unitaryAllowed) {
+      console.log("bateu");
+      setPassIsRequired(true);
+    } else {
+      setPassIsRequired(false);
+    }
+    console.log(limit, passIsRequired);
     if (value < 0) setDiscount(null);
     else if (value > 100) setDiscount(100);
     else setDiscount(value);
@@ -31,7 +42,7 @@ export function ModalDiscount() {
 
   const handleSave = () => {
     setError(false);
-    if (password !== "admin@2355") {
+    if (password !== "admin@2355" && passIsRequired) {
       setError(true);
       return;
     }
@@ -76,6 +87,7 @@ export function ModalDiscount() {
                 handleChangeDiscount(+e.target.value);
               }}
             />
+
             <TextField
               autoFocus
               margin="dense"
@@ -85,6 +97,7 @@ export function ModalDiscount() {
               error={error}
               fullWidth
               variant="standard"
+              disabled={!passIsRequired}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);

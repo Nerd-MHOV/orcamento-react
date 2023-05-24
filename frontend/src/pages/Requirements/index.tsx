@@ -3,22 +3,12 @@ import { Link } from "react-router-dom";
 import Btn from "../../components/Btn";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
-import CollapsibleTableTariff from "../../components/TableCollapseTariffs";
-import { createData } from "../../components/TableCollapseTariffs/helpers";
 import TableRequirements, {
   createRequirementsData,
   dataRequirementsProps,
 } from "../../components/TableRequirements";
-import TableUsers, {
-  createDataUsers,
-  dataUserProps,
-} from "../../components/TableUsers";
 import { useApi } from "../../hooks/api/api";
-import {
-  AllTariffsProps,
-  ApiRequirementsProps,
-  ApiUserProps,
-} from "../../hooks/api/interfaces";
+import { ApiRequirementsProps } from "../../hooks/api/interfaces";
 import "./style.scss";
 
 export const RequirementsPage = () => {
