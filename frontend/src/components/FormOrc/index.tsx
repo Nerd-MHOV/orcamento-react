@@ -71,7 +71,7 @@ export const FormOrc = () => {
           </div>
           <div
             className="daily-courtesy"
-            style={!dailyCourtesy ? { display: "none" } : {}}
+            // style={dailyCourtesy ? { display: "none" } : {}}
           >
             <IconButton
               aria-label="expand row"

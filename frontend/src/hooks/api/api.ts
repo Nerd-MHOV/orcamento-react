@@ -204,13 +204,15 @@ export const useApi = () => ({
     name: string,
     percent_general: number,
     percent_unitary: number,
-    dates: { date: string }[]
+    dates: { date: string }[],
+    daily_courtesy: boolean = false
   ): Promise<"success" | "error"> => {
     const response = await api.post("/discount", {
       name,
       percent_general,
       percent_unitary,
       dates,
+      daily_courtesy,
     });
     return response.data.msg;
   },
