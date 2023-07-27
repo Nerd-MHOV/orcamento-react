@@ -24,6 +24,10 @@ export interface ApiDiscountProps {
   percent_general: number;
   percent_unitary: number;
   daily_courtesy: boolean;
+  daily_minimum: number;
+  daily_maximum: number;
+  payers_minimum: number;
+  applicable_in: "midweek" | "weekend" | "all";
   active: boolean;
   dates: ApiDiscountDateProps[];
 }

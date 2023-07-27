@@ -20,13 +20,13 @@ export const ButtonsBudget = () => {
     EvitaBug(budgets, "token");
   }
   async function generatePdfDescription() {
-    if (
-      budgets.find((budget) =>
-        budget.arrComplete.responseForm.category.match(/Day-Use/)
-      )
-    ) {
-      return;
-    }
+    // if (
+    //   budgets.find((budget) =>
+    //     budget.arrComplete.responseForm.category.match(/Day-Use/)
+    //   )
+    // ) {
+    //   return;
+    // }
     const arrUser = await api.findUniqueUser(userLogin);
     const deal_id = budgets[0].arrComplete.responseForm.numberPipe;
     let response;

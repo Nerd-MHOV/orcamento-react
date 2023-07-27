@@ -13,8 +13,6 @@ import {
   Edit,
 } from "@mui/icons-material";
 import { useApi } from "../../hooks/api/api";
-import { deleteUser } from "../../pages/Users/deleteUser";
-import { DialogDeleteUser } from "../DialogDeleteUser";
 import { DialogDeleteRequirement } from "../DialogDeleteRequirement";
 import { deleteRequirement } from "../../pages/Requirements/deleteRequirement";
 import DialogPriceRequirement from "../DialogPriceRequirement";

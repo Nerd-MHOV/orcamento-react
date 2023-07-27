@@ -190,10 +190,14 @@ model BudgetsFavorites {
 
 model Discounts {
   id              String          @id @default(uuid())
-  name            String
+  name            String          @unique
   percent_general Float
   percent_unitary Float
   daily_courtesy  Boolean
+  daily_minimum   Int
+  daily_maximum   Int
+  payers_minimum  Int
+  applicable_in   String
   active          Boolean         @default(true)
   dates           DiscountDates[]
 
@@ -201,7 +205,8 @@ model Discounts {
 }
 
 model DiscountDates {
-  date        String    @id
+  id          String    @id @default(uuid())
+  date        String
   discount_id String
   discount    Discounts @relation(fields: [discount_id], references: [id], onDelete: Cascade)
 

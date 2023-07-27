@@ -40,7 +40,7 @@ export async function pipeChangeDeal(
       )
       .then((tariff_pipe) => {
         // pipe.addFile();
-        pipe.addProduct(token, dealId, tariff_pipe.product_pipe, valueMinimum);
+        pipe.addProduct(token, dealId, +tariff_pipe.product_pipe, valueMinimum);
         pipe.changePipeline(token, dealId, user.user_pipe);
       })
       .catch((err) => console.log(err));

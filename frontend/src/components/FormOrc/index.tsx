@@ -16,6 +16,7 @@ import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useApi } from "../../hooks/api/api";
 import { getAllowedDiscount } from "../../context/generateTariff/functions/getters/getAllowedDiscount";
+import { ActionInputForm } from "./partForm/action";
 
 export const FormOrc = () => {
   const {
@@ -25,19 +26,24 @@ export const FormOrc = () => {
     selectionRange,
     setDailyCourtesy: setCheckCourtesy,
     dailyCourtesy: checkCourtesy,
+    actionSelected,
+    dataTable,
   } = useContext(GenerateTariffContext);
 
-  const api = useApi();
   const [dailyCourtesy, setDailyCourtesy] = useState(false);
 
   const getIsCourtesy = async () => {
-    const isCourtesy = await getAllowedDiscount(selectionRange);
-    setDailyCourtesy(isCourtesy.daily_courtesy);
+    const isCourtesy = actionSelected?.daily_courtesy ?? false;
+    setDailyCourtesy(isCourtesy);
+    console.log(actionSelected, "actionSelected");
+    if (!isCourtesy) {
+      setCheckCourtesy(false);
+    }
   };
 
   useEffect(() => {
     getIsCourtesy();
-  }, [selectionRange]);
+  }, [actionSelected, selectionRange, dataTable]);
 
   return (
     <>
@@ -59,6 +65,10 @@ export const FormOrc = () => {
             <RequirementInputForm />
           </div>
         </form>
+        <div style={{ width: "100%" }}>
+          <ActionInputForm />
+        </div>
+
         <div className="pos-form">
           <div>
             <div
@@ -71,7 +81,7 @@ export const FormOrc = () => {
           </div>
           <div
             className="daily-courtesy"
-            // style={dailyCourtesy ? { display: "none" } : {}}
+            style={!dailyCourtesy ? { display: "none" } : {}}
           >
             <IconButton
               aria-label="expand row"

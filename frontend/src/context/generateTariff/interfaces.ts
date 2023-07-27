@@ -1,3 +1,4 @@
+import { ApiDiscountProps } from "../../hooks/api/interfaces";
 import { AppHotelProps } from "../../hooks/appHotel/interfaces";
 
 export interface GenerateTariffContextProps {
@@ -58,6 +59,10 @@ export interface GenerateTariffContextProps {
   handleConfirmModalPermission: (password: string) => Promise<boolean>;
   setDailyCourtesy: React.Dispatch<React.SetStateAction<boolean>>;
   dailyCourtesy: boolean;
+  setActionSelected: React.Dispatch<
+    React.SetStateAction<ApiDiscountProps | undefined>
+  >;
+  actionSelected: ApiDiscountProps | undefined;
 }
 
 export type SelectionRangeProps = {

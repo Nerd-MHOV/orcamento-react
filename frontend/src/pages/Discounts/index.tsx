@@ -26,7 +26,7 @@ export const DiscountsPage = () => {
       <div className="p20">
         <div className="containerBx">
           <div className="top">
-            <div className="titleContainerBx">Gerenciar descontos</div>
+            <div className="titleContainerBx">Gerenciar Ação</div>
             <Link to="/discounts/create" className="link">
               <Btn action=" + " color="dashboard" onClick={() => {}} />
             </Link>

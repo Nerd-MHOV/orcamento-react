@@ -16,10 +16,10 @@ export async function duAdultBudget(
     let totalAdult = 0;
     valuesAdult = await duGenerateBudget(initDate, arrForm, "adt");
 
-    //single
-    if (Number(amountAdults) === 1 && arrChild.length === 0) {
-      valuesAdult = valuesAdult.map((value) => value * 2);
-    }
+    // //single
+    // if (Number(amountAdults) === 1 && arrChild.length === 0) {
+    //   valuesAdult = valuesAdult.map((value) => value * 2);
+    // }
 
     for (let i = 0; i < valuesAdult.length; i++) {
       totalAdult += valuesAdult[i];

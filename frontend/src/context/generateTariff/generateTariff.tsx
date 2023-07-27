@@ -31,6 +31,7 @@ import {
 } from "./interfaces";
 import { useApi } from "../../hooks/api/api";
 import { addDays, format } from "date-fns";
+import { ApiDiscountProps } from "../../hooks/api/interfaces";
 
 export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   handleSelectDate: async () => {},
@@ -83,6 +84,8 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   handleConfirmModalPermission: async (password) => true,
   setDailyCourtesy() {},
   dailyCourtesy: false,
+  setActionSelected() {},
+  actionSelected: undefined,
 });
 
 export const GenerateTariffProvider = ({
@@ -133,6 +136,9 @@ export const GenerateTariffProvider = ({
   const [functionChangeDiscount, setFunctionChangeDiscount] = useState({
     func: function (value: number) {},
   });
+  const [actionSelected, setActionSelected] = useState<
+    ApiDiscountProps | undefined
+  >();
 
   const handleOpenModalPermission = (
     value: number,
@@ -151,6 +157,15 @@ export const GenerateTariffProvider = ({
 
   const handleConfirmModalPermission = async (password: string) => {
     if (password === "admin@2355") {
+      functionChangeDiscount.func(valuePermissionModal);
+      return true;
+    }
+
+    if (
+      password === "ajuste" &&
+      valuePermissionModal &&
+      valuePermissionModal <= 20
+    ) {
       functionChangeDiscount.func(valuePermissionModal);
       return true;
     }
@@ -431,6 +446,8 @@ export const GenerateTariffProvider = ({
         handleConfirmModalPermission,
         dailyCourtesy,
         setDailyCourtesy,
+        actionSelected,
+        setActionSelected,
       }}
     >
       {children}

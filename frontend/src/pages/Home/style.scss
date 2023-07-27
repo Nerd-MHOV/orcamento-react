@@ -11,6 +11,10 @@
           display: none;
         }
 
+        .rdrWeekDays span:first-child {
+          margin-right: 6px;
+        }
+
         .buttons {
           margin-top: 15px;
           display: flex;

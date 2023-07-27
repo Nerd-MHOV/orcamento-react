@@ -22,7 +22,7 @@ import {
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-  baseURL: "http://localhost:3333",
+  baseURL: "http://192.168.10.87:3333",
   headers: {
     Authorization: `Bearer ${storageData}`,
   },
@@ -204,8 +204,12 @@ export const useApi = () => ({
     name: string,
     percent_general: number,
     percent_unitary: number,
+    daily_minimum: number,
+    daily_maximum: number,
+    payers_minimum: number,
     dates: { date: string }[],
-    daily_courtesy: boolean = false
+    daily_courtesy: boolean,
+    applicable_in: "midweek" | "weekend" | "all"
   ): Promise<"success" | "error"> => {
     const response = await api.post("/discount", {
       name,
@@ -213,6 +217,10 @@ export const useApi = () => ({
       percent_unitary,
       dates,
       daily_courtesy,
+      daily_minimum,
+      daily_maximum,
+      payers_minimum,
+      applicable_in,
     });
     return response.data.msg;
   },

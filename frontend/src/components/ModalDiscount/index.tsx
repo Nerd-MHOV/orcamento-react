@@ -18,17 +18,21 @@ export function ModalDiscount() {
     selectionRange,
     discountBeingEdited,
     addUnitaryDiscount,
+    dataTable,
+    actionSelected,
   } = React.useContext(GenerateTariffContext);
 
+  console.log(dataTable, "here");
   const [password, setPassword] = React.useState("");
   const [passIsRequired, setPassIsRequired] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [discount, setDiscount] = React.useState<number | null>(null);
-  const handleChangeDiscount = async (value: number) => {
-    let limit = await getAllowedDiscount(selectionRange);
 
-    if (value > limit.unitaryAllowed) {
+  const handleChangeDiscount = async (value: number) => {
+    let limit = actionSelected?.percent_unitary ?? 0;
+
+    if (value > limit) {
       console.log("bateu");
       setPassIsRequired(true);
     } else {
@@ -43,8 +47,11 @@ export function ModalDiscount() {
   const handleSave = () => {
     setError(false);
     if (password !== "admin@2355" && passIsRequired) {
-      setError(true);
-      return;
+      if (password == "ajuste" && discount && discount <= 20) {
+      } else {
+        setError(true);
+        return;
+      }
     }
 
     if (discount === discountBeingEdited.discount) {

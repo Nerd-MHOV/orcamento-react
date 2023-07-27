@@ -2,15 +2,24 @@
     .form {
         display: flex;
         flex-direction: column;
+        
         .grid {
+
             display: flex;
             flex-direction: column;
             gap: 20px;
-            .buttons {
-                width: 100%;
+            
+
+            .daily-courtesy {
                 display: flex;
-                justify-content: space-between;
+                align-items: center;
+                
             }
+        }
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
         .button {
             margin-top: 20px;

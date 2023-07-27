@@ -1,7 +1,6 @@
 import express from "express";
 import routes from "./routes";
 import cors from "cors";
-import { errorMiddleware } from "./middlewares/error";
 
 require("dotenv").config();
 
@@ -14,6 +13,7 @@ const whiteList = [
   "http://192.168.99.105:5173",
   "http://localhost:4173",
   "http://192.168.10.87:81",
+  "http://localhost:81",
   "http://192.168.10.87:3333",
 ];
 app.use(

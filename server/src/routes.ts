@@ -140,6 +140,8 @@ routes.post("/tariff/delete", isAdmin, deleteTariff.handle);
 routes.post("/tariff/order", changeOrderTariff.handle);
 routes.post("/tariff/active", toggleActiveTariff.handle);
 
+
+//---------- stop here
 routes.get("/tariff-value", findTariffValue.handle);
 routes.post("/tariff-value", createTariffValue.handle);
 

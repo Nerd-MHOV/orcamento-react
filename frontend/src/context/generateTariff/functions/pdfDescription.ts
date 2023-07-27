@@ -4,14 +4,14 @@ import { blue, red } from "@mui/material/colors";
 import { format } from "date-fns";
 
 // for dev
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+// import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "pdfmake/build/vfs_fonts";
+// (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 // // for build
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "./vfs_fonts";
-// (<any>pdfMake).vfs = pdfFonts.pdfMake;
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "./vfs_fonts";
+(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const months = [
   "Janeiro",
@@ -41,12 +41,11 @@ async function pdfDescription(
   token: string,
   namePerson: string
 ) {
+  console.log("chegou aqui");
   let realBudget = budgets[0];
   console.log(realBudget, "realBudget");
-  let housingUnit = realBudget.arrComplete.responseForm.housingUnit.substr(
-    0,
-    3
-  );
+  let housingUnit =
+    realBudget.arrComplete?.responseForm?.housingUnit?.substr(0, 3) || `1000`;
 
   let rows_days = new Array();
   let rows_extra = new Array();
@@ -54,13 +53,16 @@ async function pdfDescription(
   for (let budget of realBudget.rows) {
     let lineRows = [];
 
-    lineRows.push({ text: budget.desc });
+    lineRows.push({ text: budget.desc, style: { fontSize: 9 } });
     for (let value of budget.values) {
       lineRows.push({
         text: `R$ ${value.toLocaleString("pt-BR", {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         })}`,
+        style: {
+          fontSize: 9,
+        },
       });
     }
     lineRows.push({
@@ -71,6 +73,9 @@ async function pdfDescription(
           minimumFractionDigits: 2,
         }
       )}`,
+      style: {
+        fontSize: 9,
+      },
       bold: true,
     });
     lineRows.push({
@@ -78,6 +83,9 @@ async function pdfDescription(
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
       })}`,
+      style: {
+        fontSize: 9,
+      },
       bold: true,
     });
 
@@ -88,8 +96,16 @@ async function pdfDescription(
   let lastRow_extras = [];
   for (let count = 0; count <= realBudget.columns.length + 1; count++) {
     if (count === 0) {
-      lastRow_days.push({ text: "TOTAL", bold: true });
-      lastRow_extras.push({ text: "TOTAL", bold: true });
+      lastRow_days.push({
+        text: "Total de Diárias",
+        bold: true,
+        style: { fontSize: 8 },
+      });
+      lastRow_extras.push({
+        text: "Total de Extras",
+        bold: true,
+        style: { fontSize: 8 },
+      });
     } else if (count === realBudget.columns.length) {
       let total_days = 0;
       let total_extras = 0;
@@ -107,6 +123,9 @@ async function pdfDescription(
           minimumFractionDigits: 2,
         })}`,
         bold: true,
+        style: {
+          fontSize: 9,
+        },
         color: "#d05c45",
       });
       lastRow_extras.push({
@@ -115,6 +134,9 @@ async function pdfDescription(
           minimumFractionDigits: 2,
         })}`,
         bold: true,
+        style: {
+          fontSize: 9,
+        },
         color: "#d05c45",
       });
     } else {
@@ -133,6 +155,9 @@ async function pdfDescription(
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         })}`,
+        style: {
+          fontSize: 9,
+        },
         bold: true,
       });
       lastRow_extras.push({
@@ -140,6 +165,9 @@ async function pdfDescription(
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         })}`,
+        style: {
+          fontSize: 9,
+        },
         bold: true,
       });
     }
@@ -148,9 +176,24 @@ async function pdfDescription(
   let columns = realBudget.columns.map((title: string) => ({
     text: title,
     bold: true,
+    style: {
+      fontSize: 8,
+    },
   }));
-  columns.push({ text: "desconto aplicado", bold: true });
-  columns.push({ text: "TOTAL", bold: true });
+  columns.push({
+    text: "desconto aplicado",
+    bold: true,
+    style: {
+      fontSize: 8,
+    },
+  });
+  columns.push({
+    text: "TOTAL",
+    bold: true,
+    style: {
+      fontSize: 8,
+    },
+  });
 
   let total =
     onlyNumber(lastRow_days.at(-1)?.text) +
@@ -198,15 +241,10 @@ async function pdfDescription(
         ],
       },
       {
-        text:
-          realBudget.arrComplete.responseForm.category +
-          " - R$: " +
-          total.toLocaleString("pt-BR", {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          }),
+        text: realBudget.arrComplete.responseForm.category,
+
         style: {
-          fontSize: 20,
+          fontSize: 18,
         },
         bold: true,
       },
@@ -300,6 +338,61 @@ async function pdfDescription(
         },
       },
       {
+        text: " ",
+        style: {
+          margin: 200,
+        },
+      },
+      {
+        table: {
+          widths: ["*", "*"],
+          body: [
+            [
+              {
+                text: "Total da UH",
+                alignment: "left",
+                fontSize: 9,
+                bold: true,
+              },
+              {
+                text:
+                  "R$ " +
+                  total.toLocaleString("pt-BR", {
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2,
+                  }),
+                alignment: "right",
+                fontSize: 10,
+                bold: true,
+              },
+            ],
+          ],
+        },
+        layout: {
+          hLineWidth: function (i, node) {
+            return i === 0 || i === node.table.body.length ? 2 : 1;
+          },
+          vLineWidth: function (i, node) {
+            return i === 0 || i === node.table.widths?.length ? 2 : 1;
+          },
+          hLineColor: function (i, node) {
+            return i === 0 || i === node.table.body.length ? "black" : "gray";
+          },
+          vLineColor: function (i, node) {
+            return i === 0 || i === node.table.widths?.length
+              ? "black"
+              : "gray";
+          },
+          // hLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+          // vLineStyle: function (i, node) { return {dash: { length: 10, space: 4 }}; },
+          // paddingLeft: function(i, node) { return 4; },
+          // paddingRight: function(i, node) { return 4; },
+          // paddingTop: function(i, node) { return 2; },
+          // paddingBottom: function(i, node) { return 2; },
+          // fillColor: function (rowIndex, node, columnIndex) { return null; }
+        },
+      },
+      {
         text: `000000${housingUnit}09928`,
         alignment: "right",
         fontSize: 8,
@@ -311,7 +404,7 @@ async function pdfDescription(
         bold: true,
       },
       description: {
-        fontSize: 10,
+        fontSize: 8,
       },
     },
   };
@@ -327,7 +420,7 @@ async function pdfDescription(
         token,
         deal_id,
         blob,
-        "Descrição.pdf"
+        `Descrição-${format(new Date(), "dd-MM-yy")}.pdf`
       );
       console.log(response);
     });

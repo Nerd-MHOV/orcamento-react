@@ -1,4 +1,4 @@
-import { addDays, isWeekend } from "date-fns";
+import { addDays, format, isWeekend } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
@@ -10,7 +10,6 @@ export async function duGenerateBudget(
 ) {
   const valuesBudget = [];
   let tariffBudget = 0;
-
   let tariffName = "";
 
   if (arrForm.category.match(/Full/)) {
@@ -27,6 +26,26 @@ export async function duGenerateBudget(
     } else {
       tariffName = "Day-Use 2023 - Tradicional - MDS";
     }
+  }
+
+  const responseSpecific = await prismaClient.specificDates.findFirst({
+    where: {
+      date: format(date, "yyyy-MM-dd"),
+    },
+    include: {
+      tariffs: {
+        include: {
+          food: true,
+          TariffValues: true,
+        },
+      },
+    },
+  });
+
+  if (responseSpecific) {
+    if (arrForm.category.match(/Full/))
+      tariffName = "Day-Use 2023 - Full - FDS";
+    else tariffName = "Day-Use 2023 - Tradicional - FDS";
   }
 
   let tariffs = await prismaClient.dUTariff.findUnique({

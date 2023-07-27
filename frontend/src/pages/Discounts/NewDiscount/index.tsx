@@ -9,7 +9,7 @@ export const NewDiscountPage = () => {
       <div className="p20">
         <div className="containerBx">
           <div className="top">
-            <div className="titleContainerBx">Cadastrar Desconto</div>
+            <div className="titleContainerBx">Cadastrar Ação</div>
           </div>
           <div className="form">
             <FormNewDiscount />

@@ -6,4 +6,7 @@
 .form {
     margin-top: 20px;
     justify-content: center;
+    .rdrWeekDays span:first-child {
+        margin-right: 6px;
+      }
 }

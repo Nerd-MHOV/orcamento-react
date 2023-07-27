@@ -9,16 +9,15 @@ export const DiscountInputForm = () => {
     callHandleForm,
     handleOpenModalPermission,
     selectionRange,
+    actionSelected,
   } = useContext(GenerateTariffContext);
   const [discount, setDiscount] = useState<number | null>(null);
   const handleChangeDiscount = async (value: number) => {
-    let limit = await getAllowedDiscount(selectionRange);
+    let limit = actionSelected?.percent_general ?? 10;
 
-    console.log(limit);
-    if (limit.generalAllowed === 0) limit.generalAllowed = 10;
-    if (value > limit.generalAllowed) {
+    if (value > limit) {
       verifyPermission(value);
-      value = limit.generalAllowed;
+      value = limit;
     }
     if (value < 0) setDiscount(null);
     else if (value > 100) setDiscount(100);

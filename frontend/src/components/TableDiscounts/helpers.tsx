@@ -11,15 +11,27 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useApi } from "../../hooks/api/api";
 
 import {
+  CalendarMonth,
   CheckBox,
   CheckBoxOutlineBlank,
   Delete,
   Edit,
+  Event,
+  Person,
 } from "@mui/icons-material";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { DialogDeleteDiscount } from "../DialogDeleteDiscount";
+import { DateRange } from "react-date-range";
+import { Box } from "@mui/system";
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from "@mui/material";
 
 export const head = [
   "Nome",
@@ -27,7 +39,7 @@ export const head = [
   "Porcentagem Unitária",
   "Diária Cortesia",
   "Ativo",
-  "Editar",
+  // "Editar",
   "Deletar",
 ];
 
@@ -116,11 +128,11 @@ export function Row(props: {
             {row.active ? <CheckBox /> : <CheckBoxOutlineBlank />}
           </IconButton>
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => {}}>
             <Edit />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -134,29 +146,98 @@ export function Row(props: {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Table size="small" aria-label="purchases">
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Datas</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {row.dates.map((date) => (
-                  <TableRow key={date.date}>
-                    <TableCell></TableCell>
+        <TableCell
+          style={{ paddingBottom: 0, paddingTop: 0, position: "relative" }}
+          colSpan={4}
+        >
+          <Collapse
+            in={open}
+            timeout="auto"
+            unmountOnExit
+            style={{ position: "relative" }}
+          >
+            <Box
+              display="flex"
+              gap={4}
+              mt={4}
+              justifyContent="center"
+              position="relative"
+            >
+              <DateRange
+                className="calendar"
+                ranges={row.dates.map((date, index) => {
+                  return {
+                    startDate: new Date(date.date),
+                    endDate: new Date(date.date),
+                    key: index.toString(),
+                  };
+                })}
+                onChange={() => {}}
+                rangeColors={[]}
+                locale={ptBR}
+              />
 
-                    <TableCell>
-                      {format(new Date(date.date), "dd / MM / yy", {
-                        locale: ptBR,
-                      })}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+              <Box>
+                <List
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <CalendarMonth />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Mínimo de diárias:"
+                      secondary={row.daily_minimum}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <CalendarMonth />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Máximo de diárias:"
+                      secondary={row.daily_maximum}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <Person />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Mínimo de pagantes:"
+                      secondary={row.payers_minimum}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <Event />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Aplicado em:"
+                      secondary={
+                        row.applicable_in === "midweek"
+                          ? "Somente Meio de Semana"
+                          : row.applicable_in === "weekend"
+                          ? "Somente Fim de Semana"
+                          : "Tudo"
+                      }
+                    />
+                  </ListItem>
+                </List>
+              </Box>
+            </Box>
           </Collapse>
         </TableCell>
       </TableRow>
