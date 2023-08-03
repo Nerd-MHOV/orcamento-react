@@ -6,7 +6,6 @@ import { LayoutBudget } from "../../components/Layout";
 import { SearchInputBudget } from "../../components/SearchBudget";
 import CollapsibleTableBudgets from "../../components/TableCollapseBudgets";
 import { createData } from "../../components/TableCollapseBudgets/helpers";
-import { AuthContext } from "../../context/authContext";
 import { useApi } from "../../hooks/api/api";
 import { ApiSavedBudgetsProps } from "../../hooks/api/interfaces";
 
@@ -29,14 +28,14 @@ export const BudgetsPage = () => {
     let rows: ReturnType<typeof createData>[] = [];
 
     budgets.map((bud) => {
-      let pipeNumber = 0;
+      let id_rd = "";
       let total = 0;
       let uhs = 0;
       bud.budgets.forEach((row) => {
-        pipeNumber =
-          row.arrComplete.responseForm?.numberPipe !== undefined
-            ? Number(row.arrComplete.responseForm?.numberPipe)
-            : pipeNumber;
+        id_rd =
+          row.arrComplete.responseForm?.rd_client !== undefined
+            ? row.arrComplete.responseForm?.rd_client
+            : id_rd;
 
         total += row.total.total;
         uhs++;
@@ -45,12 +44,14 @@ export const BudgetsPage = () => {
         createData({
           budgets: bud.budgets,
           date: new Date(bud.createdAt),
-          product_pipe: pipeNumber,
+          rd_client: id_rd,
           total: total,
           id: bud.id,
           user: bud.responsible.name,
           uhs: uhs,
           favorites: bud.favorites,
+          name: bud.name,
+          status: bud.status
         })
       );
     });

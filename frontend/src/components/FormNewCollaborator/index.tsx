@@ -102,7 +102,7 @@ export const FormNewCollaborator = () => {
             required
             margin="dense"
             {...register("token")}
-            label="Token Pipe"
+            label="Token RD"
             type="text"
             variant="outlined"
           />
@@ -110,7 +110,7 @@ export const FormNewCollaborator = () => {
             required
             margin="dense"
             {...register("user_pipe")}
-            label="nº do Usuário Pipe"
+            label="ID do Usuário RD"
             type="text"
             variant="outlined"
           />

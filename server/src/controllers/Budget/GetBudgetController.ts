@@ -17,6 +17,7 @@ export class GetBudgetController {
         responsible: true,
         favorites: true,
       },
+      take: 100,
       orderBy: {
         createdAt: "desc",
       },
@@ -72,6 +73,18 @@ export class GetBudgetController {
                   path: ["1", "columns", "1"],
                   string_contains: query,
                 },
+              },
+              {
+                name: {
+                  contains: query,
+                  mode: "insensitive"
+                }
+              },
+              {
+                status: {
+                  contains: query,
+                  mode: "insensitive"
+                }
               },
               {
                 responsible: {

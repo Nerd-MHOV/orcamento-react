@@ -9,7 +9,7 @@ import { prismaClient } from "../../database/prismaClient";
 
 export class UpdateSpecificDateController {
   async handle(request: Request, response: Response) {
-    const { product_pipe, values, checkIn, food, dates } = request.body;
+    const { product_rd, values, checkIn, food, dates } = request.body;
     const { name } = request.params;
     try {
       const [limparDates, createNewDates] = await prismaClient.$transaction([
@@ -17,7 +17,7 @@ export class UpdateSpecificDateController {
         prismaClient.specificDates.createMany({ data: dates }),
       ]);
 
-      values.forEach(async (val: TariffValues) => {
+      for (const val of values) {
         const { id: id, ...newValues } = val;
         await prismaClient.tariffValues.update({
           where: {
@@ -25,9 +25,9 @@ export class UpdateSpecificDateController {
           },
           data: newValues,
         });
-      });
+      }
 
-      checkIn.forEach(async (val: TariffCheckInValues) => {
+      for (const val of checkIn) {
         const { id: id, ...newValues } = val;
 
         await prismaClient.tariffCheckInValues.update({
@@ -36,7 +36,7 @@ export class UpdateSpecificDateController {
           },
           data: newValues,
         });
-      });
+      }
 
       const { id: id, ...newValues } = food;
       await prismaClient.foods.update({
@@ -49,7 +49,7 @@ export class UpdateSpecificDateController {
           name,
         },
         data: {
-          product_pipe,
+          product_rd,
         },
         include: {
           food: true,

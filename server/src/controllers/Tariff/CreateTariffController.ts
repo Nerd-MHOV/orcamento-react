@@ -3,13 +3,13 @@ import { prismaClient } from "../../database/prismaClient";
 
 export class CreateTariffController {
   async handle(request: Request, response: Response) {
-    const { name, product_pipe, food_id } = request.body;
+    const { name, product_rd, food_id } = request.body;
 
     await prismaClient.tariff
       .create({
         data: {
           name,
-          product_pipe,
+          product_rd,
           active: true,
           food_id,
         },

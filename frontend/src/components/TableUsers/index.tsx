@@ -21,7 +21,7 @@ export interface dataUserProps {
   id: string;
   name: string;
   level: number;
-  pipe: number;
+  rd: string;
   active: boolean;
 }
 
@@ -29,10 +29,10 @@ export function createDataUsers(
   id: string,
   name: string,
   level: number,
-  pipe: number,
+  rd: string,
   active: boolean
 ) {
-  return { id, name, level, pipe, active };
+  return { id, name, level, rd, active };
 }
 
 export default function TableUsers({
@@ -65,7 +65,7 @@ export default function TableUsers({
           <TableRow>
             <TableCell>Nome</TableCell>
             <TableCell align="right">Nivel de permissão</TableCell>
-            <TableCell align="right">Pipe</TableCell>
+            <TableCell align="right">RD</TableCell>
             <TableCell align="right">Ativo</TableCell>
             <TableCell align="right">Apagar</TableCell>
             <TableCell align="right">Editar</TableCell>
@@ -81,7 +81,7 @@ export default function TableUsers({
                 {row.name}
               </TableCell>
               <TableCell align="right">{row.level}</TableCell>
-              <TableCell align="right">{row.pipe}</TableCell>
+              <TableCell align="right">{row.rd}</TableCell>
               <TableCell align="right">
                 <button
                   className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"

@@ -198,12 +198,54 @@ export function ModalRequirement() {
     </Dialog>
   );
 
+
+    const modalGeneric = (
+        <Dialog open={open} onClose={handleClose} className="modalRequirements">
+            <DialogTitle>
+                {requirementsModal[requirementsModal.length - 1]}
+            </DialogTitle>
+            <DialogContent>
+                <DialogContentText>Quantidade ?</DialogContentText>
+                <div className="form">
+                    <TextField
+                        label="Quantidade"
+                        type="number"
+                        name="amountGeneric"
+                        className="textField"
+                        variant="standard"
+                        onChange={(value) => {
+                            setAmount(Number(value.target.value));
+                        }}
+                        value={amount}
+                    />
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button
+                    onClick={() => {
+                        handleSave(
+                            requirementsModal,
+                            requirementsModal[requirementsModal.length - 1],
+                            typeModal,
+                            {
+                                adult: 0,
+                                child: [],
+                                amount: amount,
+                            }
+                        );
+                    }}
+                >
+                    Confirmar
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+
+
+
   if (typeModal === "person") return modalPerson;
   if (typeModal === "ticket") return modalTicket;
   if (typeModal === "tourism") return modalTourism;
-  return (
-    <Dialog open={open} onClose={handleClose} className="modalRequirements">
-      null
-    </Dialog>
-  );
+  return modalGeneric;
 }

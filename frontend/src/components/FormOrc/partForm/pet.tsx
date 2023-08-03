@@ -1,11 +1,21 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useContext } from "react";
+import {useContext, useEffect} from "react";
 import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import useQuery from "../../../hooks/urlQuery/query";
 
 const petOptions = ["pequeno", "médio", "grande"];
 
 export const PetInputForm = () => {
   const { petValue, setPetValue } = useContext(GenerateTariffContext);
+  const query = useQuery();
+
+    useEffect(() => {
+        if(query.get("pet")) {
+            const pet = query.get("pet")?.split(",")
+            if(!pet) return
+            setPetValue(pet)
+        }
+    }, []);
   return (
     <Autocomplete
       multiple

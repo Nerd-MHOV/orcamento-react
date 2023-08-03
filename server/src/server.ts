@@ -1,6 +1,8 @@
 import express from "express";
 import routes from "./routes";
 import cors from "cors";
+import axios from "axios";
+import morgan from "morgan"
 
 require("dotenv").config();
 
@@ -25,9 +27,10 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json());
+app.use(morgan("dev"))
 app.use(routes);
+
 
 //app.use(errorMiddleware);
 app.listen(3333, () => {

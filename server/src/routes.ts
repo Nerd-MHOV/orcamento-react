@@ -49,6 +49,7 @@ import { UpdateUserController } from "./controllers/Users/UpdateUsersController"
 import { ValidateUsersController } from "./controllers/Users/ValidateUsersController";
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { isAdmin } from "./middlewares/isAdmin";
+import {RDController} from "./controllers/RdStation/RDController";
 
 const routes = express.Router();
 
@@ -111,6 +112,7 @@ const updateDiscount = new UpdateDiscountController();
 const activeDiscount = new ToggleActiveDiscountController();
 const daily_courtesy = new ToggleDailyCourtesyController();
 const deleteDiscount = new DeleteDiscountController();
+const rd = new RDController();
 
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
@@ -156,7 +158,7 @@ routes.put("/specific-date/:name", isAdmin, updateSpecificDate.handle);
 routes.post("/requirement", newRequirement.handle);
 routes.get("/requirement", findRequirements.handle);
 routes.post("/requirement/unique", findaRequirement.handle);
-routes.get("/housing-units", findAllHousingUnits.handle);
+routes.get("/housing-units", findAllHousingUnits.handle);                           //
 routes.put("/requirement/active/:name", isAdmin, activeRequirement.handle);
 routes.put("/requirement/price", isAdmin, priceRequirement.handle);
 routes.delete("/requirement/:name", deleteRequirement.handle);
@@ -175,5 +177,9 @@ routes.put("/discount/:id/active", isAdmin, activeDiscount.handle);
 routes.put("/discount/:id/daily_courtesy", isAdmin, daily_courtesy.handle);
 routes.delete("/discount/:id", isAdmin, deleteDiscount.handle);
 
+routes.post("/rd/get_a_deal", rd.getDeal)
+routes.post("/rd/delete_product", rd.deleteProduct)
+routes.post("/rd/add_product", rd.addProduct)
+routes.post("/rd/change_stage", rd.changeStage)
 // routes.post("/pipedrive", changeDeal.handle);
 export default routes;

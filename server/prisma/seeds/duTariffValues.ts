@@ -1,4 +1,5 @@
 export const DUtariffValuesSeed = [
+
   {
     id: "1",
     tariff_id: "Day-Use 2023 - Tradicional - MDS",

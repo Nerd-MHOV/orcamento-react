@@ -12,7 +12,8 @@ export class GetNumberPipeController {
 
     if (format(date, "yyyy-MM-dd") === format(dateOut, "yyyy-MM-dd")) {
       tariff = {
-        product_pipe: "46",
+        // todo cadastrar day use no rd
+        product_rd: "temquecadastrar",
       };
     }
 

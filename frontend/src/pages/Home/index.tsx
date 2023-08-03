@@ -20,10 +20,11 @@ const Home = () => {
         <div className="homeBx">
           <Navbar />
           <div className="p20">
+            {/* modal */}
+            <ModalDiscount />
+            <ModalPermissionDiscount />
             <div className="containerBx">
-              {/* modal */}
-              <ModalDiscount />
-              <ModalPermissionDiscount />
+
               <div className="top">
                 <CalendarPicker />
                 <FormOrc />

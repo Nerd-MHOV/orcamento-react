@@ -86,6 +86,8 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   dailyCourtesy: false,
   setActionSelected() {},
   actionSelected: undefined,
+  getClientName: async (id) => "",
+  clientName: ""
 });
 
 export const GenerateTariffProvider = ({
@@ -139,6 +141,7 @@ export const GenerateTariffProvider = ({
   const [actionSelected, setActionSelected] = useState<
     ApiDiscountProps | undefined
   >();
+  const [clientName, setClientName] = useState("")
 
   const handleOpenModalPermission = (
     value: number,
@@ -193,6 +196,18 @@ export const GenerateTariffProvider = ({
     const response = await getUnitUsing(ranges.selection);
     setStateApp(response.response);
     setUnitUsing(response.units);
+  }
+
+  async function getClientName(id: string) {
+    return api.rdGetaDeal(id)
+        .then(res => {
+          setClientName(res.name + "")
+          return res.name + ""
+        })
+        .catch(err => {
+          setClientName("")
+          return ""
+        })
   }
 
   async function handleSaveBudget() {
@@ -448,6 +463,8 @@ export const GenerateTariffProvider = ({
         setDailyCourtesy,
         actionSelected,
         setActionSelected,
+        clientName,
+        getClientName
       }}
     >
       {children}

@@ -1,7 +1,6 @@
 import { addDays, format } from "date-fns";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { usePipe } from "../../../hooks/pipedrive/pipeApi";
 
 //where BUILD
 import * as pdfFonts from "./vfs_fonts";
@@ -31,7 +30,6 @@ async function pdfBudget(
   name: string,
   email: string,
   numberPhone: string,
-  token: string
 ) {
   const now = format(new Date(), "dd/MM/yyyy HH:mm");
   const validate = format(addDays(new Date(), 3), "dd/MM/yyyy");
@@ -217,6 +215,10 @@ async function pdfBudget(
     pageSize: {
       width: 595.28,
       height: "auto",
+    },
+    info: {
+      title: "PDF Orçamento cliente",
+      author: "Matheus Henrique"
     },
     pageMargins: [0, 0, 0, 0],
     images: {
@@ -645,15 +647,29 @@ async function pdfBudget(
   };
 
   const pdf = pdfMake.createPdf(docDefinitions);
-  pdf.open();
+  //pdf.open();
 
-  if (dealId) {
-    const document = pdf.getBlob(async (blob) => {
-      const pipe = usePipe();
-      const response = await pipe.addFile(token, dealId, blob, "Orçamento.pdf");
-      console.log(response);
-    });
-  }
+  pdf.getBlob((blob) => {
+    // Converte o blob em uma URL de dados
+    const url = URL.createObjectURL(blob);
+    // Define o tamanho e posição da janela pop-up
+    const width = 1000; // Largura da janela em pixels
+    const height = 650; // Altura da janela em pixels
+    const left = (window.innerWidth - width) / 2; // Centraliza a janela horizontalmente
+    const top = (window.innerHeight - height) / 2; // Centraliza a janela verticalmente
+    const features = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
+
+    // Abre a janela pop-up com o PDF
+    window.open(url, '_blank', features);
+  });
+
+  // if (dealId) {
+  //   const document = pdf.getBlob(async (blob) => {
+  //     const pipe = usePipe();
+  //     const response = await pipe.addFile(token, dealId, blob, "Orçamento.pdf");
+  //     console.log(response);
+  //   });
+  // }
 }
 
 export default pdfBudget;

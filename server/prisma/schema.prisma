@@ -17,8 +17,8 @@ model User {
   name        String             @unique
   username    String             @unique
   password    String
-  user_pipe   String
-  token_pipe  String
+  user_rd     String
+  token_rd    String
   level       Float              @default(1)
   active      Boolean            @default(true)
   SaveBudgets SaveBudgets[]
@@ -28,7 +28,7 @@ model User {
 }
 
 model Foods {
-  id    Int   @id @default(autoincrement())
+  id    String @id @default(uuid())
   adt   Float
   adtex Float
   chd0  Float
@@ -58,13 +58,13 @@ model Pet {
 }
 
 model Tariff {
-  name         String  @id
-  product_pipe String
-  active       Boolean
-  order_id     Int     @default(autoincrement())
-  food_id      Int
+  name       String  @id
+  product_rd String
+  active     Boolean @default(true)
+  order_id   Int     @default(autoincrement())
+  food_id    String
 
-  food Foods @relation(fields: [food_id], references: [id])
+  food Foods @relation(fields: [food_id], references: [id], onDelete: Cascade)
 
   TariffValues        TariffValues[]
   SpecificDates       SpecificDates[]
@@ -85,8 +85,8 @@ model TariffValues {
   chd4        Float
   chd8        Float
 
-  tariffs    Tariff     @relation(fields: [tariffs_id], references: [name])
-  categories Categories @relation(fields: [category_id], references: [id])
+  tariffs    Tariff     @relation(fields: [tariffs_id], references: [name], onDelete: Cascade)
+  categories Categories @relation(fields: [category_id], references: [id], onDelete: Restrict)
 
   @@map("tariff_values")
 }
@@ -95,7 +95,7 @@ model SpecificDates {
   date       String @id
   tariffs_id String
 
-  tariffs Tariff @relation(fields: [tariffs_id], references: [name])
+  tariffs Tariff @relation(fields: [tariffs_id], references: [name], onDelete: Cascade)
 
   @@map("specific_dates")
 }
@@ -105,8 +105,8 @@ model CommonDates {
   tariff_to_midweek_id String
   tariff_to_weekend_id String
 
-  tariff_to_midweek Tariff @relation(name: "tariff_to_midweek", fields: [tariff_to_midweek_id], references: [name])
-  tariff_to_weekend Tariff @relation(name: "tariff_to_weekend", fields: [tariff_to_weekend_id], references: [name])
+  tariff_to_midweek Tariff @relation(name: "tariff_to_midweek", fields: [tariff_to_midweek_id], references: [name], onDelete: Cascade)
+  tariff_to_weekend Tariff @relation(name: "tariff_to_weekend", fields: [tariff_to_weekend_id], references: [name], onDelete: Cascade)
 
   @@map("common_dates")
 }
@@ -129,7 +129,7 @@ model TariffCheckInValues {
   chd4       Float
   chd8       Float
 
-  tariffs Tariff @relation(fields: [tariffs_id], references: [name])
+  tariffs Tariff @relation(fields: [tariffs_id], references: [name], onDelete: Cascade)
 
   @@map("tariff_checkin_values")
 }
@@ -146,9 +146,9 @@ model HUs {
 }
 
 model DUTariff {
-  name         String  @id
-  product_pipe String
-  active       Boolean @default(true)
+  name       String  @id
+  product_rd String
+  active     Boolean @default(true)
 
   DUTariffValues DUTariffValues[]
 
@@ -171,6 +171,8 @@ model SaveBudgets {
   id          String             @id @default(uuid())
   user_id     String
   budgets     Json
+  name        String?
+  status      String             @default("em aberto")
   createdAt   DateTime           @default(now())
   responsible User               @relation(fields: [user_id], references: [id])
   favorites   BudgetsFavorites[]

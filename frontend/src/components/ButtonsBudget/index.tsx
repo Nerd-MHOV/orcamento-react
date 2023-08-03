@@ -3,11 +3,9 @@ import { AuthContext } from "../../context/authContext";
 import { useApi } from "../../hooks/api/api";
 import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
-import EvitaBug from "../../context/generateTariff/functions/evitaBugPDF";
-import { pipeChangeDeal } from "../../context/generateTariff/functions/pipeChangeDeal";
+import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
 import Btn from "../Btn";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
-import { usePipe } from "../../hooks/pipedrive/pipeApi";
 
 export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
@@ -15,10 +13,7 @@ export const ButtonsBudget = () => {
     GenerateTariffContext
   );
   const api = useApi();
-  const pipe = usePipe();
-  function evitaBug() {
-    EvitaBug(budgets, "token");
-  }
+
   async function generatePdfDescription() {
     // if (
     //   budgets.find((budget) =>
@@ -28,18 +23,19 @@ export const ButtonsBudget = () => {
     //   return;
     // }
     const arrUser = await api.findUniqueUser(userLogin);
-    const deal_id = budgets[0].arrComplete.responseForm.numberPipe;
+    const deal_id = budgets[0].arrComplete.responseForm.rd_client;
     let response;
-    if (deal_id) response = await pipe.getaDeal(arrUser.token_pipe, deal_id);
-    let name = response?.data?.person_name || "";
-    pdfDescription(budgets, arrUser.token_pipe, name);
+    if (deal_id) response = await api.rdGetaDeal(deal_id);
+    console.log(response, "here")
+    let name = response?.name || "undefined";
+    await pdfDescription(budgets, name);
   }
 
   async function generatePdfBudget() {
     if (budgets.length < 1) {
       return;
     }
-    pipeChangeDeal(userLogin, budgets);
+    await rdSaveProcess(userLogin, budgets);
     if (
       budgets.find((budget) =>
         budget.arrComplete.responseForm.category.match(/Day-Use/)
@@ -48,12 +44,11 @@ export const ButtonsBudget = () => {
       return;
     }
     const arrUser = await api.findUniqueUser(userLogin);
-    pdfBudget(
+    await pdfBudget(
       budgets,
       arrUser.name,
       arrUser.email,
       arrUser.phone,
-      arrUser.token_pipe
     );
 
     api

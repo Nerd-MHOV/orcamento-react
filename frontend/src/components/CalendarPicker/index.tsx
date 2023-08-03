@@ -1,13 +1,15 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useContext } from "react";
+import {useContext, useEffect} from "react";
 import { DateRangePicker } from "react-date-range";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import useQuery from "../../hooks/urlQuery/query";
 
 export const CalendarPicker = () => {
   const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } =
     useContext(GenerateTariffContext);
 
+  const query = useQuery();
   function customDayContent(day: Date) {
     let extraDot = null;
     if (holidays.includes(format(day, "yyyy-MM-dd"))) {
@@ -34,16 +36,24 @@ export const CalendarPicker = () => {
   }
 
   function customDisableDays(day: Date) {
-    if (holidays.includes(format(day, "yyyy-MM-dd"))) {
-      return false;
-    }
-
-    if (monthsWithTariffs.includes(format(day, "yyyy-MM"))) {
-      return false;
-    }
-
+    if (holidays.includes(format(day, "yyyy-MM-dd")))  return false;
+    else if (monthsWithTariffs.includes(format(day, "yyyy-MM"))) return false;
     return true;
   }
+
+    useEffect(() => {
+        if(query.get("check-in") && query.get("check-out")) {
+            setTimeout(() => {
+                handleSelectDate({
+                    selection: {
+                        startDate: new Date(query.get("check-in")!),
+                        endDate: new Date(query.get("check-out")!),
+                        key: "selection"
+                    }
+                })
+            }, 1000)
+        }
+    }, []);
 
   return (
     <DateRangePicker

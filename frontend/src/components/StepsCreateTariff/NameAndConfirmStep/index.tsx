@@ -45,7 +45,7 @@ export const NameAndConfirmStep = () => {
       rowTariff.push(
         createData({
           name,
-          product_pipe: pipeNum.toString(),
+          product_rd: pipeNum.toString(),
           active: true,
           order_id: 0,
           food_id: foodPad ? 1 : 0,
@@ -113,7 +113,7 @@ export const NameAndConfirmStep = () => {
       rowTariff.push(
         createData({
           name: nameMDS,
-          product_pipe: pipeNumMDS.toString(),
+          product_rd: pipeNumMDS.toString(),
           active: true,
           order_id: 0,
           food_id: foodPad ? 1 : 0,
@@ -173,7 +173,7 @@ export const NameAndConfirmStep = () => {
       rowTariff.push(
         createData({
           name: nameFDS,
-          product_pipe: pipeNumFDS.toString(),
+          product_rd: pipeNumFDS.toString(),
           active: true,
           order_id: 0,
           food_id: foodPad ? 1 : 0,
@@ -327,7 +327,7 @@ export const NameAndConfirmStep = () => {
               }}
             />
             <TextField
-              label="Numero Pipedrive"
+              label="ID RDStation"
               value={pipeNum}
               onChange={(e) => {
                 setPipeNum(e.target.value);
@@ -359,7 +359,7 @@ export const NameAndConfirmStep = () => {
                 value={nameMDS}
               />
               <TextField
-                label="Numero Pipedrive"
+                label="ID RDStation"
                 value={pipeNumMDS}
                 onChange={(e) => setPipeNumMDS(e.target.value)}
               />
@@ -379,7 +379,7 @@ export const NameAndConfirmStep = () => {
                 value={nameFDS}
               />
               <TextField
-                label="Numero Pipedrive"
+                label="ID RDStation"
                 value={pipeNumFDS}
                 onChange={(e) => setPipeNumFDS(e.target.value)}
               />

@@ -111,19 +111,19 @@ export const FormEditCollaborator = ({ fields }: { fields: ApiUserProps }) => {
             required
             margin="dense"
             {...register("token")}
-            label="Token Pipe"
+            label="Token RD"
             type="text"
             variant="outlined"
-            defaultValue={fields.token_pipe}
+            defaultValue={fields.token_rd}
           />
           <TextField
             required
             margin="dense"
             {...register("user_pipe")}
-            label="nº do Usuário Pipe"
+            label="ID do Usuário RD"
             type="text"
             variant="outlined"
-            defaultValue={fields.user_pipe}
+            defaultValue={fields.user_rd}
           />
         </div>
 

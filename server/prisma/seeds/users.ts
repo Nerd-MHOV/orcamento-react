@@ -7,7 +7,8 @@ export const UserSeed = [
     name: "Matheus Henrique",
     username: "admin",
     password: bcrypt.hashSync("admin", 10),
-    token_pipe: "0b89d278f9d3debfe30b08cb441f295f84832371",
-    user_pipe: "3183119",
+    token_rd: "649dcc1c48f91a001f09be68",
+    user_rd: "649dcc1c48f91a001f09be65",
+    level: 3
   },
 ];

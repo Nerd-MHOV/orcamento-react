@@ -6,7 +6,7 @@ import {
 
 export interface AllTariffsProps {
   name: string;
-  product_pipe: string;
+  product_rd: string;
   active: boolean;
   order_id: number;
   food_id: number;
@@ -89,8 +89,8 @@ export interface ApiUserProps {
   email: string;
   level: number;
   phone: string;
-  token_pipe: string;
-  user_pipe: string;
+  token_rd: string;
+  user_rd: string;
   active: boolean;
 }
 
@@ -101,6 +101,8 @@ export interface ApiSavedBudgetsProps {
   createdAt: Date;
   budgets: BudgetsContentProps[];
   favorites: BudgetsFavoritesProps[];
+  name: string;
+  status: string;
 }
 
 export interface ApiRequirementsProps {

@@ -4,10 +4,10 @@ import { prismaClient } from "../../database/prismaClient";
 
 export class UpdateCommonDateController {
   async handle(request: Request, response: Response) {
-    const { product_pipe, values, checkIn, food } = request.body;
+    const { product_rd, values, checkIn, food } = request.body;
     const { name } = request.params;
     try {
-      values.forEach(async (val: TariffValues) => {
+      for (const val of values) {
         const { id: id, ...newValues } = val;
         await prismaClient.tariffValues.update({
           where: {
@@ -15,18 +15,17 @@ export class UpdateCommonDateController {
           },
           data: newValues,
         });
-      });
+      }
 
-      checkIn.forEach(async (val: TariffCheckInValues) => {
+      for (const val of checkIn) {
         const { id: id, ...newValues } = val;
-
         await prismaClient.tariffCheckInValues.update({
           where: {
             id,
           },
           data: newValues,
         });
-      });
+      }
 
       const { id: id, ...newValues } = food;
       await prismaClient.foods.update({
@@ -39,7 +38,7 @@ export class UpdateCommonDateController {
           name,
         },
         data: {
-          product_pipe,
+          product_rd,
         },
         include: {
           food: true,

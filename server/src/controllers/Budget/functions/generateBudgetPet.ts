@@ -18,7 +18,7 @@ export async function generateBudgetPet(
     let tariffSpecific = tariffs.filter(
       (arr: any) => arr.carrying === carrying
     );
-    if (tariffSpecific) tariffBudget = tariffSpecific[0].daily_price;
+    if (tariffSpecific[0]) tariffBudget = tariffSpecific[0].daily_price;
 
     valuesBudget.push(tariffBudget);
 

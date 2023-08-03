@@ -28,7 +28,7 @@ export const NameAndConfirmStep = () => {
     rowTariff.push(
       createData({
         name: getTariffType() === "specific" ? tariff.name : name,
-        product_pipe: pipeNum.toString(),
+        product_rd: pipeNum.toString(),
         active: true,
         order_id: 0,
         food_id: getFoodID() || 0,
@@ -96,7 +96,7 @@ export const NameAndConfirmStep = () => {
     getTariffs();
     if (getTariffType() !== "specific") generateName();
     if (getTariffType() === "specific") setName(tariff.name);
-    setPipeNum(tariff.product_pipe);
+    setPipeNum(tariff.product_rd);
   }, []);
 
   useEffect(() => {
@@ -130,7 +130,7 @@ export const NameAndConfirmStep = () => {
             disabled={getTariffType() === "specific" ? false : true}
           />
           <TextField
-            label="Numero Pipedrive"
+            label="ID RDStation"
             value={pipeNum}
             onChange={(e) => {
               setPipeNum(e.target.value);

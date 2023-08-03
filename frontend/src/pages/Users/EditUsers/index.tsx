@@ -3,7 +3,6 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FormEditCollaborator } from "../../../components/FormEditCollaborator";
-import { FormNewCollaborator } from "../../../components/FormNewCollaborator";
 import { LayoutBudget } from "../../../components/Layout";
 import { useApi } from "../../../hooks/api/api";
 import { ApiUserProps } from "../../../hooks/api/interfaces";

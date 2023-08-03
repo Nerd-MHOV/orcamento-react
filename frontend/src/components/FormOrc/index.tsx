@@ -8,15 +8,14 @@ import { DiscountInputForm } from "./partForm/discount";
 import { CategoryInputForm } from "./partForm/category";
 import { PensionInputForm } from "./partForm/pension";
 import { PipeNumberInputForm } from "./partForm/pipeNumber";
+import { RdClientInputForm} from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
-import Btn from "../Btn";
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { useApi } from "../../hooks/api/api";
-import { getAllowedDiscount } from "../../context/generateTariff/functions/getters/getAllowedDiscount";
 import { ActionInputForm } from "./partForm/action";
+import {GetClientName} from "./partForm/getClientName";
 
 export const FormOrc = () => {
   const {
@@ -45,8 +44,9 @@ export const FormOrc = () => {
     getIsCourtesy();
   }, [actionSelected, selectionRange, dataTable]);
 
+
   return (
-    <>
+    <div>
       <div className="modal">
         <ModalRequirement />
       </div>
@@ -61,7 +61,8 @@ export const FormOrc = () => {
           <div className="formBox">
             <CategoryInputForm />
             <PensionInputForm />
-            <PipeNumberInputForm />
+            {/*<PipeNumberInputForm />*/}
+            <RdClientInputForm />
             <RequirementInputForm />
           </div>
         </form>
@@ -95,7 +96,8 @@ export const FormOrc = () => {
             <p style={{ color: "#757575" }}>Diária Cortesia</p>
           </div>
         </div>
+        <GetClientName />
       </div>
-    </>
+    </div>
   );
 };

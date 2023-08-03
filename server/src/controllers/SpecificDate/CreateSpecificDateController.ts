@@ -23,7 +23,7 @@ export class CreateSpecificDateController {
       const specificCreate = await prismaClient.tariff.create({
         data: {
           name: tariff.name,
-          product_pipe: tariff.product_pipe,
+          product_rd: tariff.product_rd,
           active: tariff.active,
           food: {
             connectOrCreate: {

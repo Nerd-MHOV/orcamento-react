@@ -1,0 +1,22 @@
+.status {
+  white-space: nowrap;
+  text-align: center;
+  padding: 2px;
+  font-weight: bold;
+  color: #ffffff;
+  &.aberto {
+    background: #2e86de;
+  }
+  &.vencido {
+    background: orange;
+  }
+  &.perdido{
+    background: #d05c45;
+  }
+  &.ganho {
+    background: #10ac84;
+  }
+  &.aguardando {
+    background: var(--blue);
+  }
+}

@@ -19,7 +19,7 @@ import { createDataRelationship } from "../TableCollapseRelationships/helpers";
 import { DialogDeleteTariff } from "../DialogDeleteTariff";
 import { Link } from "react-router-dom";
 
-export const head = ["Nome", "Pipe", "ativo"];
+export const head = ["Nome", "ID RD", "ativo"];
 
 export function convertForReal(number?: number) {
   if (typeof number !== "number") {
@@ -33,7 +33,7 @@ export function convertForReal(number?: number) {
 
 export function createData({
   name,
-  product_pipe,
+  product_rd,
   active,
   order_id,
   food_id,
@@ -46,7 +46,7 @@ export function createData({
 }: AllTariffsProps) {
   return {
     name,
-    product_pipe,
+    product_rd,
     active,
     order_id,
     food_id,
@@ -183,7 +183,7 @@ export function Row(props: {
         <TableCell component="th" scope="row">
           {row.name}
         </TableCell>
-        <TableCell>{row.product_pipe}</TableCell>
+        <TableCell>{row.product_rd}</TableCell>
         {/* <TableCell>
           <button
             className="css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root"

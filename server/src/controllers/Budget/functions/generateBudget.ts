@@ -57,8 +57,6 @@ export async function generateBudget(
       if (onlyFood) tariffBudget = 90;
     }
 
-    console.log(daily_courtesy);
-
     if (daily_courtesy && addDays(initDate, 2) > finalDate) {
       tariffBudget = 0;
     }

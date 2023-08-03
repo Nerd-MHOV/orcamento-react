@@ -3,14 +3,12 @@ import { Link } from "react-router-dom";
 import Btn from "../../components/Btn";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
-import CollapsibleTableTariff from "../../components/TableCollapseTariffs";
-import { createData } from "../../components/TableCollapseTariffs/helpers";
 import TableUsers, {
   createDataUsers,
   dataUserProps,
 } from "../../components/TableUsers";
 import { useApi } from "../../hooks/api/api";
-import { AllTariffsProps, ApiUserProps } from "../../hooks/api/interfaces";
+import { ApiUserProps } from "../../hooks/api/interfaces";
 import "./style.scss";
 
 export const UsersPage = () => {
@@ -31,7 +29,7 @@ export const UsersPage = () => {
           user.id,
           user.name,
           user.level,
-          Number(user.user_pipe),
+          user.user_rd,
           user.active
         )
       );

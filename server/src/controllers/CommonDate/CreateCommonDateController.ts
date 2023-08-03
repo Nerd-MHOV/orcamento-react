@@ -39,7 +39,7 @@ export class CreateCommonDateController {
           prismaClient.tariff.create({
             data: {
               name: first.name,
-              product_pipe: first.product_pipe,
+              product_rd: first.product_rd,
               active: first.active,
               food: {
                 connectOrCreate: {
@@ -64,7 +64,7 @@ export class CreateCommonDateController {
           prismaClient.tariff.create({
             data: {
               name: second.name,
-              product_pipe: second.product_pipe,
+              product_rd: second.product_rd,
               active: second.active,
               food: {
                 connectOrCreate: {

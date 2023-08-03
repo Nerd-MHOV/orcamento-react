@@ -1,7 +1,6 @@
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { usePipe } from "../../../hooks/pipedrive/pipeApi";
 const months = [
   "Janeiro",
   "Fevereiro",
@@ -109,19 +108,19 @@ async function EvitaBug(budgets: any[], token: string) {
   const pdf = pdfMake.createPdf(docDefinitions);
   pdf.open();
 
-  let deal_id = realBudget.arrComplete.responseForm.numberPipe;
-  if (deal_id) {
-    const document = pdf.getBlob(async (blob) => {
-      const pipe = usePipe();
-      const response = await pipe.addFile(
-        token,
-        deal_id,
-        blob,
-        "Descrição.pdf"
-      );
-      console.log(response);
-    });
-  }
+  // let deal_id = realBudget.arrComplete.responseForm.numberPipe;
+  // if (deal_id) {
+  //   const document = pdf.getBlob(async (blob) => {
+  //     const pipe = usePipe();
+  //     const response = await pipe.addFile(
+  //       token,
+  //       deal_id,
+  //       blob,
+  //       "Descrição.pdf"
+  //     );
+  //     console.log(response);
+  //   });
+  // }
 }
 
 export default EvitaBug;

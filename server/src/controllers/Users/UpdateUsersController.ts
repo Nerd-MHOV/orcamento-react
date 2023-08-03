@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 export class UpdateUserController {
   async handle(request: Request, response: Response) {
-    const { name, email, password, phone, username, token_pipe, user_pipe } =
+    const { name, email, password, phone, username, token_rd, user_rd } =
       request.body;
     const { id } = request.params;
 
@@ -14,29 +14,29 @@ export class UpdateUserController {
       .hash(password, 10)
       .then(async (hashPassword) => {
         if (!password) {
-          return await prismaClient.user.update({
+          return prismaClient.user.update({
             data: {
               name,
               email,
               phone,
               username,
-              token_pipe,
-              user_pipe,
+              token_rd,
+              user_rd,
             },
             where: {
               id,
             },
           });
         } else {
-          return await prismaClient.user.update({
+          return prismaClient.user.update({
             data: {
               name,
               email,
               password: hashPassword,
               phone,
               username,
-              token_pipe,
-              user_pipe,
+              token_rd,
+              user_rd,
             },
             where: {
               id,

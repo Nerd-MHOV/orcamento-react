@@ -22,6 +22,7 @@ export async function handleForm(
 
   const formUp: HTMLFormElement | any = document.querySelector("#form");
   const responseForm = serialize(formUp, { hash: true });
+  console.log("form", responseForm)
 
   if (
     typeof responseForm.category === "string" &&
@@ -47,6 +48,8 @@ export async function handleForm(
   }
 
   if (!responseForm.category || !responseForm.pension) return;
+
+
 
   responseForm.housingUnit = responseForm.category;
   responseForm.category = category;
