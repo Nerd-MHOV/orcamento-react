@@ -50,6 +50,7 @@ import { ValidateUsersController } from "./controllers/Users/ValidateUsersContro
 import { authMiddleware } from "./middlewares/authMiddleware";
 import { isAdmin } from "./middlewares/isAdmin";
 import {RDController} from "./controllers/RdStation/RDController";
+import {RoutinesAutomations} from "./controllers/RoutinesAutomations/RoutinesAutomations";
 
 const routes = express.Router();
 
@@ -113,9 +114,15 @@ const activeDiscount = new ToggleActiveDiscountController();
 const daily_courtesy = new ToggleDailyCourtesyController();
 const deleteDiscount = new DeleteDiscountController();
 const rd = new RDController();
+const routinesAutomations = new RoutinesAutomations();
 
 routes.post("/user", createUser.handle);
 routes.post("/login", loginUser.handle);
+
+
+routes.get("/routines/opportunities", routinesAutomations.getOpportunities)
+routes.get("/routines/assist-opportunities", routinesAutomations.assistOpportunities)
+
 
 routes.use(authMiddleware);
 routes.delete("/user/:id", isAdmin, deleteUser.handle);
@@ -166,6 +173,7 @@ routes.delete("/requirement/:name", deleteRequirement.handle);
 routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);
 routes.post("/save-budget", saveBudget.handle);
+routes.put("/save-budget/rename", saveBudget.renameBudget);
 routes.get("/budget", getBudget.handle);
 
 routes.put("/favorite/:id", authMiddleware, favoriteBudget.handle);
@@ -181,5 +189,8 @@ routes.post("/rd/get_a_deal", rd.getDeal)
 routes.post("/rd/delete_product", rd.deleteProduct)
 routes.post("/rd/add_product", rd.addProduct)
 routes.post("/rd/change_stage", rd.changeStage)
+
+
+
 // routes.post("/pipedrive", changeDeal.handle);
 export default routes;

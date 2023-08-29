@@ -1,0 +1,9 @@
+- change api.ts for ip server
+
+- change pdfDescription.ts for generate PDF in build
+
+- change pdfBudget.ts for generate PDF in build
+
+- upload server side in 'forever'
+
+- path for front side is '/var/www/sistema-orçamento' < dispatch here

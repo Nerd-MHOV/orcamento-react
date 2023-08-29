@@ -22,6 +22,8 @@ import pdfDescription from "../../context/generateTariff/functions/pdfDescriptio
 import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import {Star, StarOutline, StartOutlined} from "@mui/icons-material";
 import {StatusBudget} from "../StatusBudget/StatusBudget";
+import BudgetNameField from "./BudgetNameField";
+import Button from "@mui/material/Button";
 
 export const head = ["Data", "nome", "User", "ID RD", "UHs", "TOTAL", "status", "favoritos"];
 
@@ -115,6 +117,11 @@ export function Row(props: {
         await pdfBudget(budgets, arrUser.name, arrUser.email, arrUser.phone,);
     }
 
+    async function handleSendBudget(rd_id: string | undefined, budget_id: string, budget: BudgetsContentProps[]) {
+        if(!rd_id) return;
+        alert("Enviando!")
+    }
+
     async function handleFavorite(id: string) {
         api.favoriteBudget(id).then((response) => {
             reloadRows();
@@ -136,7 +143,7 @@ export function Row(props: {
                 <TableCell component="th" scope="row">
                     {format(row.date, "dd/MM/yy HH:mm", {locale: ptBR})}
                 </TableCell>
-                <TableCell>{row.name}</TableCell>
+                <TableCell><BudgetNameField name={row.name} id={row.id} reload={reloadRows} /></TableCell>
                 <TableCell>{row.user}</TableCell>
                 <TableCell>{row.rd_client}</TableCell>
                 <TableCell>{row.uhs}</TableCell>
@@ -238,6 +245,12 @@ export function Row(props: {
                                         </Collapse>
                                     </Box>);
                             })}
+                            <Box display={"flex"} sx={{
+                                justifyContent: "end",
+                                marginBottom: 2
+                            }}>
+                                <Button onClick={() => { handleSendBudget(row.rd_client, row.id, row.budgets)}}>Enviar para Cliente</Button>
+                            </Box>
                         </>
                     </Collapse>
                 </TableCell>

@@ -338,12 +338,29 @@ export const useApi = () => ({
         return response.data;
     },
 
-    saveBudget: async (user_id: string, budgets: DataContentProps[]) => {
+    saveBudget: async (user_id: string, budgets: DataContentProps[], remake = true, name = "") => {
+
+        const budgetId = budgets.find(obj => obj.arrComplete.responseForm.rd_client);
+        if (budgetId) {
+            budgets.forEach(obj => {
+                obj.arrComplete.responseForm.rd_client = budgetId.arrComplete.responseForm.rd_client;
+            })
+        }
+
         const response = await api.post("/save-budget", {
             user_id,
             budgets,
+            remake,
+            name,
         });
 
+        return response.data;
+    },
+
+    renameBudget: async (id: string, name: string) => {
+        const response = await api.put("/save-budget/rename", {
+            id, name
+        })
         return response.data;
     },
 

@@ -67,7 +67,10 @@ export class RDController {
                     }, {
                         "custom_field_id": "64b7edb9f217510019a64bc5", // porte de pets
                         "value": pet.toString()
-                    },]
+                    },{
+                        "custom_field_id": "64b94d33862444000e56696e", // status orçamento
+                        "value": "em andamento"
+                    }]
                 },
             }, {
                 params: {token: user.token_rd}

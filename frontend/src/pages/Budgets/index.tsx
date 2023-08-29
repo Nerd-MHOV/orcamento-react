@@ -10,9 +10,11 @@ import { useApi } from "../../hooks/api/api";
 import { ApiSavedBudgetsProps } from "../../hooks/api/interfaces";
 
 import "./style.scss";
+import useQuery from "../../hooks/urlQuery/query";
 
 export const BudgetsPage = () => {
   const api = useApi();
+
   const [rows, setRows] = useState<ReturnType<typeof createData>[]>([]);
   const [budgets, setBudgets] = useState<ApiSavedBudgetsProps[]>([]);
   const [search, setSearch] = useState("");
@@ -67,6 +69,8 @@ export const BudgetsPage = () => {
     getBudgets();
   }, [search, onlyFavorites]);
 
+
+
   return (
     <LayoutBudget>
       <div className="p20">
@@ -74,7 +78,7 @@ export const BudgetsPage = () => {
           <div className="top">
             <div className="titleContainerBx">Gerenciar Orçamentos</div>
             <Box>
-              <SearchInputBudget setWord={setSearch} />
+              <SearchInputBudget setWord={setSearch} word={search} />
               <Box display="flex" alignItems="center">
                 <p style={{ color: "gray" }}>Somente favoritos</p>
                 <IconButton

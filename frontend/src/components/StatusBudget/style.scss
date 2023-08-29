@@ -1,10 +1,11 @@
 .status {
   white-space: nowrap;
   text-align: center;
-  padding: 2px;
+  padding: 2px 6px;
   font-weight: bold;
   color: #ffffff;
-  &.aberto {
+  background: #b3b3b3;
+  &.andamento {
     background: #2e86de;
   }
   &.vencido {
@@ -17,6 +18,9 @@
     background: #10ac84;
   }
   &.aguardando {
-    background: var(--blue);
+    background: #57aebd;
+  }
+  &.none {
+    background: #565656;
   }
 }

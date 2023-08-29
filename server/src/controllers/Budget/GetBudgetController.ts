@@ -40,25 +40,25 @@ export class GetBudgetController {
             OR: [
               {
                 budgets: {
-                  path: ["0", "arrComplete", "responseForm", "numberPipe"],
+                  path: ["0", "arrComplete", "responseForm", "rd_client"],
                   string_contains: query,
                 },
               },
               {
                 budgets: {
-                  path: ["1", "arrComplete", "responseForm", "numberPipe"],
+                  path: ["1", "arrComplete", "responseForm", "rd_client"],
                   string_contains: query,
                 },
               },
               {
                 budgets: {
-                  path: ["2", "arrComplete", "responseForm", "numberPipe"],
+                  path: ["2", "arrComplete", "responseForm", "rd_client"],
                   string_contains: query,
                 },
               },
               {
                 budgets: {
-                  path: ["3", "arrComplete", "responseForm", "numberPipe"],
+                  path: ["3", "arrComplete", "responseForm", "rd_client"],
                   string_contains: query,
                 },
               },

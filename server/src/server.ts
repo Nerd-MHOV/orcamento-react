@@ -1,8 +1,10 @@
 import express from "express";
 import routes from "./routes";
 import cors from "cors";
-import axios from "axios";
 import morgan from "morgan"
+import cron from "node-cron"
+import {fsAssistOpportunity} from "./crons/fsAssistOpportunity";
+import {fsAssistDBStatus} from "./crons/fsAssistDBStatus";
 
 require("dotenv").config();
 
@@ -30,6 +32,9 @@ app.use(
 app.use(express.json());
 app.use(morgan("dev"))
 app.use(routes);
+
+cron.schedule("*/20 * * * * *", fsAssistOpportunity)
+cron.schedule("0 6 * * *", fsAssistDBStatus)
 
 
 //app.use(errorMiddleware);

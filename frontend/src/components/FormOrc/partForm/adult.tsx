@@ -8,6 +8,7 @@ export const AdultInputForm = () => {
   const { changeOccupancyWrong, callHandleForm, clearUnitaryDiscount } =
     useContext(GenerateTariffContext);
   const query = useQuery();
+
     useEffect(() => {
         if(query.get("adt")) setValue(Number(query.get("adt")))
     }, []);

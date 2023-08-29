@@ -51,8 +51,12 @@ export const ButtonsBudget = () => {
       arrUser.phone,
     );
 
+    const deal_id = budgets[0].arrComplete.responseForm.rd_client;
+    let response;
+    if (deal_id) response = await api.rdGetaDeal(deal_id);
+
     api
-      .saveBudget(userLogin, budgets)
+      .saveBudget(userLogin, budgets, true, response?.name)
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
   }

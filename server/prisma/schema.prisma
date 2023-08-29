@@ -172,7 +172,7 @@ model SaveBudgets {
   user_id     String
   budgets     Json
   name        String?
-  status      String             @default("em aberto")
+  status      String             @default("em andamento")
   createdAt   DateTime           @default(now())
   responsible User               @relation(fields: [user_id], references: [id])
   favorites   BudgetsFavorites[]
@@ -214,3 +214,20 @@ model DiscountDates {
 
   @@map("discount_dates")
 }
+
+model Routines {
+  id  String @id @default(uuid())
+  routine String @unique
+  last_action String?
+  last_deal String?
+}
+
+model Deals {
+  id String @id
+  budget_status String?
+  check_in String?
+  check_out String?
+  win String?
+  amount_total String?
+}
+

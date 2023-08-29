@@ -1,14 +1,18 @@
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { Box } from "@mui/system";
+import useQuery from "../../hooks/urlQuery/query";
 
 export const SearchInputBudget = ({
   setWord,
+    word,
 }: {
   setWord: React.Dispatch<React.SetStateAction<string>>;
+  word: string
 }) => {
+  const query = useQuery();
   const searchRef = useRef();
   const onSearch = (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,6 +20,12 @@ export const SearchInputBudget = ({
     const searchQuery = searchRef.current?.firstChild?.value;
     setWord(encodeURI(searchQuery));
   };
+
+  useEffect(() => {
+    if(query.get("find")) {
+      setWord(query.get("find")!)
+    }
+  }, []);
 
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -69,6 +79,7 @@ export const SearchInputBudget = ({
           ref={searchRef}
           placeholder="Buscar..."
           inputProps={{ "aria-label": "search" }}
+          defaultValue={decodeURI(word)}
         />
       </Search>
     </form>

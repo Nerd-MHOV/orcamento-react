@@ -4,23 +4,23 @@ import bcrypt from "bcrypt";
 
 export class CreateUserController {
   async handle(request: Request, response: Response) {
-    const { name, email, password, phone, username, token_pipe, user_pipe } =
+    const { name, email, password, phone, username, token_rd, user_rd } =
       request.body;
 
     await bcrypt
       .hash(password, 10)
       .then(async (hashPassword) => {
-        return await prismaClient.user.create({
+        return prismaClient.user.create({
           data: {
             name,
             email,
             password: hashPassword,
             phone,
             username,
-            token_pipe,
-            user_pipe,
+            token_rd,
+            user_rd,
           },
-        });
+        })
       })
       .then((newUser) => {
         const { password: _, ...user } = newUser;
