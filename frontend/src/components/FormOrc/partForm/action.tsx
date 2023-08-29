@@ -56,7 +56,7 @@ export const ActionInputForm = () => {
         <MenuItem value={""}>Nenhuma</MenuItem>
 
         {action.map((el) => (
-          <MenuItem value={el.name}>{el.name}</MenuItem>
+          <MenuItem key={el.id} value={el.name}>{el.name}</MenuItem>
         ))}
       </Select>
     </FormControl>

@@ -206,8 +206,8 @@ export function Row(props: {
                                                             </TableRow>))}
                                                         <TableRow>
                                                             <TableCell>Total</TableCell>
-                                                            {totalDay.map((td) => {
-                                                                return (<TableCell>{convertForReal(td)}</TableCell>);
+                                                            {totalDay.map((td, index) => {
+                                                                return (<TableCell key={index} >{convertForReal(td)}</TableCell>);
                                                             })}
                                                             <TableCell>
                                                                 {convertForReal(bud.total.total)}

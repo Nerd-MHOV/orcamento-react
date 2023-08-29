@@ -1,8 +1,7 @@
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import {useEffect, useRef, useState} from "react";
-import { Box } from "@mui/system";
+import {useEffect, useRef} from "react";
 import useQuery from "../../hooks/urlQuery/query";
 
 export const SearchInputBudget = ({

@@ -30,8 +30,8 @@ const assistOpportunity = async (page = 1) => {
 
         const budget_status = field.filter((fil) => fil.custom_field_id === "64b94d33862444000e56696e")[0]?.value + "" || null;
 
-        const win = deal?.win + "" || null;
-        const amount_total = deal?.amount_total + "" || null;
+        const win = deal.win + "" || null;
+        const amount_total = deal.amount_total + "" || null;
 
 
         let db_deal = await prismaClient.deals.findUnique({

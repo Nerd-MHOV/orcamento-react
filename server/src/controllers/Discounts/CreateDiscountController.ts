@@ -39,7 +39,7 @@ export class CreateDiscountController {
         console.log(err.meta.target[0]);
         return response
           .status(500)
-          .json({ msg: "error", debug: err, target: err?.meta?.target[0] });
+          .json({ msg: "error", debug: err, target: err.meta.target[0] });
       });
   }
 }
