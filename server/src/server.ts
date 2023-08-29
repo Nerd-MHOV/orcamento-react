@@ -5,7 +5,7 @@ import morgan from "morgan"
 import cron from "node-cron"
 import {fsAssistOpportunity} from "./crons/fsAssistOpportunity";
 import {fsAssistDBStatus} from "./crons/fsAssistDBStatus";
-
+import ChatGuru from "./services/chatguru/main";
 require("dotenv").config();
 
 const app = express();
@@ -33,8 +33,11 @@ app.use(express.json());
 app.use(morgan("dev"))
 app.use(routes);
 
+
 cron.schedule("*/20 * * * * *", fsAssistOpportunity)
 cron.schedule("0 6 * * *", fsAssistDBStatus)
+
+
 
 
 //app.use(errorMiddleware);

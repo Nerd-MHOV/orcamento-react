@@ -51,10 +51,10 @@ async function updateStatus(budget: SaveBudgets, status: string) {
 
         }
     })
-        .then(res => {
+        .then(() => {
             console.log(` [ INFO ] - Updated status budget ${budget.id}`)
         })
-        .catch(err => {
+        .catch(() => {
         console.log(` [ ERROR ] - Update status to budget ${budget.id}`)
     })
     await prismaClient.saveBudgets.update({

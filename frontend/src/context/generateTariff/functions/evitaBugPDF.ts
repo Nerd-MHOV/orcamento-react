@@ -1,20 +1,6 @@
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-const months = [
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-];
 async function EvitaBug(budgets: any[], token: string) {
   (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -24,7 +10,7 @@ async function EvitaBug(budgets: any[], token: string) {
     0,
     3
   );
-  let rows = new Array();
+  let rows = [];
 
   for (let budget of realBudget.rows) {
     let lineRows = [];

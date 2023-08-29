@@ -36,9 +36,7 @@ export async function requirementBudget(
     let valueRequirement: number[] = [];
     let totalRequirement = 0;
     let uRequirement = arrRequirement[countRequirement].requirement;
-    //let uType = arrRequirement[countRequirement].type;
     const id = 400 + numRequirement;
-    let discount = 0;
     let totalNoDiscount = 0;
 
     valueRequirement = await generateBudgetRequirement(
@@ -49,7 +47,7 @@ export async function requirementBudget(
     );
 
     //verify unitary discount
-    discount = (unitaryDiscount.find(
+    let discount = (unitaryDiscount.find(
         unit => unit.id === id && unit.name === nameRequirement
     )?.discount ?? 0) / 100
 

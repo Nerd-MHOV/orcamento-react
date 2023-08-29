@@ -18,13 +18,13 @@ import { ContextTariffProps } from "./interface";
 export const CreateTariffContext = createContext<ContextTariffProps>({
   arrTariffs: initialValue,
   typeTariff: "common",
-  setTypeTariff(type) {},
-  setDates(date) {},
-  setEarlyEntryValues(keyType, keyTypeEarly, keyGroup, value) {},
-  setFoodValues(keyType, keyGroup, value) {},
-  setAllFoodValues(keyType, values) {},
-  setUHValues(keyType, keyGroup, keyUH, value) {},
-  getValues(keyType) {
+  setTypeTariff() {},
+  setDates() {},
+  setEarlyEntryValues() {},
+  setFoodValues() {},
+  setAllFoodValues() {},
+  setUHValues() {},
+  getValues() {
     return {
       UHsValues: initValuesUHS,
       earlyEntryValues: {
@@ -34,14 +34,14 @@ export const CreateTariffContext = createContext<ContextTariffProps>({
       foodValue: initValues,
     };
   },
-  next(active) {},
+  next() {},
   setRelationTariffs() {},
   relationTariffs: [],
   foodPad: false,
-  setFoodPad(boolean) {},
-  activeStep(step) {},
+  setFoodPad() {},
+  activeStep() {},
   specificName: "",
-  setSpecificName(name) {},
+  setSpecificName() {},
   loading: false,
   stateResponse: "success",
   createTariff() {},

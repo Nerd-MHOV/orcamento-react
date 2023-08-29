@@ -3,5 +3,5 @@ export const initTariffContext = {
   food_id: 0,
   name: "",
   order_id: 1,
-  product_pipe: "",
+  product_rd: "",
 };

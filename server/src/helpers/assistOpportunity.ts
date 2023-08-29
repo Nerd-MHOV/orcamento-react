@@ -18,8 +18,6 @@ const assistOpportunity = async (page = 1) => {
             routine: "opportunity",
         },
     });
-    console.log(total, has_more);
-
     deals.map(async (deal) => {
         const field = deal.deal_custom_fields;
         let deal_change = false;
