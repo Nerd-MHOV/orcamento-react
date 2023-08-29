@@ -36,7 +36,7 @@ export async function requirementBudget(
     let valueRequirement: number[] = [];
     let totalRequirement = 0;
     let uRequirement = arrRequirement[countRequirement].requirement;
-    let uType = arrRequirement[countRequirement].type;
+    //let uType = arrRequirement[countRequirement].type;
     const id = 400 + numRequirement;
     let discount = 0;
     let totalNoDiscount = 0;
@@ -49,11 +49,9 @@ export async function requirementBudget(
     );
 
     //verify unitary discount
-    unitaryDiscount.map((unit) => {
-      if (unit.id === id && unit.name === nameRequirement) {
-        discount = unit.discount / 100;
-      }
-    });
+    discount = (unitaryDiscount.find(
+        unit => unit.id === id && unit.name === nameRequirement
+    )?.discount ?? 0) / 100
 
     const valueWithDiscount = valueRequirement.map((value) => {
       totalNoDiscount += value;
