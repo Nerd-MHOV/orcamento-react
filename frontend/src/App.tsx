@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { NewTariff } from "./pages/Tariffs/NewTariffs";
@@ -18,6 +18,7 @@ import { DiscountsPage } from "./pages/Discounts";
 import { NewDiscountPage } from "./pages/Discounts/NewDiscount";
 
 function App() {
+
   return (
     <div className="App">
       <BrowserRouter>

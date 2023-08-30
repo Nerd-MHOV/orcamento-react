@@ -29,11 +29,11 @@ export class CalcBudgetDUController {
 
     console.log(arrForm.category);
     //vars:
-    let adultRows: RowsProps[] = [];
-    let childRows: RowsProps[] = [];
-    let petRows: RowsProps[] = [];
+    let adultRows: RowsProps[];
+    let childRows: RowsProps[];
+    let petRows: RowsProps[];
 
-    let requirementRows: RowsProps[] = [];
+    let requirementRows: RowsProps[];
     let discountRow: RowsProps[] = [];
 
     let initDate = new Date(rangeDate.startDate);

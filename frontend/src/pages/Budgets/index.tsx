@@ -1,7 +1,7 @@
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { Box } from "@mui/system";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutBudget } from "../../components/Layout";
 import { SearchInputBudget } from "../../components/SearchBudget";
 import CollapsibleTableBudgets from "../../components/TableCollapseBudgets";
@@ -10,7 +10,6 @@ import { useApi } from "../../hooks/api/api";
 import { ApiSavedBudgetsProps } from "../../hooks/api/interfaces";
 
 import "./style.scss";
-import useQuery from "../../hooks/urlQuery/query";
 
 export const BudgetsPage = () => {
   const api = useApi();

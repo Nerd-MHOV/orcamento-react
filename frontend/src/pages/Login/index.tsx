@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import Btn from "../../components/Btn";
 import Message from "../../components/Message";
 import { CallbackProps } from "../../components/Message/interface";
+import useQuery from "../../hooks/urlQuery/query";
 
 const Login = () => {
+  const query = useQuery();
   const [user, setUser] = useState("");
   const [passwd, setPasswd] = useState("");
   const [callback, setCallback] = useState<CallbackProps>({});
@@ -18,7 +20,7 @@ const Login = () => {
       const response = await auth.login(user, passwd);
       if (response) {
         setCallback(response);
-        if (response.type === "success") location.href = "/";
+        if (response.type === "success") location.href = query.get("from") || "/";
         // navigate("/");
       } else {
         setCallback({

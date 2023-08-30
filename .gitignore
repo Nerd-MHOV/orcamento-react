@@ -2,3 +2,5 @@
 node_modules
 dist
 qodana.yaml
+.vscode
+dist

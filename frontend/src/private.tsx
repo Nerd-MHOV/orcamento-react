@@ -1,11 +1,11 @@
 import { Box, CircularProgress } from "@mui/material";
-import { useContext, useEffect } from "react";
-import { Navigate, Outlet, Route } from "react-router-dom";
+import { useContext } from "react";
+import {Navigate, Outlet, useLocation} from "react-router-dom";
 import { AuthContext } from "./context/authContext";
 
 export const Private = () => {
-  const { authenticated, loading, validateToken } = useContext(AuthContext);
-
+  const { authenticated, loading } = useContext(AuthContext);
+  const location = useLocation();
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center" }} m={10}>
@@ -13,5 +13,6 @@ export const Private = () => {
       </Box>
     );
   }
-  return authenticated ? <Outlet /> : <Navigate to="/login" />;
+  return authenticated ? <Outlet /> : <Navigate to={`/login?from=${location.pathname}${location.search}`} />;
+
 };

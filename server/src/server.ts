@@ -5,7 +5,6 @@ import morgan from "morgan"
 import cron from "node-cron"
 import {fsAssistOpportunity} from "./crons/fsAssistOpportunity";
 import {fsAssistDBStatus} from "./crons/fsAssistDBStatus";
-import ChatGuru from "./services/chatguru/main";
 require("dotenv").config();
 
 const app = express();
