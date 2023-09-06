@@ -23,6 +23,7 @@ const whiteList = [
     "http://localhost:81",
     "http://localhost:83",
     "http://192.168.10.87:3333",
+    "http://localhost:4173",
 ];
 app.use(
     cors({

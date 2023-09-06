@@ -1,14 +1,9 @@
 import { addDays, format } from "date-fns";
-import * as pdfMake from "pdfmake/build/pdfmake";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 
-//where BUILD
-import * as pdfFonts from "./vfs_fonts";
-
-//where DEV
-// import * as pdfFonts from "pdfmake/build/vfs_fonts";
-
-(<any>pdfMake).vfs = pdfFonts.pdfMake;
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const months = [
   "Janeiro",

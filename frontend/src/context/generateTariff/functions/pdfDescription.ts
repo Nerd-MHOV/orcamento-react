@@ -1,23 +1,15 @@
 import {TDocumentDefinitions} from "pdfmake/interfaces";
 
-
 import {HeaderCalcMemory} from "./file-part/calc-memory/header";
 import {DailyCalcMemory} from "./file-part/calc-memory/daily";
 import {ExtraCalcMemory} from "./file-part/calc-memory/extra";
 import {TotalCalcMemory} from "./file-part/calc-memory/total";
 import {DataContentProps} from "../interfaces";
 
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
-// for dev
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "pdfmake/build/vfs_fonts";
-//
-// (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-
-// // for build
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "./vfs_fonts";
-(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const onlyNumber = (string: string | undefined) => {
     if (!string) return 0;
