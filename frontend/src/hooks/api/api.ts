@@ -22,7 +22,7 @@ import {
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-    baseURL: "http://192.168.10.83:3335",
+    baseURL: "http://192.168.10.93:3335",
     headers: {
         Authorization: `Bearer ${storageData}`,
     },
