@@ -4,3 +4,5 @@ dist
 qodana.yaml
 .vscode
 dist
+.idea
+.vscode

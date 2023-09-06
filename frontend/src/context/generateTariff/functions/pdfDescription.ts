@@ -1,22 +1,23 @@
 import {TDocumentDefinitions} from "pdfmake/interfaces";
-import {format} from "date-fns";
 
-// for dev
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
+
 import {HeaderCalcMemory} from "./file-part/calc-memory/header";
 import {DailyCalcMemory} from "./file-part/calc-memory/daily";
-import {LayoutTableMemoryCalc} from "./file-part/calc-memory/layout_table";
 import {ExtraCalcMemory} from "./file-part/calc-memory/extra";
 import {TotalCalcMemory} from "./file-part/calc-memory/total";
 import {DataContentProps} from "../interfaces";
 
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+
+// for dev
+// import * as pdfMake from "pdfmake/build/pdfmake";
+// import * as pdfFonts from "pdfmake/build/vfs_fonts";
+//
+// (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 // // for build
-// import * as pdfMake from "pdfmake/build/pdfmake";
-// import * as pdfFonts from "./vfs_fonts";
-// (<any>pdfMake).vfs = pdfFonts.pdfMake;
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "./vfs_fonts";
+(<any>pdfMake).vfs = pdfFonts.pdfMake;
 
 const onlyNumber = (string: string | undefined) => {
     if (!string) return 0;
@@ -203,21 +204,21 @@ async function pdfDescription(
         const content: any[] = [
             {
                 text: singleBudget.arrComplete.responseForm.category,
-                style: { fontSize: 18 },
+                style: {fontSize: 18},
                 alignment: "center",
             },
             {
                 text: `${singleBudget.arrComplete.responseForm.housingUnit} - pensão: ${singleBudget.arrComplete.responseForm.pension}`,
-                style: { fontSize: 8 },
+                style: {fontSize: 8},
                 alignment: "center",
             },
             ...DailyCalcMemory(widthTable, columns, rows_days, lastRow_days),
-            { text: " ",  style: {margin: 200} }, //margin
+            {text: " ", style: {margin: 200}}, //margin
             ...ExtraCalcMemory(widthTable, columns, rows_extra, lastRow_extras),
             ...TotalCalcMemory(total),
             {
                 text: "_______________________________________________________________________________________",
-                margin: [0, 20, 0,10],
+                margin: [0, 20, 0, 10],
                 noWrap: true,
                 alignment: "center"
             }
@@ -245,7 +246,7 @@ async function pdfDescription(
             //for
             {
                 text: "_______________________________________________________________________________________",
-                margin: [0, 20, 0,10],
+                margin: [0, 20, 0, 10],
                 noWrap: true,
                 alignment: "center"
             },
