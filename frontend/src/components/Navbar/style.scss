@@ -6,12 +6,18 @@
     justify-content: space-between;
     padding: 5px;
     .menu, .support{
+        display: flex;
+        gap: 10px;
         cursor: pointer;
         svg{
             width: 30px;
             height: 30px;
             font-weight: bold;
         }
+        a{
+            text-decoration: none;
+            color: var(--blue)
+         }
     }
 
 }

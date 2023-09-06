@@ -1,4 +1,5 @@
-import {assistDBStatus} from "../helpers/assistDBStatus";
+import {assistDBStatus} from "./DBStatus/assistDBStatus";
+
 
 export const fsAssistDBStatus = async  () => {
 
@@ -6,6 +7,8 @@ export const fsAssistDBStatus = async  () => {
     await assistDBStatus();
 
 }
+
+
 
 
 

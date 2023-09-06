@@ -1,7 +1,7 @@
-import {prismaClient} from "../database/prismaClient";
+import {prismaClient} from "../../database/prismaClient";
 import {SaveBudgets} from "@prisma/client";
 import {addDays} from "date-fns";
-import {UpdateDeal} from "../services/rdstation/updateDeal";
+import {UpdateDeal} from "../../services/rdstation/updateDeal";
 
 
 export const assistDBStatus = async  () => {
@@ -9,6 +9,7 @@ export const assistDBStatus = async  () => {
     const filterNotIn = [
         "perdido", "ganho", "none", "refeito",
     ]
+
     const budgets = await prismaClient.saveBudgets.findMany({
         where: {
             status: {
