@@ -47,10 +47,10 @@ export class RDController {
             const axiosResponse = await rdApi.put(`/deals/${deal_id}`, {
                 deal_stage_id: "649dcc5287d5af0023d4aaa0", deal: {
                     user_id: user.user_rd, deal_custom_fields: [{
-                        "custom_field_id": "64b7e36af4f07f001ab229e9", //check-in
+                        "custom_field_id": "64ff4e1f2ab269001b8bb10f", //check-in
                         "value": check_in
                     }, {
-                        "custom_field_id": "64b7e389d59c560018d30e20", //check-out
+                        "custom_field_id": "64ff4e32966cc10022693bc2", //check-out
                         "value": check_out
                     }, {
                         "custom_field_id": "64b7e553c69b74001c0e0048", //quantidade de crianças
