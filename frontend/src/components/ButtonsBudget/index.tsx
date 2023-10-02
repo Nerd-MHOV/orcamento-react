@@ -6,6 +6,8 @@ import pdfDescription from "../../context/generateTariff/functions/pdfDescriptio
 import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
 import Btn from "../Btn";
 import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import {ModalConfirmGroup} from "../ModalConfirmGroup";
+import * as React from "react";
 
 export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
@@ -14,6 +16,28 @@ export const ButtonsBudget = () => {
   );
   const api = useApi();
 
+
+  const [openModalConfirmGroup, setOpenModalConfirmGroup] = React.useState(false);
+
+  const handleOpenModalConfirmGroup = () => {
+
+    const dealId = budgets.reduce((acc, budget) => {
+      if (!acc && budget.arrComplete.responseForm.rd_client) {
+        return budget.arrComplete.responseForm.rd_client;
+      }
+      return acc;
+    }, "");
+
+    if(budgets.length > 1 && dealId) {
+      setOpenModalConfirmGroup(true);
+      return;
+    }
+    generatePdfBudget();
+   };
+
+  const handleCloseModalConfirmGroup = () => {
+    setOpenModalConfirmGroup(false);
+  };
   async function generatePdfDescription() {
     // if (
     //   budgets.find((budget) =>
@@ -31,11 +55,13 @@ export const ButtonsBudget = () => {
     await pdfDescription(budgets, name);
   }
 
-  async function generatePdfBudget() {
+  async function generatePdfBudget(group = false) {
+    handleCloseModalConfirmGroup();
     if (budgets.length < 1) {
       return;
     }
-    await rdSaveProcess(userLogin, budgets);
+    console.log("BUDGET:", budgets)
+    await rdSaveProcess(userLogin, budgets, group);
     if (
       budgets.find((budget) =>
         budget.arrComplete.responseForm.category.match(/Day-Use/)
@@ -63,11 +89,16 @@ export const ButtonsBudget = () => {
 
   return (
     <div className="boxButtons" style={{ marginTop: 32 }}>
+      <ModalConfirmGroup
+       open={openModalConfirmGroup}
+       handleClose={handleCloseModalConfirmGroup}
+       handleConclusion={generatePdfBudget}
+      />
       <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />
       <Btn
         action="Gerar PDF Orçamento"
         color="darkBlue"
-        onClick={generatePdfBudget}
+        onClick={handleOpenModalConfirmGroup}
       />
       <Btn
         action="Memória de Cálculo"
