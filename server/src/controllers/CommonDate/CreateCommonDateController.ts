@@ -45,7 +45,7 @@ export class CreateCommonDateController {
               active: first.active,
               food: {
                 create: {
-                    ...firstFood,
+                  ...firstFood,
                 },
               },
               TariffCheckInValues: {
@@ -66,11 +66,8 @@ export class CreateCommonDateController {
               product_rd: second.product_rd,
               active: second.active,
               food: {
-                connectOrCreate: {
-                  where: { id: secondFoodId },
-                  create: {
-                    ...secondFood,
-                  },
+                create: {
+                  ...secondFood,
                 },
               },
               TariffCheckInValues: {
