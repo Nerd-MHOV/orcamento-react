@@ -44,11 +44,8 @@ export class CreateCommonDateController {
               product_rd: first.product_rd,
               active: first.active,
               food: {
-                connectOrCreate: {
-                  where: { id: firstFoodId != 0 ? firstFoodId : uuid()},
-                  create: {
+                create: {
                     ...firstFood,
-                  },
                 },
               },
               TariffCheckInValues: {
