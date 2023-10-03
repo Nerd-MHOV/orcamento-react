@@ -32,6 +32,8 @@ import {
 import { useApi } from "../../hooks/api/api";
 import { addDays, format } from "date-fns";
 import { ApiDiscountProps } from "../../hooks/api/interfaces";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 
 export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   handleSelectDate: async () => {},
@@ -87,7 +89,9 @@ export const GenerateTariffContext = createContext<GenerateTariffContextProps>({
   setActionSelected() {},
   actionSelected: undefined,
   getClientName: async (id) => "",
-  clientName: ""
+  clientName: "",
+  handleOpenBackdrop() {},
+  handleCloseBackdrop() {},
 });
 
 export const GenerateTariffProvider = ({
@@ -142,6 +146,15 @@ export const GenerateTariffProvider = ({
     ApiDiscountProps | undefined
   >();
   const [clientName, setClientName] = useState("")
+  const [openBackdrop, setOpenBackdrop] = useState(false)
+
+  const handleOpenBackdrop = () => {
+    setOpenBackdrop(true);
+  }
+
+  const handleCloseBackdrop = () => {
+    setOpenBackdrop(false);
+  }
 
   const handleOpenModalPermission = (
     value: number,
@@ -464,9 +477,18 @@ export const GenerateTariffProvider = ({
         actionSelected,
         setActionSelected,
         clientName,
-        getClientName
+        getClientName,
+        handleOpenBackdrop,
+        handleCloseBackdrop,
       }}
     >
+      <Backdrop
+          sx={{ color: '#54a0ff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={openBackdrop}
+          onClick={handleCloseBackdrop}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {children}
     </GenerateTariffContext.Provider>
   );

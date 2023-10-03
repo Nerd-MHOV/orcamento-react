@@ -70,6 +70,8 @@ export interface GenerateTariffContextProps {
     actionSelected: ApiDiscountProps | undefined;
     getClientName: (id: string) => Promise<string>;
     clientName: string;
+    handleOpenBackdrop: VoidFunction;
+    handleCloseBackdrop: VoidFunction;
 }
 
 export type SelectionRangeProps = {

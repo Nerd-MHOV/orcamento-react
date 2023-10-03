@@ -11,11 +11,15 @@ import TableCalc from "../../components/TableCalc";
 import { GenerateTariffProvider } from "../../context/generateTariff/generateTariff";
 import { ModalDiscount } from "../../components/ModalDiscount";
 import ModalPermissionDiscount from "../../components/ModalPermissionDiscount";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Home = () => {
   return (
     <GenerateTariffProvider>
+
       <div className="home">
+
         <Sidebar />
         <div className="homeBx">
           <Navbar />

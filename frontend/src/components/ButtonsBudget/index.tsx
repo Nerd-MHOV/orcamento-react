@@ -11,7 +11,7 @@ import * as React from "react";
 
 export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
-  const { budgets, handleSaveBudget, clearTariffs } = useContext(
+  const { budgets, handleSaveBudget, clearTariffs, handleOpenBackdrop, handleCloseBackdrop } = useContext(
     GenerateTariffContext
   );
   const api = useApi();
@@ -20,7 +20,6 @@ export const ButtonsBudget = () => {
   const [openModalConfirmGroup, setOpenModalConfirmGroup] = React.useState(false);
 
   const handleOpenModalConfirmGroup = () => {
-
     const dealId = budgets.reduce((acc, budget) => {
       if (!acc && budget.arrComplete.responseForm.rd_client) {
         return budget.arrComplete.responseForm.rd_client;
@@ -32,6 +31,9 @@ export const ButtonsBudget = () => {
       setOpenModalConfirmGroup(true);
       return;
     }
+
+    handleOpenBackdrop();
+
     generatePdfBudget();
    };
 
@@ -46,6 +48,7 @@ export const ButtonsBudget = () => {
     // ) {
     //   return;
     // }
+    handleOpenBackdrop()
     const arrUser = await api.findUniqueUser(userLogin);
     const deal_id = budgets[0].arrComplete.responseForm.rd_client;
     let response;
@@ -53,6 +56,7 @@ export const ButtonsBudget = () => {
     console.log(response, "here")
     let name = response?.name || "undefined";
     await pdfDescription(budgets, name);
+    handleCloseBackdrop()
   }
 
   async function generatePdfBudget(group = false) {
@@ -85,6 +89,9 @@ export const ButtonsBudget = () => {
       .saveBudget(userLogin, budgets, true, response?.name)
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
+
+
+    handleCloseBackdrop();
   }
 
   return (
