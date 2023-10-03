@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { prismaClient } from "../../database/prismaClient";
+import {v4 as uuid} from "uuid";
+
 
 export class CreateCommonDateController {
   async handle(request: Request, response: Response) {
@@ -43,7 +45,7 @@ export class CreateCommonDateController {
               active: first.active,
               food: {
                 connectOrCreate: {
-                  where: { id: firstFoodId },
+                  where: { id: firstFoodId != 0 ? firstFoodId : uuid()},
                   create: {
                     ...firstFood,
                   },
