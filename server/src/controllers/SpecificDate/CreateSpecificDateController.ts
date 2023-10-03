@@ -26,10 +26,7 @@ export class CreateSpecificDateController {
           product_rd: tariff.product_rd,
           active: tariff.active,
           food: {
-            connectOrCreate: {
-              where: { id: foodId },
-              create: food,
-            },
+            create: food,
           },
           TariffCheckInValues: {
             createMany: {
