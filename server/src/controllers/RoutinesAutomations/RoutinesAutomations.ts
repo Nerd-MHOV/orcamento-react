@@ -3,6 +3,7 @@ import {rdGetDeals} from "../../services/rdstation/getDeals";
 import {assistOpportunity} from "../../crons/fsAssistOpportunity";
 import assist48hInWalking from "../../crons/DBStatus/assist48hInWalking";
 import assist24hInExpend from "../../crons/DBStatus/assist24hInExpend";
+import {fsAssistDaysDeadLine} from "../../crons/fsAssistDaysDeadLine";
 
 export class RoutinesAutomations {
     async getOpportunities (request: Request, response: Response) {
@@ -23,5 +24,10 @@ export class RoutinesAutomations {
     async assist24hInExpend ( request: Request, response: Response) {
         const res = await assist24hInExpend()
         return response.json(res)
+    }
+
+    async daysToDeadLine (request: Request, response: Response) {
+        fsAssistDaysDeadLine();
+        return response.json("Init process to check date in stage")
     }
 }

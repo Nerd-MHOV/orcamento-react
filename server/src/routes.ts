@@ -125,6 +125,8 @@ routes.get("/routines/opportunities", routinesAutomations.getOpportunities)
 routes.get("/routines/assist-opportunities", routinesAutomations.assistOpportunities)
 routes.get("/routines/assist-48h-in-walked", routinesAutomations.assist48hInWalked)
 routes.get("/routines/assist-24h-in-expend", routinesAutomations.assist24hInExpend)
+routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
+
 
 routes.use(authMiddleware);
 routes.delete("/user/:id", isAdmin, deleteUser.handle);
