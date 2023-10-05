@@ -4,6 +4,7 @@ import {assistOpportunity} from "../../crons/fsAssistOpportunity";
 import assist48hInWalking from "../../crons/DBStatus/assist48hInWalking";
 import assist24hInExpend from "../../crons/DBStatus/assist24hInExpend";
 import {fsAssistDaysDeadLine} from "../../crons/fsAssistDaysDeadLine";
+import {assistDBStatus} from "../../crons/DBStatus/assistDBStatus";
 
 export class RoutinesAutomations {
     async getOpportunities (request: Request, response: Response) {
@@ -16,6 +17,10 @@ export class RoutinesAutomations {
         return response.json(has_change ? "I found changes" : "All is ok")
     }
 
+    async assistDBStatus (request: Request, response: Response) {
+        assistDBStatus();
+        return response.json("assistDBStatus")
+    }
     async assist48hInWalked (request: Request, response: Response) {
         const res = await assist48hInWalking()
         return response.json(res)

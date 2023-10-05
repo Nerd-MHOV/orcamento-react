@@ -52,6 +52,7 @@ import { isAdmin } from "./middlewares/isAdmin";
 import {RDController} from "./controllers/RdStation/RDController";
 import {RoutinesAutomations} from "./controllers/RoutinesAutomations/RoutinesAutomations";
 import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
+import {assistDBStatus} from "./crons/DBStatus/assistDBStatus";
 
 const routes = express.Router();
 
@@ -123,6 +124,7 @@ routes.post("/login", loginUser.handle);
 
 routes.get("/routines/opportunities", routinesAutomations.getOpportunities)
 routes.get("/routines/assist-opportunities", routinesAutomations.assistOpportunities)
+routes.get("/routines/assist-db-status", routinesAutomations.assistDBStatus)
 routes.get("/routines/assist-48h-in-walked", routinesAutomations.assist48hInWalked)
 routes.get("/routines/assist-24h-in-expend", routinesAutomations.assist24hInExpend)
 routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
