@@ -47,11 +47,11 @@ export function ModalDiscount() {
   const handleSave = () => {
     setError(false);
     if (password !== "admin@2355" && passIsRequired) {
-      if (password == "ajuste" && discount && discount <= 20) {
-      } else {
+      // if (password == "ajuste" && discount && discount <= 20) {
+      // } else {
         setError(true);
         return;
-      }
+      // }
     }
 
     if (discount === discountBeingEdited.discount) {

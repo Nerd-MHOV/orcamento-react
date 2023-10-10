@@ -13,7 +13,12 @@ export const PetInputForm = () => {
         if(query.get("pet")) {
             const pet = query.get("pet")?.split(",")
             if(!pet) return
-            setPetValue(pet)
+            const filter = pet.filter(item => {
+                const lowercaseItem = item.toLowerCase();
+                return lowercaseItem === "pequeno" || lowercaseItem === "médio" || lowercaseItem === "grande";
+            });
+            if(!filter) return
+            setPetValue(filter)
         }
     }, []);
   return (
