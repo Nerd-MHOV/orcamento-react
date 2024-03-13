@@ -31,7 +31,6 @@ async function pdfBudget(
   const monthNum = Number(budgets[0].columns[1].substr(-2));
   const titleMonth = months[monthNum - 1];
 
-  console.log(budgets);
   const arrValues: any[] = [];
   let dealId = 0;
 
@@ -657,14 +656,6 @@ async function pdfBudget(
     // Abre a janela pop-up com o PDF
     window.open(url, '_blank', features);
   });
-
-  // if (dealId) {
-  //   const document = pdf.getBlob(async (blob) => {
-  //     const pipe = usePipe();
-  //     const response = await pipe.addFile(token, dealId, blob, "Orçamento.pdf");
-  //     console.log(response);
-  //   });
-  // }
 }
 
 export default pdfBudget;

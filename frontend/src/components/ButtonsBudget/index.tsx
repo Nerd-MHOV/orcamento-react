@@ -53,7 +53,6 @@ export const ButtonsBudget = () => {
     const deal_id = budgets[0].arrComplete.responseForm.rd_client;
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
-    console.log(response, "here")
     let name = response?.name || "undefined";
     await pdfDescription(budgets, name);
     handleCloseBackdrop()
@@ -64,7 +63,6 @@ export const ButtonsBudget = () => {
     if (budgets.length < 1) {
       return;
     }
-    console.log("BUDGET:", budgets)
     await rdSaveProcess(userLogin, budgets, group);
     if (
       budgets.find((budget) =>
@@ -85,10 +83,7 @@ export const ButtonsBudget = () => {
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
 
-    api
-      .saveBudget(userLogin, budgets, true, response?.name)
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+    api.saveBudget(userLogin, budgets, true, response?.name)
 
 
     handleCloseBackdrop();

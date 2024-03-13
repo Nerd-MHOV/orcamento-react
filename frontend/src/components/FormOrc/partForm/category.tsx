@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useContext } from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
-import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
+import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces/categoriesProps";
 
 export const CategoryInputForm = () => {
   const {
@@ -10,7 +10,7 @@ export const CategoryInputForm = () => {
     categoryValue,
     selectionRange,
     unitUsing,
-  } = useContext(GenerateTariffContext);
+  } = useGenerateTariff();
 
   const optionDisabled = (options: CategoryOptionsProps) => {
     if (

@@ -1,13 +1,13 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useContext } from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 
 export const RequirementInputForm = () => {
   const {
     listRequirements,
     requirementValue,
     handleClickOpenModalRequirement,
-  } = useContext(GenerateTariffContext);
+  } = useGenerateTariff();
   return (
     <Autocomplete
       multiple

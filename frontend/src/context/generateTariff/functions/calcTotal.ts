@@ -1,4 +1,4 @@
-import { DataContentProps } from "../interfaces";
+import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 
 export const calcTotal = (data: DataContentProps) => {
   let totalPerRow: {

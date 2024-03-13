@@ -28,9 +28,7 @@ const Login = () => {
           message: "Verifique a Senha e o Usuario!",
         });
       }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {

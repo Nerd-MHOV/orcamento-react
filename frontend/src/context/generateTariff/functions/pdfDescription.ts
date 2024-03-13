@@ -4,8 +4,7 @@ import {HeaderCalcMemory} from "./file-part/calc-memory/header";
 import {DailyCalcMemory} from "./file-part/calc-memory/daily";
 import {ExtraCalcMemory} from "./file-part/calc-memory/extra";
 import {TotalCalcMemory} from "./file-part/calc-memory/total";
-import {DataContentProps} from "../interfaces";
-
+import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
@@ -23,7 +22,6 @@ async function pdfDescription(
     budgets: DataContentProps[],
     namePerson: string
 ) {
-    console.log(budgets);
     const contentFor = [];
     //housing unit
 
@@ -276,20 +274,6 @@ async function pdfDescription(
         // Abre a janela pop-up com o PDF
         window.open(url, '_blank', features);
     });
-
-    // let deal_id = realBudget.arrComplete.responseForm.numberPipe;
-    // if (deal_id) {
-    //   const document = pdf.getBlob(async (blob) => {
-    //     const pipe = usePipe();
-    //     const response = await pipe.addFile(
-    //       token,
-    //       deal_id,
-    //       blob,
-    //       `Descrição-${format(new Date(), "dd-MM-yy")}.pdf`
-    //     );
-    //     console.log(response);
-    //   });
-    // }
 }
 
 export default pdfDescription;

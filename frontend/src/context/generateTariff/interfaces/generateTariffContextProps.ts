@@ -1,9 +1,23 @@
-import {ApiDiscountProps} from "../../hooks/api/interfaces";
-import {AppHotelProps} from "../../hooks/appHotel/interfaces";
+import SelectionRangeProps from "./selectionRangeProps";
+import {ApiDiscountProps} from "../../../hooks/api/interfaces";
+import {AppHotelProps} from "../../../hooks/appHotel/interfaces";
+import DataContentProps from "./tableBudgetDataContentProps";
+import { RequirementSubmitValuesProps } from "./requirementSubmitProps";
+import OccupancyProps from "./occupancyProps";
+import { CategoryOptionsProps } from "./categoriesProps";
+import PensionsOptionsProps from "./pensionOptionsProps";
+import RowModalDiscount from "./rowModalDiscount";
 
-export interface GenerateTariffContextProps {
+export type TypeModalProps = "person" | "ticket" | "tourism";
+export type occupacyUHProps = {
+    text: string,
+    max: number, 
+    min: number, 
+    category: string
+}
+
+interface GenerateTariffContextProps {
     handleSelectDate(ranges: any): Promise<void>;
-
     holidays: string[];
     monthsWithTariffs: string[];
     selectionRange: SelectionRangeProps;
@@ -38,9 +52,9 @@ export interface GenerateTariffContextProps {
     petValue: string[];
     setPetValue: React.Dispatch<React.SetStateAction<string[]>>;
     disabledPension: boolean;
-    handleCategoryInput: (newValue: CategoryOptionsProps | null) => void;
+   
     categoryOptions: CategoryOptionsProps[];
-    categoryValue: CategoryOptionsProps | null;
+    
     setPensionValue: React.Dispatch<
         React.SetStateAction<PensionsOptionsProps | null>
     >;
@@ -72,98 +86,11 @@ export interface GenerateTariffContextProps {
     clientName: string;
     handleOpenBackdrop: VoidFunction;
     handleCloseBackdrop: VoidFunction;
+    getOccupancyUH: (housingUnit: CategoryOptionsProps) => occupacyUHProps
+    
+    handleCategoryInput: (newValue: CategoryOptionsProps | null) => void;
+    categoryValue: CategoryOptionsProps | null;
+    handleCategoriesCorporateInput: (newValue: CategoryOptionsProps[]) => void;
+    categoriesCorporateValues: CategoryOptionsProps[];
 }
-
-export type SelectionRangeProps = {
-    startDate: Date;
-    endDate: Date;
-    key: string;
-};
-
-export type RowsProps = {
-    id: number;
-    desc: string;
-    values: string[] | number[] | any[];
-    total: string | number;
-    noDiscount: string[] | number[] | any[];
-    totalNoDiscount: string | number;
-    discountApplied: string | number;
-};
-
-export type DataContentProps = {
-    rows: RowsProps[] | [];
-    columns: string[] | [];
-    arrComplete?: any;
-    total?: {
-        total: number;
-        noDiscount: number;
-    };
-};
-
-//form
-export interface CategoriesProps {
-    category: {
-        id: string;
-        name: string;
-    };
-    category_id: string;
-    id: string;
-    minimum_occupancy: number;
-    maximum_occupancy: number;
-}
-
-export type TypeModalProps = "person" | "ticket" | "tourism";
-export type PensionsOptionsProps = "simples" | "meia" | "completa";
-export type CategoryOptionsStringProps =
-    | "padrão"
-    | "padrão varanda"
-    | "luxo"
-    | "luxo conjugado"
-    | "luxo com hidro";
-
-export interface RequirementSubmitProps {
-    requirement: string;
-    type: string;
-    values: RequirementSubmitValuesProps;
-}
-
-export interface RequirementSubmitValuesProps {
-    adult: number;
-    child: string[];
-    amount: number;
-}
-
-export interface CategoryOptionsProps {
-    label: string;
-    unit: string;
-    category: string;
-}
-
-export interface ArrCompleteProps {
-    childValue?: String[];
-    petValue?: String[];
-    responseForm?: ResponseFormProps;
-    selectionRange?: SelectionRangeProps;
-}
-
-export interface ResponseFormProps {
-    adult?: number;
-    discount?: number;
-    category?: string;
-    housingUnit: string;
-    rd_client: string;
-    pension: string;
-}
-
-export interface OccupancyProps {
-    text: string;
-    max: number;
-    min: number;
-    category: string;
-}
-
-export interface RowModalDiscount {
-    id: number;
-    name: string;
-    discount: number;
-}
+export default GenerateTariffContextProps

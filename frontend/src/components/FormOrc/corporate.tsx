@@ -1,23 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import "./style.scss";
 import { ModalRequirement } from "../ModalRequirement";
-import { AdultInputForm } from "./partForm/adult";
-import { ChildInputForm } from "./partForm/child";
-import { PetInputForm } from "./partForm/pet";
-import { DiscountInputForm } from "./partForm/discount";
-import { CategoryInputForm } from "./partForm/category";
 import { PensionInputForm } from "./partForm/pension";
-import { PipeNumberInputForm } from "./partForm/pipeNumber";
-import { RdClientInputForm} from "./partForm/rdClient";
+import { RdClientInputForm } from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { ActionInputForm } from "./partForm/action";
-import {GetClientName} from "./partForm/getClientName";
+import { GetClientName } from "./partForm/getClientName";
+import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
 
-export const FormOrc = () => {
+export const FormOrcCorporate = () => {
   const {
     stateApp,
     occupancyWrong,
@@ -27,14 +22,13 @@ export const FormOrc = () => {
     dailyCourtesy: checkCourtesy,
     actionSelected,
     dataTable,
-  } = useContext(GenerateTariffContext);
+  } = useGenerateTariff();
 
   const [dailyCourtesy, setDailyCourtesy] = useState(false);
 
   const getIsCourtesy = async () => {
     const isCourtesy = actionSelected?.daily_courtesy ?? false;
     setDailyCourtesy(isCourtesy);
-    console.log(actionSelected, "actionSelected");
     if (!isCourtesy) {
       setCheckCourtesy(false);
     }
@@ -53,15 +47,8 @@ export const FormOrc = () => {
       <div className="boxFormAndInfo">
         <form id="form" className="form">
           <div className="formBox">
-            <AdultInputForm />
-            <ChildInputForm />
-            <PetInputForm />
-            <DiscountInputForm />
-          </div>
-          <div className="formBox">
-            <CategoryInputForm />
+            <CategoryCorporateInputForm />
             <PensionInputForm />
-            {/*<PipeNumberInputForm />*/}
             <RdClientInputForm />
             <RequirementInputForm />
           </div>

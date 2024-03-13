@@ -118,7 +118,6 @@ export function Row(props: {
   };
 
   const handleDeleteTariff = (rowToDelete: ReturnType<typeof createData>) => {
-    console.log(row);
     setRowToDelete(row);
     if (rowToDelete) setOpenDelete(true);
   };
@@ -150,8 +149,6 @@ export function Row(props: {
       ? [common.tariff_to_midweek_id, common.tariff_to_weekend_id]
       : [specific.tariffs_id];
     const result = await api.deleteTariff(arrTariff);
-    console.log(result);
-    console.log("delete");
     reloadRows();
     handleDeleteClose();
   };

@@ -19,7 +19,6 @@ export const FormNewCollaborator = () => {
   const [errForm, setErrForm] = useState("");
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
     const name = `${data.firstname} ${data.lastname}`;
     api
       .createUser(
@@ -38,7 +37,6 @@ export const FormNewCollaborator = () => {
         setErrForm("Erro do servidor");
         if (err?.response?.data?.message?.message)
           setErrForm(err.response.data.message.message);
-        console.log(err);
       });
   };
 

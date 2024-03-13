@@ -93,20 +93,6 @@ async function EvitaBug(budgets: any[], token: string) {
 
   const pdf = pdfMake.createPdf(docDefinitions);
   pdf.open();
-
-  // let deal_id = realBudget.arrComplete.responseForm.numberPipe;
-  // if (deal_id) {
-  //   const document = pdf.getBlob(async (blob) => {
-  //     const pipe = usePipe();
-  //     const response = await pipe.addFile(
-  //       token,
-  //       deal_id,
-  //       blob,
-  //       "Descrição.pdf"
-  //     );
-  //     console.log(response);
-  //   });
-  // }
 }
 
 export default EvitaBug;

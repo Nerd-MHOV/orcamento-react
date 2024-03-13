@@ -21,7 +21,6 @@ export const BudgetsPage = () => {
 
   const getBudgets = async () => {
     const response = await api.getSavedBudgets(search, onlyFavorites);
-    console.log(response);
     setBudgets(response);
   };
 

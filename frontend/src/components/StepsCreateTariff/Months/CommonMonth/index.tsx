@@ -22,7 +22,6 @@ export const CommonMonths = () => {
     let maxMonth = addYears(nowMonth, 2);
     let monthOptions = [];
     const selectedMonths = await api.findMonthWithTariff();
-    console.log(selectedMonths);
 
     while (nowMonth < maxMonth) {
       let disabled = false;
@@ -38,7 +37,6 @@ export const CommonMonths = () => {
       nowMonth = addMonths(nowMonth, 1);
     }
 
-    console.log(monthOptions);
     setOptions(monthOptions);
   };
 
@@ -55,7 +53,6 @@ export const CommonMonths = () => {
         sx={{ maxWidth: 400, margin: "0 auto" }}
         onChange={(event, value) => {
           let dates = value.map((date) => date.date);
-          console.log(dates, "dates here");
           setDates(dates);
         }}
         renderInput={(params) => (

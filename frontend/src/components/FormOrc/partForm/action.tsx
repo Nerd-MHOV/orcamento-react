@@ -9,12 +9,12 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { getAllowedDiscount } from "../../../context/generateTariff/functions/getters/getAllowedDiscount";
 import { getPayers } from "../../../context/generateTariff/functions/getters/getPayers";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 import { ApiDiscountProps } from "../../../hooks/api/interfaces";
 
 export const ActionInputForm = () => {
   const { selectionRange, dataTable, setActionSelected, actionSelected } =
-    useContext(GenerateTariffContext);
+    useGenerateTariff();
   const [action, setAction] = useState<ApiDiscountProps[]>([]);
   const [select, setSelect] = useState("");
 
@@ -24,7 +24,6 @@ export const ActionInputForm = () => {
       getPayers(dataTable)
     );
 
-    console.log("Actions", response);
     const verifyIfSelected = response.find(
       (el) => el.name === actionSelected?.name
     );
@@ -34,6 +33,10 @@ export const ActionInputForm = () => {
   useEffect(() => {
     getAction();
   }, [selectionRange, dataTable]);
+
+  useEffect(() => {
+    setActionSelected(undefined);
+  }, [selectionRange])
 
   useEffect(() => {
     setSelect(actionSelected?.name ?? "");
@@ -50,7 +53,6 @@ export const ActionInputForm = () => {
         label="Aplicar em"
         onChange={(e) => {
           setActionSelected(action.find((el) => el.name === e.target.value));
-          console.log("mudou");
         }}
       >
         <MenuItem value={""}>Nenhuma</MenuItem>

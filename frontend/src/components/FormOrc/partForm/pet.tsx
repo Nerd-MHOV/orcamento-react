@@ -1,12 +1,44 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, TextField } from "@mui/material";
 import {useContext, useEffect} from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 import useQuery from "../../../hooks/urlQuery/query";
 
 const petOptions = ["pequeno", "médio", "grande"];
 
+
+export type OnChangePetFieldFormProps = (
+  event: React.SyntheticEvent<Element, Event>, 
+  value: string[], 
+  reason: AutocompleteChangeReason, 
+  details?: AutocompleteChangeDetails<string> | undefined
+  ) => void
+interface PetFieldFormProps {
+  value: string[],
+  onChange: OnChangePetFieldFormProps
+}
+export const PetFieldForm = ({value, onChange}: PetFieldFormProps) => (
+  <Autocomplete
+  multiple
+  options={petOptions}
+  isOptionEqualToValue={() => false}
+  className="textField"
+  onChange={onChange}
+  value={value}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Pet"
+      name="pet"
+      placeholder="porte"
+      type="text"
+      variant="standard"
+    />
+  )}
+/>
+)
+
 export const PetInputForm = () => {
-  const { petValue, setPetValue } = useContext(GenerateTariffContext);
+  const { petValue, setPetValue } = useGenerateTariff();
   const query = useQuery();
 
     useEffect(() => {
@@ -22,26 +54,14 @@ export const PetInputForm = () => {
             setPetValue(filter)
         }
     }, []);
+
+    const onChange: OnChangePetFieldFormProps = (_, newValue) => {
+      setPetValue(newValue);
+    }
   return (
-    <Autocomplete
-      multiple
-      options={petOptions}
-      isOptionEqualToValue={() => false}
-      className="textField"
-      onChange={(_, newValue) => {
-        setPetValue(newValue);
-      }}
+    <PetFieldForm 
       value={petValue}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Pet"
-          name="pet"
-          placeholder="porte"
-          type="text"
-          variant="standard"
-        />
-      )}
+      onChange={onChange}
     />
   );
 };

@@ -1,5 +1,4 @@
-import { DataContentProps } from "../../interfaces";
-
+import DataContentProps from "../../interfaces/tableBudgetDataContentProps";
 export function getPayers(dataContent: DataContentProps) {
   let payers: number = 0;
 

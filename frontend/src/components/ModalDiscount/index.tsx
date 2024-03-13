@@ -7,25 +7,20 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { TextField } from "@mui/material";
 import "./style.scss";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
-import { getAllowedDiscount } from "../../context/generateTariff/functions/getters/getAllowedDiscount";
+import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
 
 export function ModalDiscount() {
   const {
     handleCloseModalDiscount: handleClose,
     handleSaveModalDiscount,
     openModalDiscount: open,
-    selectionRange,
     discountBeingEdited,
     addUnitaryDiscount,
-    dataTable,
     actionSelected,
-  } = React.useContext(GenerateTariffContext);
+  } = useGenerateTariff();
 
-  console.log(dataTable, "here");
   const [password, setPassword] = React.useState("");
   const [passIsRequired, setPassIsRequired] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [discount, setDiscount] = React.useState<number | null>(null);
 
@@ -33,12 +28,10 @@ export function ModalDiscount() {
     let limit = actionSelected?.percent_unitary ?? 0;
 
     if (value > limit) {
-      console.log("bateu");
       setPassIsRequired(true);
     } else {
       setPassIsRequired(false);
     }
-    console.log(limit, passIsRequired);
     if (value < 0) setDiscount(null);
     else if (value > 100) setDiscount(100);
     else setDiscount(value);

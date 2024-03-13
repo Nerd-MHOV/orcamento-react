@@ -17,7 +17,6 @@ export const RequirementsPage = () => {
 
   const getRequirements = async () => {
     const requirements = await api.getRequirements();
-    console.log(requirements);
     makeRows(requirements);
   };
 

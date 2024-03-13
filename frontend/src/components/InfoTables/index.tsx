@@ -9,10 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext } from "react";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
 
 export const InfoTable = () => {
-  const { budgets, deleteLine } = useContext(GenerateTariffContext);
+  const { budgets, deleteLine } = useGenerateTariff();
   return (
     <div className="infoTable">
       <>

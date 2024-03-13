@@ -19,7 +19,6 @@ export const FormEditCollaborator = ({ fields }: { fields: ApiUserProps }) => {
   const [errForm, setErrForm] = useState("");
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
     const name = `${data.firstname} ${data.lastname}`;
     api
       .updateUser(
@@ -39,7 +38,6 @@ export const FormEditCollaborator = ({ fields }: { fields: ApiUserProps }) => {
         setErrForm("Erro do servidor");
         if (err?.response?.data?.message?.message)
           setErrForm(err.response.data.message.message);
-        console.log(err);
       });
   };
 

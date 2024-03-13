@@ -72,7 +72,6 @@ export default function DialogPriceRequirement({
                   setError(false);
                   confirm(Number(price)).then((response) => {
                     setLoading(false);
-                    console.log(response);
                     if (response) {
                       close();
                       setPrice("");

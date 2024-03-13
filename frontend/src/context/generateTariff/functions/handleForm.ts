@@ -1,7 +1,7 @@
 import serialize from "form-serialize";
 import { useApi } from "../../../hooks/api/api";
-import { RequirementSubmitProps, RowModalDiscount } from "../interfaces";
-
+import RowModalDiscount from "../interfaces/rowModalDiscount";
+import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
 export interface selectionRange {
   startDate: Date;
   endDate: Date;
@@ -22,8 +22,6 @@ export async function handleForm(
 
   const formUp: HTMLFormElement | any = document.querySelector("#form");
   const responseForm = serialize(formUp, { hash: true });
-  console.log("form", responseForm)
-
   if (
     typeof responseForm.category === "string" &&
     responseForm.category.match(/Day-Use/)

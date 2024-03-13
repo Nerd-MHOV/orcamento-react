@@ -13,7 +13,6 @@ export const DiscountsPage = () => {
 
   const getDiscounts = async () => {
     const response = await api.getAllDiscounts();
-    console.log(response);
     setDiscounts(response);
   };
 

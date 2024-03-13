@@ -90,8 +90,6 @@ export const InputTables = () => {
       ? "Insira as tabelas com os valores"
       : "Insira a tabela com os valores";
 
-  console.log(typeTariff);
-
   const handleChangeInput = (
     event: React.ChangeEvent<HTMLInputElement>,
     type: "midweek" | "weekend" | "holiday"
@@ -99,8 +97,6 @@ export const InputTables = () => {
     if (event.target.files) {
       const file = event.target.files[0];
       readExcel(file).then((data) => {
-        console.log(data);
-
         if (type === "midweek") {
           setMidweek(data[0].__EMPTY_6);
         }
@@ -163,7 +159,6 @@ export const InputTables = () => {
         setUHValues(keyType, "chd4", "LUXH", data[6].__EMPTY_4);
         setUHValues(keyType, "chd8", "LUXH", data[6].__EMPTY_5);
 
-        console.log(arrTariffs);
       });
     }
   };

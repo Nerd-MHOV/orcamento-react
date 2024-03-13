@@ -34,7 +34,6 @@ export class CreateCommonDateController {
         const { id: idValue, tariffs_id: _, ...rest } = value;
         return rest;
       });
-      console.log("HERE", second.food);
 
       const [firstCreate, secondCreate, commonCreate] =
         await prismaClient.$transaction([
@@ -87,17 +86,11 @@ export class CreateCommonDateController {
           }),
         ]);
 
-      console.log("============================================");
-      console.log({ firstCreate, secondCreate, commonCreate });
       return response.json({
         msg: "success",
         debug: { firstCreate, secondCreate, commonCreate },
       });
     } catch (err) {
-      console.log("============================================");
-      console.log(err);
-      console.log("============================================");
-
       return response.json({ msg: "error", debug: err });
     }
   }

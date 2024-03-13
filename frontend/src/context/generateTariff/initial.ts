@@ -1,4 +1,5 @@
-import { RowModalDiscount } from "./interfaces";
+import GenerateTariffContextProps from "./interfaces/generateTariffContextProps";
+import RowModalDiscount from "./interfaces/rowModalDiscount";
 
 export const dataInitial = {
   rows: [],

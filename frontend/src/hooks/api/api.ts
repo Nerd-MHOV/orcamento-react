@@ -1,10 +1,8 @@
 import axios from "axios";
 import {selectionRange} from "../../context/generateTariff/functions/handleForm";
-import {
-    RequirementSubmitProps,
-    RowModalDiscount,
-    DataContentProps,
-} from "../../context/generateTariff/interfaces";
+import RowModalDiscount from "../../context/generateTariff/interfaces/rowModalDiscount";
+import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
+import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
 import {
     AllTariffsProps,
     ApiDiscountProps,
@@ -22,7 +20,7 @@ import {
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-    baseURL: "http://192.168.10.87:3335",
+    baseURL: "http://localhost:3335",
     headers: {
         Authorization: `Bearer ${storageData}`,
     },

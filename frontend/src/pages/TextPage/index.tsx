@@ -25,9 +25,7 @@ export const TestPage = () => {
       };
     });
 
-    promise.then((response) => {
-      console.log(response);
-    });
+    promise.then(() => {});
   };
   return (
     <div className="ok">

@@ -1,13 +1,12 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import {useContext, useEffect} from "react";
+import { useEffect} from "react";
 import { DateRangePicker } from "react-date-range";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import useQuery from "../../hooks/urlQuery/query";
 
 export const CalendarPicker = () => {
-  const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } =
-    useContext(GenerateTariffContext);
+  const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } = useGenerateTariff();
 
   const query = useQuery();
   function customDayContent(day: Date) {
@@ -56,6 +55,7 @@ export const CalendarPicker = () => {
     }, []);
 
   return (
+    <>
     <DateRangePicker
       ranges={[selectionRange]}
       onChange={handleSelectDate}
@@ -66,5 +66,7 @@ export const CalendarPicker = () => {
       direction="horizontal"
       locale={ptBR}
     />
+    <input type="hidden" value={JSON.stringify(selectionRange)} name='rangeDate' />
+    </>
   );
 };

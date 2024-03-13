@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { useAppApi } from "../../../../hooks/appHotel/app";
-import { SelectionRangeProps } from "../../interfaces";
+import SelectionRangeProps from "../../interfaces/selectionRangeProps";
 
 export async function getUnitUsing(date: SelectionRangeProps) {
   const app = useAppApi();

@@ -52,9 +52,6 @@ export class UpdateCommonDateController {
         debug: tariffUpdate,
       });
     } catch (err) {
-      console.log("============================================");
-      console.log(err);
-      console.log("============================================");
 
       return response.json({ msg: "error", debug: err });
     }

@@ -11,7 +11,7 @@ import { PipeNumberInputForm } from "./partForm/pipeNumber";
 import { RdClientInputForm} from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { ActionInputForm } from "./partForm/action";
@@ -27,14 +27,10 @@ export const FormOrc = () => {
     dailyCourtesy: checkCourtesy,
     actionSelected,
     dataTable,
-  } = useContext(GenerateTariffContext);
-
-  const [dailyCourtesy, setDailyCourtesy] = useState(false);
+  } = useGenerateTariff();
 
   const getIsCourtesy = async () => {
     const isCourtesy = actionSelected?.daily_courtesy ?? false;
-    setDailyCourtesy(isCourtesy);
-    console.log(actionSelected, "actionSelected");
     if (!isCourtesy) {
       setCheckCourtesy(false);
     }
@@ -80,21 +76,25 @@ export const FormOrc = () => {
             </div>
             <InfoApp stateApp={stateApp} />
           </div>
-          <div
-            className="daily-courtesy"
-            style={!dailyCourtesy ? { display: "none" } : {}}
-          >
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => {
-                setCheckCourtesy(!checkCourtesy);
-              }}
-            >
-              {checkCourtesy ? <CheckBox /> : <CheckBoxOutlineBlank />}
-            </IconButton>{" "}
-            <p style={{ color: "#757575" }}>Diária Cortesia</p>
-          </div>
+          {
+            actionSelected?.daily_courtesy ?
+                <div
+                    className="daily-courtesy"
+                >
+                  <IconButton
+                      aria-label="expand row"
+                      size="small"
+                      onClick={() => {
+                        setCheckCourtesy(!checkCourtesy);
+                      }}
+                  >
+                    {checkCourtesy ? <CheckBox /> : <CheckBoxOutlineBlank />}
+                  </IconButton>{" "}
+                  <p style={{ color: "#757575" }}>Diária Cortesia</p>
+                </div>
+                : <></>
+          }
+
         </div>
         <GetClientName />
       </div>
