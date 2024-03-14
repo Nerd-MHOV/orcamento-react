@@ -4,13 +4,12 @@ import {Day_x} from "./CheckDayToChangeStage";
 
 
 export const days_to_check_dead_line = {
-
     "BE_pos-venda_180": () => Day_x(-185, "651c29032f49be000fb3520f", "64b7f36d1bfc7f000d53f87d", "check_out"),
     "BE_pos-venda_100": () => Day_x(-180, "64b7f36d1bfc7f000d53f87c", "651c29032f49be000fb3520f", "check_out"),
     "BE_pos-venda_50": () => Day_x(-100, "64b7f36d1bfc7f000d53f87b", "64b7f36d1bfc7f000d53f87c", "check_out"),
     "BE_pos-venda_20": () => Day_x(-50, "64b7f36d1bfc7f000d53f87a", "64b7f36d1bfc7f000d53f87b", "check_out"),
     "BE_pos-venda_3": () => Day_x(-20, "64b7f36d1bfc7f000d53f879", "64b7f36d1bfc7f000d53f87a", "check_out"),
-    "BE_pos-venda_x": () => Day_x(-3, "651c2869b68030002280a5f2", "64b7f36d1bfc7f000d53f879", "check_out"),
+    "BE_pos-venda_x": () => Day_x(-3, "651c2869b68030002280a5f2", "64b7f36d1bfc7f000d53f879", "check_out", "652e87e272abd8b911a4d18a"),
     //
     // "E_pos-venda_180": () => Day_x(-240, "651c28d063557500187d61d1", "651c28e163bae5000f6c74ad", "check_out"),
     // "E_pos-venda_120": () => Day_x(-180, "64ca51a5c152910021b23eaf", "651c28d063557500187d61d1", "check_out"),
