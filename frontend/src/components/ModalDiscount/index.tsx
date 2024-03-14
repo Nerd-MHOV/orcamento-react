@@ -17,6 +17,7 @@ export function ModalDiscount() {
     discountBeingEdited,
     addUnitaryDiscount,
     actionSelected,
+    unitaryDiscount
   } = useGenerateTariff();
 
   const [password, setPassword] = React.useState("");
@@ -110,6 +111,8 @@ export function ModalDiscount() {
           <Button onClick={handleSave}>Confirmar</Button>
         </DialogActions>
       </Dialog>
+
+      {/* <input type="hidden" name="unitary_discounts" value={JSON.stringify(unitaryDiscount)} /> */}
     </Dialog>
   );
 }

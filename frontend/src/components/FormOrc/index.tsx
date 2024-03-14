@@ -47,7 +47,7 @@ export const FormOrc = () => {
         <ModalRequirement />
       </div>
       <div className="boxFormAndInfo">
-        <form id="form" className="form">
+        <div className="form">
           <div className="formBox">
             <AdultInputForm />
             <ChildInputForm />
@@ -61,7 +61,7 @@ export const FormOrc = () => {
             <RdClientInputForm />
             <RequirementInputForm />
           </div>
-        </form>
+        </div>
         <div style={{ width: "100%" }}>
           <ActionInputForm />
         </div>

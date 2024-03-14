@@ -5,15 +5,13 @@ import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
 import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
 import Btn from "../Btn";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import {ModalConfirmGroup} from "../ModalConfirmGroup";
 import * as React from "react";
 
 export const ButtonsBudget = () => {
   const { userLogin } = useContext(AuthContext);
-  const { budgets, handleSaveBudget, clearTariffs, handleOpenBackdrop, handleCloseBackdrop } = useContext(
-    GenerateTariffContext
-  );
+  const { budgets, handleSaveBudget, clearTariffs, handleOpenBackdrop, handleCloseBackdrop } = useGenerateTariff();
   const api = useApi();
 
 

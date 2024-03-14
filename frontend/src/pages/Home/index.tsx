@@ -23,6 +23,7 @@ const Home = () => {
         <Sidebar />
         <div className="homeBx">
           <Navbar />
+          <form id="form" onSubmit={(e) => {e.preventDefault()}}>
           <div className="p20">
             {/* modal */}
             <ModalDiscount />
@@ -42,6 +43,7 @@ const Home = () => {
               </div>
             </div>
           </div>
+          </form>
         </div>
       </div>
     </GenerateTariffProvider>

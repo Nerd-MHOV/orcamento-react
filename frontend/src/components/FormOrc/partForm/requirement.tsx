@@ -7,8 +7,10 @@ export const RequirementInputForm = () => {
     listRequirements,
     requirementValue,
     handleClickOpenModalRequirement,
+    requirementSubmit
   } = useGenerateTariff();
   return (
+    <>
     <Autocomplete
       multiple
       isOptionEqualToValue={() => false}
@@ -29,5 +31,7 @@ export const RequirementInputForm = () => {
         />
       )}
     />
+    <input type="hidden" name="requirementComplete" value={JSON.stringify(requirementSubmit)} />
+    </>
   );
 };

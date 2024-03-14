@@ -45,6 +45,7 @@ export const CategoryInputForm = () => {
   };
 
   return (
+    <>
     <Autocomplete
       options={categoryOptions}
       className="textField"
@@ -64,5 +65,7 @@ export const CategoryInputForm = () => {
         />
       )}
     />
+    <input type="hidden" name="categoryComplete" value={JSON.stringify(categoryValue)}/>
+    </>
   );
 };

@@ -20,7 +20,8 @@ export async function handleForm(
 ) {
   const api = useApi();
 
-  const formUp: HTMLFormElement | any = document.querySelector("#form");
+  const formUp: HTMLFormElement | null = document.querySelector("#form");
+  if(!formUp) return;
   const responseForm = serialize(formUp, { hash: true });
   if (
     typeof responseForm.category === "string" &&

@@ -1,4 +1,4 @@
-import {ReactNode, useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {getCategoryOptions} from "./functions/getters/getCategoryOptions";
 import {getColumnData} from "./functions/getters/getColumnData";
 import {getHolidays} from "./functions/getters/getHolidays";

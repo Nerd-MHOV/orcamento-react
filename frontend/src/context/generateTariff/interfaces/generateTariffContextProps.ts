@@ -2,7 +2,7 @@ import SelectionRangeProps from "./selectionRangeProps";
 import {ApiDiscountProps} from "../../../hooks/api/interfaces";
 import {AppHotelProps} from "../../../hooks/appHotel/interfaces";
 import DataContentProps from "./tableBudgetDataContentProps";
-import { RequirementSubmitValuesProps } from "./requirementSubmitProps";
+import RequirementSubmitProps, { RequirementSubmitValuesProps } from "./requirementSubmitProps";
 import OccupancyProps from "./occupancyProps";
 import { CategoryOptionsProps } from "./categoriesProps";
 import PensionsOptionsProps from "./pensionOptionsProps";
@@ -61,6 +61,7 @@ interface GenerateTariffContextProps {
     pensionValue: PensionsOptionsProps | null;
     listRequirements: string[];
     requirementValue: string[];
+    requirementSubmit: RequirementSubmitProps[];
     handleClickOpenModalRequirement: (requirement: string[]) => void;
     handleCloseModalDiscount: VoidFunction;
     handleSaveModalDiscount: VoidFunction;
@@ -69,6 +70,7 @@ interface GenerateTariffContextProps {
     discountBeingEdited: RowModalDiscount;
     addUnitaryDiscount: (row: RowModalDiscount) => void;
     clearUnitaryDiscount: VoidFunction;
+    unitaryDiscount: RowModalDiscount[];
     isOpenModalPermission: boolean;
     handleCloseModalPermission: VoidFunction;
     handleOpenModalPermission: (
