@@ -5,6 +5,7 @@ import assist48hInWalking from "../../crons/DBStatus/assist48hInWalking";
 import assist24hInExpend from "../../crons/DBStatus/assist24hInExpend";
 import {fsAssistDaysDeadLine} from "../../crons/fsAssistDaysDeadLine";
 import {assistDBStatus} from "../../crons/DBStatus/assistDBStatus";
+import { fsAssistGoogleForms } from "../../crons/fsAssistGoogleForms";
 
 export class RoutinesAutomations {
     async getOpportunities (request: Request, response: Response) {
@@ -34,5 +35,10 @@ export class RoutinesAutomations {
     async daysToDeadLine (request: Request, response: Response) {
         fsAssistDaysDeadLine();
         return response.json("Init process to check date in stage")
+    }
+
+    async googleForms ( request: Request, response: Response ) {
+        const gf = await fsAssistGoogleForms();
+        return response.json(gf)
     }
 }

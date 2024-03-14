@@ -128,6 +128,7 @@ routes.get("/routines/assist-db-status", routinesAutomations.assistDBStatus)
 routes.get("/routines/assist-48h-in-walked", routinesAutomations.assist48hInWalked)
 routes.get("/routines/assist-24h-in-expend", routinesAutomations.assist24hInExpend)
 routes.get("/routines/days-to-dead-line", routinesAutomations.daysToDeadLine)
+routes.get("/routines/google-forms", routinesAutomations.googleForms)
 
 
 routes.use(authMiddleware);

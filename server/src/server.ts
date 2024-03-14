@@ -12,6 +12,7 @@ import {ExpressAdapter} from "@bull-board/express";
 import {createBullBoard} from "@bull-board/api";
 import {BullAdapter} from "@bull-board/api/bullAdapter";
 import {fsAssistDaysDeadLine} from "./crons/fsAssistDaysDeadLine";
+import { fsAssistGoogleForms } from "./crons/fsAssistGoogleForms";
 
 require("dotenv").config();
 
@@ -66,6 +67,7 @@ cron.schedule("0 */2 * * *", fsAssistDBStatus)
 // cron.schedule("0 9 * * *", assist48hInWalking)
 // cron.schedule("0 10 * * *", assist24hInExpend)
 cron.schedule("0 3 * * *", fsAssistDaysDeadLine);
+cron.schedule("0 2 * * *", fsAssistGoogleForms);
 
 
 
