@@ -1,19 +1,19 @@
-import {rdGetDeals} from "../../services/rdstation/getDeals";
-import {checkDeadLine} from "./CheckDeadLine";
-import {CustomFieldFilter, FieldsKeysRD} from "../../services/rdstation/CustomFieldFilter";
-import {UpdateDeal} from "../../services/rdstation/updateDeal";
-import {rdCreateTask} from "../../services/rdstation/createTask";
-import {format} from "date-fns";
+import { rdGetDeals } from "../../services/rdstation/getDeals";
+import { checkDeadLine } from "./CheckDeadLine";
+import { CustomFieldFilter, FieldsKeysRD } from "../../services/rdstation/CustomFieldFilter";
+import { UpdateDeal } from "../../services/rdstation/updateDeal";
+import { rdCreateTask } from "../../services/rdstation/createTask";
+import { format } from "date-fns";
 import { Dialog } from "../../services/chatguru/Dialog";
 import formatPhone from "../../services/formatPhone";
 
 export const Day_x = async (
-    day_dead_line: number, 
-    current_stage: string, 
-    next_stage: string, 
+    day_dead_line: number,
+    current_stage: string,
+    next_stage: string,
     field: FieldsKeysRD,
     dialog?: string,
-    ) => {
+) => {
     console.log(` [ INFO ] - *Day_x() - init process....`)
     console.log(` [ INFO ] - *Day_x() - deadline: ${day_dead_line}`)
     console.log(` [ INFO ] - *Day_x() - current_stage: ${current_stage}`)
@@ -41,7 +41,7 @@ export const Day_x = async (
                 field, deal
             )
 
-            if(
+            if (
                 typeof day_to_compare?.value !== 'string'
                 || day_to_compare.value.split("/")[0].length !== 2
                 || day_to_compare.value.split("/")[1].length !== 2
@@ -79,43 +79,44 @@ export const Day_x = async (
 
 
             // mudar negocio para proxima etapa
-            if(checkDate) {
+            if (checkDate) {
                 await UpdateDeal(deal.id, {
                     deal_stage_id: next_stage
                 }).then(() => {
                     console.log(` [ INFO ] - *Day_x() - changed stage deal ${deal.name}...`)
+                }).catch(() => {
+                    console.log(` [ ERROR ] - *Day_x() - **UpdateDeal() - error to change stage deal `)
                 })
-                    .catch(() => {
-                        console.log(` [ ERROR ] - *Day_x() - **UpdateDeal() - error to change stage deal `)
-                    })
+
+                // Enviar Dialog
+                if (dialog) {
+                    const number = formatPhone(deal.contacts[0].phones[0].phone)
+                    const responseDialog = await Dialog(
+                        number,
+                        dialog
+                    );
+                    console.log(` [ INFO ] - *Day_x() - Send Dialog: ${number} - ${dialog} - ${responseDialog?.code}`)
+                    if (responseDialog?.code !== 200) {
+                        // Criar task com o erro
+                        const taskDate = new Date()
+                        taskDate.setFullYear(taskDate.getFullYear() - 1);
+                        rdCreateTask({
+                            task: {
+                                deal_id: deal.id,
+                                subject: "ERRO: Dialog Chatguru",
+                                type: "task",
+                                date: format(taskDate, "yyyy-MM-dd"),
+                                hour: format(new Date(), "HH:ii"),
+                                notes: responseDialog.description ?? "Erro ao enviar menssagem",
+                            }
+                        }).then(() => {
+                            console.log(` [ INFO ] - *Day_x() - CG Erro ao executar dialogo - created tag to ${deal.name}`)
+                        })
+                    }
+                }
+
             }
 
-            // Enviar Dialog
-            if(dialog) {
-                const number = formatPhone(deal.contacts[0].phones[0].phone)
-                const responseDialog = await Dialog(
-                    number,
-                    dialog
-                );
-                console.log(` [ INFO ] - *Day_x() - Send Dialog: ${number} - ${dialog} - ${responseDialog?.code}`)
-                if ( responseDialog?.code !== 200) {
-                    // Criar task com o erro
-                    const taskDate = new Date()
-                    taskDate.setFullYear(taskDate.getFullYear() - 1);
-                    rdCreateTask({
-                        task: {
-                            deal_id: deal.id,
-                            subject: "ERRO: Dialog Chatguru",
-                            type: "task",
-                            date: format(taskDate, "yyyy-MM-dd"),
-                            hour: format(new Date(), "HH:ii"),
-                            notes: responseDialog.description ?? "Erro ao enviar menssagem",
-                        }
-                    }).then(() => {
-                        console.log(` [ INFO ] - *Day_x() - CG Erro ao executar dialogo - created tag to ${deal.name}`)
-                    })
-                }
-            }
         }
 
         console.log(` [ INFO ] - *Day_x() - finish  deadline: ${day_dead_line}`)
