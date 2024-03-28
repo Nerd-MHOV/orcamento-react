@@ -1,7 +1,8 @@
 import serialize from "form-serialize";
 import { useApi } from "../../../hooks/api/api";
 import RowModalDiscount from "../interfaces/rowModalDiscount";
-import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
+import SelectionRangeProps from "../interfaces/selectionRangeProps";
+
 export interface selectionRange {
   startDate: Date;
   endDate: Date;
@@ -10,19 +11,23 @@ export interface selectionRange {
 
 export async function handleForm(
   category: string,
-  requirementValue: RequirementSubmitProps[],
-  childValue: any[],
-  petValue: any[],
-  selectionRange: selectionRange,
-  addRows: (rows: any[], arrComplete: any) => void,
+  selectionRange: SelectionRangeProps,
   unitaryDiscount: RowModalDiscount[],
-  dailyCourtesy: boolean
+  dailyCourtesy: boolean,
+  addRows: (rows: any[], arrComplete: any) => void,
 ) {
   const api = useApi();
 
   const formUp: HTMLFormElement | null = document.querySelector("#form");
   if(!formUp) return;
+
   const responseForm = serialize(formUp, { hash: true });
+  const childValue = JSON.parse(responseForm.child as string);
+  const petValue = JSON.parse(responseForm.pet as string);
+  // const selectionRange = JSON.parse(responseForm.rangeDate as string);
+  const requirementValue = JSON.parse(responseForm.requirementComplete as string);
+
+
   if (
     typeof responseForm.category === "string" &&
     responseForm.category.match(/Day-Use/)

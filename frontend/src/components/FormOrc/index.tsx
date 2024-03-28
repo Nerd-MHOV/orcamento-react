@@ -16,6 +16,8 @@ import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { ActionInputForm } from "./partForm/action";
 import {GetClientName} from "./partForm/getClientName";
+import { DailyCalcMemory } from "../../context/generateTariff/functions/file-part/calc-memory/daily";
+import { DailyCourtesy } from "./partForm/dailyCourtesy";
 
 export const FormOrc = () => {
   const {
@@ -27,19 +29,8 @@ export const FormOrc = () => {
     dailyCourtesy: checkCourtesy,
     actionSelected,
     dataTable,
+    clientName,
   } = useGenerateTariff();
-
-  const getIsCourtesy = async () => {
-    const isCourtesy = actionSelected?.daily_courtesy ?? false;
-    if (!isCourtesy) {
-      setCheckCourtesy(false);
-    }
-  };
-
-  useEffect(() => {
-    getIsCourtesy();
-  }, [actionSelected, selectionRange, dataTable]);
-
 
   return (
     <div>
@@ -76,27 +67,9 @@ export const FormOrc = () => {
             </div>
             <InfoApp stateApp={stateApp} />
           </div>
-          {
-            actionSelected?.daily_courtesy ?
-                <div
-                    className="daily-courtesy"
-                >
-                  <IconButton
-                      aria-label="expand row"
-                      size="small"
-                      onClick={() => {
-                        setCheckCourtesy(!checkCourtesy);
-                      }}
-                  >
-                    {checkCourtesy ? <CheckBox /> : <CheckBoxOutlineBlank />}
-                  </IconButton>{" "}
-                  <p style={{ color: "#757575" }}>Diária Cortesia</p>
-                </div>
-                : <></>
-          }
-
+          <DailyCourtesy />
         </div>
-        <GetClientName />
+        <GetClientName clientName={clientName} />
       </div>
     </div>
   );

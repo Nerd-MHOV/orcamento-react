@@ -40,7 +40,7 @@ export const ChildFieldForm = ({value, onChange}: ChildFieldFormProps) =>  (
     </>
   )
 export const ChildInputForm = () => {
-  const { setChildValue, changeOccupancyWrong, callHandleForm, childValue } =
+  const { setChildValue, changeOccupancyWrong, callHandleForm, childValue, clearUnitaryDiscount } =
     useGenerateTariff();
 
   const query = useQuery()
@@ -56,9 +56,13 @@ export const ChildInputForm = () => {
 
     const onChange: onChangeChildFieldFormProps = (_, newValue) => {
       setChildValue(newValue);
-      changeOccupancyWrong();
-      callHandleForm();
     }
+
+    useEffect(() => {
+      changeOccupancyWrong();
+      clearUnitaryDiscount();
+      callHandleForm();
+    }, [childValue])
   return (
     <ChildFieldForm
       value={childValue}

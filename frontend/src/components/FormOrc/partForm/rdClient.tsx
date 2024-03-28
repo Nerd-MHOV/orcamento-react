@@ -1,10 +1,10 @@
-import {TextField} from "@mui/material";
-import {useContext, useEffect, useState} from "react";
-import {GenerateTariffContext, useGenerateTariff} from "../../../context/generateTariff/generateTariff";
+import { TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 import useQuery from "../../../hooks/urlQuery/query";
 
-export const RdClientInputForm = () => {
-    const {callHandleForm, getClientName} = useGenerateTariff();
+export const RdClientInputForm = ({ corporate = false }) => {
+    const { callHandleForm, getClientName } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
     const query = useQuery()
     const [value, setValue] = useState<String>()
 

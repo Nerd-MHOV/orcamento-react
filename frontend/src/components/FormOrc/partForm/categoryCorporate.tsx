@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import { useContext } from "react";
-import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces/categoriesProps";
 
 const ITEM_HEIGHT = 48;
@@ -40,7 +40,7 @@ export const CategoryCorporateInputForm = () => {
     categoryOptions,
     categoriesCorporateValues,
     selectionRange,
-  } = useGenerateTariff();
+  } = useGenerateTariffCorporate();
   const handleChange = (event: SelectChangeEvent<typeof categoriesCorporateValues>) => {
     const {
       target: { value },

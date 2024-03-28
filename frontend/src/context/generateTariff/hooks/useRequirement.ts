@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import RequirementSubmitProps, { RequirementSubmitValuesProps } from "../../interfaces/requirementSubmitProps";
-import { TypeModalProps } from "../../interfaces/generateTariffContextProps";
+import RequirementSubmitProps, { RequirementSubmitValuesProps } from "../interfaces/requirementSubmitProps";
+import { TypeModalProps } from "../interfaces/generateTariffContextProps";
+import { getListRequirements } from "../functions/getters/getListRequirements";
 
 const useRequirement = () => {
     const [openModalRequirement, setOpenModalRequirement] = useState(false);
@@ -10,6 +11,7 @@ const useRequirement = () => {
     const [requirementsModal, setRequirementsModal] = useState<string[]>([]);
     const [requirementValue, setRequirementValue] = useState<string[]>([]);
     const [typeModal, setTypeModal] = useState<TypeModalProps | "">("");
+    const [listRequirements, setListRequirements] = useState<string[]>([]);
 
 
     const handleCloseModalRequirement = () => {
@@ -66,11 +68,18 @@ const useRequirement = () => {
         setRequirementValue(array);
     }
 
+    async function getVariables() {
+        setListRequirements(await getListRequirements());
+    }
+
     useEffect(() => {
         changeRequirementValue();
     }, [requirementSubmit]);
 
-
+    useEffect(() => {
+      getVariables();
+    }, [])
+    
     return ({
         requirementSubmit,
         requirementValue,
@@ -80,6 +89,7 @@ const useRequirement = () => {
         handleSaveModalRequirement,
         typeModal,
         requirementsModal,
+        listRequirements,
     })
 }
 

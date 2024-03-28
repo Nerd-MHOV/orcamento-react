@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useContext } from "react";
 import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
 
 const relationWithDiscountAndNoDiscount = (
@@ -53,10 +53,8 @@ const relationWithDiscountAndNoDiscount = (
   </>
 );
 
-const TableCalc = () => {
-  const { dataTable: data, handleClickOpenModalDiscount } = useContext(
-    GenerateTariffContext
-  );
+const TableCalc = ({ corporate = false }) => {
+  const { dataTable: data, handleClickOpenModalDiscount } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
 
   let calc = calcTotal(data);
   let totalPerRow = calc.totalPerRow;

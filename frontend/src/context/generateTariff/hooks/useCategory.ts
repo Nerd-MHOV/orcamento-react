@@ -1,20 +1,26 @@
-import { useState } from "react";
-import CategoriesProps, { CategoryOptionsProps } from "../../interfaces/categoriesProps";
-import { occupancyInitial } from "../../initial";
-import OccupancyProps from "../../interfaces/occupancyProps";
+import { useEffect, useState } from "react";
+import CategoriesProps, { CategoryOptionsProps } from "../interfaces/categoriesProps";
+import { occupancyInitial } from "../initial";
+import OccupancyProps from "../interfaces/occupancyProps";
 import serialize from "form-serialize";
+import { getCategoryOptions } from "../functions/getters/getCategoryOptions";
 
-const useCategory = (allCategories: CategoriesProps[], childValue: number[]) => {
+const useCategory = () => {
     const [categoryValue, setCategoryValue] =
         useState<CategoryOptionsProps | null>(null);
     const [occupancy, setOccupancy] = useState<OccupancyProps>(occupancyInitial);
     const [occupancyWrong, setOccupancyWrong] = useState(false);
     const [categoriesCorporateValues, setCategoriesCorporateValues] =
-      useState<CategoryOptionsProps[]>([]);
+        useState<CategoryOptionsProps[]>([]);
+    const [categoryOptions, setCategoryOptions] = useState<
+        CategoryOptionsProps[]
+    >([]);
+    const [allCategories, setAllCategories] = useState<CategoriesProps[]>([]);
+    const [unitUsing, setUnitUsing] = useState<string[]>([]);
 
 
     const handleCategoriesCorporateInput = (newValue: CategoryOptionsProps[]) => {
-    setCategoriesCorporateValues(newValue);
+        setCategoriesCorporateValues(newValue);
     }
     const handleCategoryInput = (newValue: CategoryOptionsProps | null) => {
         setCategoryValue(newValue);
@@ -37,8 +43,10 @@ const useCategory = (allCategories: CategoriesProps[], childValue: number[]) => 
     }
     function changeOccupancyWrong(parOccupancy?: OccupancyProps) {
         if (!parOccupancy) parOccupancy = occupancy;
-        const formUp: HTMLFormElement | any = document.querySelector("#form");
+        const formUp: HTMLFormElement | null = document.querySelector("#form");
+        if (!formUp) return;
         const responseForm = serialize(formUp, { hash: true });
+        const childValue = JSON.parse(responseForm?.child as string || "[]");
         let adult = responseForm.adult;
         let child = childValue.length;
         let paq = Number(adult) + child;
@@ -48,6 +56,15 @@ const useCategory = (allCategories: CategoriesProps[], childValue: number[]) => 
             setOccupancyWrong(false);
         }
     }
+
+    async function getVariables() {
+        const resCategory = await getCategoryOptions();
+        setAllCategories(resCategory.response);
+        setCategoryOptions(resCategory.list);
+    }
+    useEffect(() => {
+        getVariables();
+    }, [])
     return ({
         occupancy,
         occupancyWrong,
@@ -56,7 +73,10 @@ const useCategory = (allCategories: CategoriesProps[], childValue: number[]) => 
         categoryValue,
         categoriesCorporateValues,
         handleCategoryInput,
-        handleCategoriesCorporateInput
+        handleCategoriesCorporateInput,
+        categoryOptions,
+        unitUsing,
+        setUnitUsing,
     })
 }
 

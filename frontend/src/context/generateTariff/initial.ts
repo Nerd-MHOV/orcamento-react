@@ -1,3 +1,4 @@
+import { CorporateBodySendBudget } from "./interfaces/corporateProps";
 import GenerateTariffContextProps from "./interfaces/generateTariffContextProps";
 import RowModalDiscount from "./interfaces/rowModalDiscount";
 
@@ -24,3 +25,11 @@ export const rowDiscountInitial: RowModalDiscount = {
   name: "",
   discount: 0,
 };
+
+export const corporateBodySendBudgetInitial: CorporateBodySendBudget = {
+  rooms: [],
+  pension: 'completa',
+  requirements: [],
+  dateRange: null,
+  idClient: null,
+}

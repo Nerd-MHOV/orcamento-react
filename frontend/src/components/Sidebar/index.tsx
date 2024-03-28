@@ -10,6 +10,7 @@ import {
   Menu,
   PostAdd,
   QueryStats,
+  TableView,
   ViewList,
 } from "@mui/icons-material";
 import { useContext } from "react";
@@ -51,6 +52,14 @@ const Sidebar = () => {
                 <Dashboard />
               </span>
               <span className="title">Home</span>
+            </Link>
+          </li>
+          <li className={pathname === "/corporate" ? "hovered" : ""}>
+            <Link to="/corporate" className="link">
+              <span className="icon">
+                <TableView />
+              </span>
+              <span className="title">Corporativo</span>
             </Link>
           </li>
           <li className={pathname.includes("/tariffs") ? "hovered" : ""}>

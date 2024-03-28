@@ -41,7 +41,7 @@ export const PetFieldForm = ({ value, onChange }: PetFieldFormProps) => (
 )
 
 export const PetInputForm = () => {
-  const { petValue, setPetValue } = useGenerateTariff();
+  const { petValue, setPetValue, clearUnitaryDiscount, callHandleForm } = useGenerateTariff();
   const query = useQuery();
 
   useEffect(() => {
@@ -61,6 +61,11 @@ export const PetInputForm = () => {
   const onChange: OnChangePetFieldFormProps = (_, newValue) => {
     setPetValue(newValue);
   }
+
+  useEffect(() => {
+    clearUnitaryDiscount()
+    callHandleForm()
+  }, [petValue])
   return (
     <PetFieldForm
       value={petValue}

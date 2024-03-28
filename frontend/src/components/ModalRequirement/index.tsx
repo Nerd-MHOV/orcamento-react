@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Autocomplete, TextField } from "@mui/material";
 import "./style.scss";
-import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import serialize from "form-serialize";
 
 const ageChild = [
@@ -25,7 +25,7 @@ const ageChild = [
   "12",
 ];
 
-export function ModalRequirement() {
+export function ModalRequirement({ corporate = false }) {
   const {
     openModalRequirement: open,
     handleCloseModalRequirement: handleClose,
@@ -33,7 +33,7 @@ export function ModalRequirement() {
     handleSaveModalRequirement: handleSave,
     typeModal,
     childValue,
-  } = useGenerateTariff();
+  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   const [child, setChild] = React.useState<any[]>([]);
   const [adult, setAdult] = React.useState<number>(0);
   const [amount, setAmount] = React.useState<number>(0);

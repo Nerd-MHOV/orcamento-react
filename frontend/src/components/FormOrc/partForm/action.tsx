@@ -6,15 +6,15 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllowedDiscount } from "../../../context/generateTariff/functions/getters/getAllowedDiscount";
 import { getPayers } from "../../../context/generateTariff/functions/getters/getPayers";
-import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 import { ApiDiscountProps } from "../../../hooks/api/interfaces";
 
-export const ActionInputForm = () => {
+export const ActionInputForm = ({ corporate = false }) => {
   const { selectionRange, dataTable, setActionSelected, actionSelected } =
-    useGenerateTariff();
+    corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   const [action, setAction] = useState<ApiDiscountProps[]>([]);
   const [select, setSelect] = useState("");
 

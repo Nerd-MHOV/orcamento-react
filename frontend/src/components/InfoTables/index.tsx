@@ -8,11 +8,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useContext } from "react";
-import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 
-export const InfoTable = () => {
-  const { budgets, deleteLine } = useGenerateTariff();
+export const InfoTable = ({ corporate = false }) => {
+  const { budgets, deleteLine } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   return (
     <div className="infoTable">
       <>

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useApi } from "../../../../hooks/api/api"
+import { useApi } from "../../../hooks/api/api"
 
 const useClientName = () => {
     const api = useApi();

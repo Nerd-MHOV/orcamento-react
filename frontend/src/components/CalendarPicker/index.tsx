@@ -2,11 +2,20 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useEffect} from "react";
 import { DateRangePicker } from "react-date-range";
-import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import useQuery from "../../hooks/urlQuery/query";
+import { getUnitUsing } from "../../context/generateTariff/functions/getters/getUnitUsing";
 
-export const CalendarPicker = () => {
-  const { handleSelectDate, holidays, monthsWithTariffs, selectionRange } = useGenerateTariff();
+export const CalendarPicker = ({ corporate = false }) => {
+  const { 
+    handleSelectDate, 
+    holidays, 
+    monthsWithTariffs, 
+    selectionRange,
+    setUnitUsing,
+    setStateApp,
+    callHandleForm,
+  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
 
   const query = useQuery();
   function customDayContent(day: Date) {
@@ -40,6 +49,13 @@ export const CalendarPicker = () => {
     return true;
   }
 
+  async function whenChangeSelectionRange() {
+    setUnitUsing([]);
+    const response = await getUnitUsing(selectionRange);
+    setStateApp(response.response);
+    setUnitUsing(response.units);
+  }
+
     useEffect(() => {
         if(query.get("check-in") && query.get("check-out")) {
             setTimeout(() => {
@@ -54,6 +70,10 @@ export const CalendarPicker = () => {
         }
     }, []);
 
+    useEffect( () => {
+      whenChangeSelectionRange()
+      callHandleForm()
+    }, [selectionRange])
   return (
     <>
     <DateRangePicker

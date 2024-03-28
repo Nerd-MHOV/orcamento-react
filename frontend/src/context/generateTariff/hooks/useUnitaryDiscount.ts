@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RowModalDiscount from "../../interfaces/rowModalDiscount";
+import RowModalDiscount from "../interfaces/rowModalDiscount";
 
 
 const useUnitaryDiscount = () => {
