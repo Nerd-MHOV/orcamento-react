@@ -1,10 +1,11 @@
-import {prismaClient} from "../../database/prismaClient";
-import {SaveBudgets} from "@prisma/client";
-import {addDays} from "date-fns";
-import {UpdateDeal} from "../../services/rdstation/updateDeal";
+import { prismaClient } from "../../database/prismaClient";
+import { SaveBudgets } from "@prisma/client";
+import { addDays } from "date-fns";
+import { UpdateDeal } from "../../services/rdstation/updateDeal";
+import { rdGetADeal } from "../../services/rdstation/getADeal";
 
 
-export const assistDBStatus = async  () => {
+export const assistDBStatus = async () => {
 
     const filterNotIn = [
         "perdido", "ganho", "none", "refeito",
@@ -23,7 +24,7 @@ export const assistDBStatus = async  () => {
 
 
 const verifyHasExpired = async (budgets: SaveBudgets[]) => {
-    for(const budget of budgets) {
+    for (const budget of budgets) {
         const expireIn = addDays(budget.createdAt, 3);
         // const loseIn = addDays(budget.createdAt, 5)
         // if(loseIn < new Date()) {
@@ -31,9 +32,9 @@ const verifyHasExpired = async (budgets: SaveBudgets[]) => {
         //    await updateStatus(budget, "perdido")
         //
         // }else
-        if(expireIn < new Date()) {
+        if (expireIn < new Date()) {
             // atualizar para vencido
-           await updateStatus(budget, "vencido")
+            await updateStatus(budget, "vencido")
         }
 
     }
@@ -41,26 +42,27 @@ const verifyHasExpired = async (budgets: SaveBudgets[]) => {
 
 async function updateStatus(budget: SaveBudgets, status: string) {
     // @ts-ignore
-    await UpdateDeal(budget.budgets[0].arrComplete.responseForm.rd_client, {
+    const deal_id = budget.budgets[0].arrComplete.responseForm.rd_client
+    const cf_id = "64b94d33862444000e56696e";
+    await UpdateDeal(deal_id, {
         deal: {
             deal_custom_fields: [
                 {
-                    custom_field_id: "64b94d33862444000e56696e",
+                    custom_field_id: cf_id,
                     value: status,
                 }
-            ],
-
+            ]
         }
     })
         .then(() => {
             console.log(` [ INFO ] - Updated status budget ${budget.id}`)
         })
         .catch(() => {
-        console.log(` [ ERROR ] - Update status to budget ${budget.id}`)
-    })
+            console.log(` [ ERROR ] - Update status to budget ${budget.id}`)
+        })
     await prismaClient.saveBudgets.update({
-        where: { id: budget.id},
-        data: {status: status}
+        where: { id: budget.id },
+        data: { status: status }
     })
 }
 

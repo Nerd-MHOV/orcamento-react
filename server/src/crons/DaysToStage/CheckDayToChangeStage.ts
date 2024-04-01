@@ -1,11 +1,16 @@
 import { rdGetDeals } from "../../services/rdstation/getDeals";
 import { checkDeadLine } from "./CheckDeadLine";
-import { CustomFieldFilter, FieldsKeysRD } from "../../services/rdstation/CustomFieldFilter";
+import { CustomFieldFilter, CustomFieldFilterContact, FieldsKeysRD } from "../../services/rdstation/CustomFieldFilter";
 import { UpdateDeal } from "../../services/rdstation/updateDeal";
 import { rdCreateTask } from "../../services/rdstation/createTask";
 import { format } from "date-fns";
 import { Dialog } from "../../services/chatguru/Dialog";
 import formatPhone from "../../services/formatPhone";
+import getLoyaltPoints from "../../services/getLoyaltPoints";
+import { EditField } from "../../services/chatguru/EditField";
+import { rdstationConfig } from "../../config/rdstationConfig";
+import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
+import { UpdateCustomFieldsRDToCG } from "./UpdateCustomFieldsRDToCG";
 
 export const Day_x = async (
     day_dead_line: number,
@@ -32,14 +37,12 @@ export const Day_x = async (
 
         for (const deal of deals.deals) {
 
-            // // mock deal
-            // if ( deal.id !== "65f2ed0cbf1c25000d1e3966" ) continue;
-            // console.log("ACHOU O YAM")
-            // // mock end
+            // mock deal
+            if (deal.id !== "65f2ed0cbf1c25000d1e3966") continue;
+            console.log("ACHOU O YAM")
+            // mock end
 
-            const day_to_compare = CustomFieldFilter(
-                field, deal
-            )
+            const day_to_compare = CustomFieldFilter(field, deal)
 
             if (
                 typeof day_to_compare?.value !== 'string'
@@ -76,6 +79,57 @@ export const Day_x = async (
                 new Date(`${year}-${month}-${day}`),
                 day_dead_line,
             )
+
+            const checkDateToRdInformation = checkDeadLine(
+                new Date(`${year}-${month}-${day}`),
+                day_dead_line + 2,
+            )
+
+            const checkDateToCgInformation = checkDeadLine(
+                new Date(`${year}-${month}-${day}`),
+                day_dead_line + 1,
+            )
+
+            // Atualizar informações rd 
+            if (checkDateToRdInformation) {
+                // get cpf
+                const contactDeal = await rdGetContactDeal(deal.id);
+                const cpf = CustomFieldFilterContact("cpf", contactDeal.contacts[0])?.value;
+                if (!cpf) {
+                    console.log(` [ ERROR ] - *Day_x() - GET CPF TO ${deal.name} ${cpf}`)
+                    return;
+                };
+                // pontos_fidelidade
+                const points = await getLoyaltPoints(`${cpf}`)
+                if (!points) {
+                    console.log(` [ ERROR ] - *Day_x() - GET LAUOUTS POINTS ${deal.name} ${cpf}`)
+                    return;
+                };
+
+                UpdateDeal(deal.id, {
+                    deal: {
+                        deal_custom_fields: [
+                            {
+                                custom_field_id: rdstationConfig.fields.points,
+                                value: String(points?.saldo),
+                            },
+                            {
+                                custom_field_id: rdstationConfig.fields.points_validate,
+                                value: `${day}/${month}/${+year + 1}`
+                            }
+                        ]
+                    }
+                }).then(() => {
+                    console.log(` [ SUCCESS ] - *Day_x() - ATT LAUOUTS POINTS ${deal.name} ${cpf}`)
+                }).catch(() => {
+                    console.log(` [ ERROR ] - *Day_x() - ATT LAUOUTS POINTS ${deal.name} ${cpf}`)
+                })
+            }
+
+            // Atualiza informações rd -> cg 
+            if (checkDateToCgInformation) {
+                await UpdateCustomFieldsRDToCG(deal)
+            }
 
 
             // mudar negocio para proxima etapa
@@ -128,3 +182,4 @@ export const Day_x = async (
         return false;
     }
 }
+

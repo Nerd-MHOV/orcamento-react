@@ -1,5 +1,10 @@
-import {Request, Response} from "express";
+import { Request, Response } from "express";
 import axios from "axios";
+import { UpdateDeal } from "../../services/rdstation/updateDeal";
+import formatPhone from "../../services/formatPhone";
+import { EditField } from "../../services/chatguru/EditField";
+import { rdGetADeal } from "../../services/rdstation/getADeal";
+import { UpdateCustomFieldsRDToCG } from "../../crons/DaysToStage/UpdateCustomFieldsRDToCG";
 
 const rdApi = axios.create({
     baseURL: "https://crm.rdstation.com/api/v1",
@@ -7,40 +12,40 @@ const rdApi = axios.create({
 
 export class RDController {
     async deleteProduct(request: Request, response: Response) {
-        const {deal_id, deal_product_id} = request.body;
+        const { deal_id, deal_product_id } = request.body;
         const user = request.user;
         try {
             const axiosResponse = await rdApi
                 .delete(`/deals/${deal_id}/deal_products/${deal_product_id}`, {
-                    params: {token: user.token_rd}
+                    params: { token: user.token_rd }
                 })
             return response.json(axiosResponse.data)
         } catch (e) {
-            return response.status(400).json({msg: "error", debug: e});
+            return response.status(400).json({ msg: "error", debug: e });
         }
 
     }
 
     async addProduct(request: Request, response: Response) {
-        const {deal_id, product_id, price, amount} = request.body
+        const { deal_id, product_id, price, amount } = request.body
         const user = request.user;
         try {
             console.log(request.body)
             const axiosResponse = await rdApi.post(`/deals/${deal_id}/deal_products`, {
                 product_id, price, amount: amount,
             }, {
-                params: {token: user.token_rd}
+                params: { token: user.token_rd }
             });
             return response.json(axiosResponse.data);
         } catch (e) {
             console.log(e);
-            return response.status(400).json({msg: "error", debug: e});
+            return response.status(400).json({ msg: "error", debug: e });
         }
 
     }
 
     async changeStage(request: Request, response: Response) {
-        const {deal_id, check_in, check_out, adt, chd, pet} = request.body;
+        const { deal_id, check_in, check_out, adt, chd, pet } = request.body;
         const user = request.user;
         console.log(request.body)
         try {
@@ -67,34 +72,46 @@ export class RDController {
                     }, {
                         "custom_field_id": "64b7edb9f217510019a64bc5", // porte de pets
                         "value": pet.toString()
-                    },{
+                    }, {
                         "custom_field_id": "64b94d33862444000e56696e", // status orçamento
                         "value": "em andamento"
                     }]
                 },
             }, {
-                params: {token: user.token_rd}
+                params: { token: user.token_rd }
             });
+
+
+            // att cg new automations
+            const deal = await rdGetADeal(deal_id);
+            UpdateCustomFieldsRDToCG(deal);
+
             return response.json(axiosResponse.data);
         } catch (e) {
             console.log(e);
-            return response.status(400).json({msg: "error", debug: e});
+            return response.status(400).json({ msg: "error", debug: e });
         }
 
     }
 
     async getDeal(request: Request, response: Response) {
-        const {deal_id} = request.body;
+        const { deal_id } = request.body;
         const user = request.user;
         try {
             const axiosResponse = await rdApi.get(`/deals/${deal_id}`, {
-                params: {token: user.token_rd}
+                params: { token: user.token_rd }
             });
             return response.json(axiosResponse.data)
         } catch (e) {
             console.log(e);
-            return response.status(400).json({msg: "error", debug: e});
+            return response.status(400).json({ msg: "error", debug: e });
         }
 
     }
+}
+
+
+function formatToDate(date: string) {
+    const [day, month, year] = date.split("/")
+    return `${year}-${month}-${day}`
 }
