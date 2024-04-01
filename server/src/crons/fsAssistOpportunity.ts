@@ -106,9 +106,18 @@ export const assistOpportunity = async (page = 1) => {
             const onlyWin = budgets_deal.filter(budget => budget.status === 'ganho')
             const onlyLose = budgets_deal
                 .filter(budget => budget.status === 'perdido')
-            if (deal.win === true && onlyWin.length !== budgets_deal.length) await winChange(deal, 'ganho')
-            else if (deal.win === false && onlyLose.length !== budgets_deal.length) await winChange(deal, 'perdido')
-            else if (deal.win === null && (onlyWin.length > 0 || onlyLose.length > 0)) await winChange(deal, "em andamento")
+            if (deal.win === true && onlyWin.length !== budgets_deal.length) {
+                await winChange(deal, 'ganho')
+                deal_change = true
+            }
+            else if (deal.win === false && onlyLose.length !== budgets_deal.length) {
+                await winChange(deal, 'perdido')
+                deal_change = true
+            }
+            else if (deal.win === null && (onlyWin.length > 0 || onlyLose.length > 0)) {
+                await winChange(deal, "em andamento")
+                deal_change = true
+            }
         }
 
 
