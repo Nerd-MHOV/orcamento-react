@@ -4,7 +4,7 @@ import { CustomFieldFilter } from "../../services/rdstation/CustomFieldFilter";
 import { Deal } from "../../services/rdstation/rd.types";
 
 export async function UpdateCustomFieldsRDToCG(deal: Deal) {
-    const number = formatPhone(deal.contacts[0].phones[0].phone)
+    const number = formatPhone(deal.contacts[0]?.phones[0]?.phone)
     if (!number) {
         return;
     }
@@ -15,7 +15,7 @@ export async function UpdateCustomFieldsRDToCG(deal: Deal) {
     const points = CustomFieldFilter("points", deal)?.value
     const redLinePoints = check_out
 
-    return EditField(number, {
+    const response = await EditField(number, {
         "ID_RD": deal.id,
         "CHD_IDADE": chd,
         "ADULTOS": adt,
@@ -24,6 +24,8 @@ export async function UpdateCustomFieldsRDToCG(deal: Deal) {
         "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
         "Pontos_fidelidade": Number(points),
     })
+    console.log(response);
+    return response
 }
 
 function formatToDate(date: string) {
