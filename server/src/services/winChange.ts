@@ -2,6 +2,7 @@ import {SaveBudgets} from "@prisma/client";
 import {prismaClient} from "../database/prismaClient";
 import {rdApiAdm} from "./rdstation/rdApiAdm";
 import {Deal} from "./rdstation/rd.types";
+import { UpdateDeal } from "./rdstation/updateDeal";
 
 export const winChange = async (deal: Deal, status: string ) => {
     console.log("altomação: ", status, deal.name)
@@ -20,7 +21,7 @@ export const winChange = async (deal: Deal, status: string ) => {
     })
 
     // mudar etapa no rd
-    const updateRd =  rdApiAdm.put("/deals/"+deal.id, {
+    const updateRd =  UpdateDeal(deal.id, {
         deal: {
             deal_custom_fields: [
                 {
@@ -30,6 +31,7 @@ export const winChange = async (deal: Deal, status: string ) => {
             ]
         }
     })
+    
 
     return await Promise.all([updatedDb, updateRd]).then(res => {
         return true
