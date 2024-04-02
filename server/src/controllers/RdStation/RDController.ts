@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import axios from "axios";
-import { UpdateDeal } from "../../services/rdstation/updateDeal";
 import formatPhone from "../../services/formatPhone";
 import { EditField } from "../../services/chatguru/EditField";
 import { rdGetADeal } from "../../services/rdstation/getADeal";
-import { UpdateCustomFieldsRDToCG } from "../../crons/DaysToStage/UpdateCustomFieldsRDToCG";
 import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
 import { CustomFieldFilter } from "../../services/rdstation/CustomFieldFilter";
 
@@ -84,7 +82,7 @@ export class RDController {
             });
 
 
-            // att cg new automations TODO: REVER PQ NESSA REQUISICAO NAO VEM O CONTACTS
+            // att cg new automations
             let deal = await rdGetADeal(deal_id);
             let contact = await rdGetContactDeal(deal_id);
             const number = formatPhone(contact.contacts[0]?.phones[0]?.phone)
