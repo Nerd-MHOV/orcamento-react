@@ -33,7 +33,9 @@ const useCategory = () => {
         };
     };
     function getOccupancyUH(housingUnit: CategoryOptionsProps) {
+        if (typeof housingUnit.unit === 'string') return occupancyInitial
         let category = allCategories.filter((arr) => arr?.id === housingUnit.unit);
+
         return {
             text: `${category[0].id} - min: ${category[0].minimum_occupancy}, max: ${category[0].maximum_occupancy}`,
             max: category[0].maximum_occupancy,

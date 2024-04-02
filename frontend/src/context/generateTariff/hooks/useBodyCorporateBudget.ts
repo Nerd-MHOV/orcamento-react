@@ -1,20 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CorporateBodySendBudget, RoomCorporate } from "../interfaces/corporateProps";
 import { corporateBodySendBudgetInitial } from "../initial";
 import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
+import { CategoryOptionsProps } from "../interfaces/categoriesProps";
 
 const useBodyCorporateBudget = () => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
 
-    function addRoomCorporate(rooms: RoomCorporate[]) {
+    function addRoomCorporate(categories: CategoryOptionsProps[]) {
         const newRooms = [...roomsToBudget.rooms];
-        rooms.forEach( room => {
-            const index = roomsToBudget.rooms.findIndex(oldRoom => oldRoom.roomNumber === room.roomNumber);
+        categories.forEach( category => {
+            const index = roomsToBudget.rooms.findIndex(oldRoom => oldRoom.roomNumber === category);
             if (index > -1) {    // Se o quarto já existe, atualize-o
-                newRooms[index] = room;
+                newRooms[index].roomNumber = category;
             } else {            // Se o quarto não existe, adicione-o ao array
-                newRooms.push(room);
+                newRooms.push({
+                    adt: 0,
+                    chd: [],
+                    pet: [],
+                    roomNumber: category
+                });
             }  
         })
         setRoomsToBudget(old => ( {
@@ -23,16 +29,29 @@ const useBodyCorporateBudget = () => {
         } ))
     }
 
-    function deleteRoomCorporate(rooms: RoomCorporate[]) {
+    function deleteRoomCorporate(categories: CategoryOptionsProps[]) {
         const toDeleteIndex: number[] = [];
-        rooms.forEach( room => {
-            const index = roomsToBudget.rooms.findIndex(oldRoom => oldRoom.roomNumber === room.roomNumber);
+        const roomsMock = [...roomsToBudget.rooms]
+
+        categories.forEach( category => {
+            const index = roomsMock.findIndex(oldRoom => oldRoom.roomNumber.unit === category.unit);
             toDeleteIndex.push(index);
         })
+        console.log(toDeleteIndex)
         setRoomsToBudget(old => ( {
             ...old,
             rooms: old.rooms.filter((_, index) => !toDeleteIndex.includes(index))
         } ))
+    }
+
+    function changeCategoryToRoomCorporate(categories: CategoryOptionsProps[]) {
+        const add = categories.filter( category => !roomsToBudget.rooms.some(room => room.roomNumber === category))
+        const remove = roomsToBudget.rooms.filter( room => !categories.some(category => room.roomNumber === category))
+
+        const removeCategory: CategoryOptionsProps[] = remove.map(obj => ({ ...obj.roomNumber }))
+
+        addRoomCorporate(add)
+        deleteRoomCorporate(removeCategory)
     }
 
     function changePension(pension: string) {
@@ -62,6 +81,10 @@ const useBodyCorporateBudget = () => {
             idClient,
         }))
     }
+
+    useEffect(() => {
+        console.log(roomsToBudget);
+    }, [roomsToBudget])
     return {
         roomsToBudget,
         addRoomCorporate,
@@ -70,6 +93,7 @@ const useBodyCorporateBudget = () => {
         changeRequirementCorporate,
         changeDateCorporateBudget,
         changeIdClient,
+        changeCategoryToRoomCorporate,
     }
 }
 

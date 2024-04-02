@@ -14,9 +14,6 @@ import useInfoBudgets from "./hooks/useInfoBudgets";
 import { corporateBodySendBudgetInitial, dataInitial } from "./initial";
 import RowsProps from "./interfaces/tableBudgetRowsProps";
 import { getColumnData } from "./functions/getters/getColumnData";
-import { getUnitUsing } from "./functions/getters/getUnitUsing";
-import { CorporateBodySendBudget, RoomCorporate } from "./interfaces/corporateProps";
-import RequirementSubmitProps from "./interfaces/requirementSubmitProps";
 import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
 
 const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -30,7 +27,6 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             };
         });
     }
-
     //Loading Component
     const [openBackdrop, setOpenBackdrop] = useState(false)
     const handleOpenBackdrop = () => { setOpenBackdrop(true) }
@@ -39,12 +35,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleOpenBackdrop,
         handleCloseBackdrop,
     }
-
-
-
     //Send Objetct To Api Budget
     function callHandleForm() { }
-
     const selectionRangeHook = useDateRange();
     useEffect(() => {
         setDataTable((par) => ({
@@ -52,20 +44,21 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             columns: getColumnData(selectionRangeHook.selectionRange),
         }))
     }, [selectionRangeHook.selectionRange]);
-
-
     // NEW for corporate
     const bodySendBudget = useBodyCorporateBudget();
+    const categoryHook = useCategory();
+    useEffect(() => { 
+        bodySendBudget.changeCategoryToRoomCorporate(categoryHook.categoriesCorporateValues)
+    }, [categoryHook.categoriesCorporateValues])
     return (
         <GenerateTariffCorporateContext.Provider
             value={{
                 ...bodySendBudget,
-
                 ...loadingComponent,
                 ...usePermission(),                                             // Modal Permission General Discount
                 ...selectionRangeHook,                                          // CalendarPicker
                 ...useActionsDiscount(),                                        // FormOrc/corporate 
-                ...useCategory(),                                               // FormOrc/corporate 
+                ...categoryHook,                                               // FormOrc/corporate 
                 ...useRequirement(),                                            // ModalRequirement, Requirement(form)
                 ...useRoomLayout(),                                             // pension(form)
                 ...useClientName(),                                             // rdClient(form)

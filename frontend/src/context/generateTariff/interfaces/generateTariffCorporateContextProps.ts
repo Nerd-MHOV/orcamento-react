@@ -1,3 +1,4 @@
+import { CategoryOptionsProps } from "./categoriesProps";
 import { CorporateBodySendBudget, RoomCorporate } from "./corporateProps";
 import { ActionPromossionsGTCP, DatePartGTCP, InfoBudgetGTCP, LoadingGTCP, ModalPermissionDiscountGTCP, PensionGTCP, RequirementPartGTCP, RoomPartGTCP } from "./generateTariffContextProps";
 import RequirementSubmitProps from "./requirementSubmitProps";
@@ -29,8 +30,8 @@ BodyCorporateBudgetGTCP
 
 interface BodyCorporateBudgetGTCP {
     roomsToBudget: CorporateBodySendBudget;
-    addRoomCorporate: (rooms: RoomCorporate[]) => void;
-    deleteRoomCorporate: (rooms: RoomCorporate[]) => void;
+    addRoomCorporate: (rooms: CategoryOptionsProps[]) => void;
+    deleteRoomCorporate: (rooms: CategoryOptionsProps[]) => void;
     changePension: (pension: string) => void;
     changeRequirementCorporate: (requirements: RequirementSubmitProps[]) => void;
     changeDateCorporateBudget: (dateRange: SelectionRangeProps) => void;
