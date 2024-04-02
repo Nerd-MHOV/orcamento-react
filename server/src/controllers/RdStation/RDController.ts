@@ -5,6 +5,8 @@ import formatPhone from "../../services/formatPhone";
 import { EditField } from "../../services/chatguru/EditField";
 import { rdGetADeal } from "../../services/rdstation/getADeal";
 import { UpdateCustomFieldsRDToCG } from "../../crons/DaysToStage/UpdateCustomFieldsRDToCG";
+import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
+import { CustomFieldFilter } from "../../services/rdstation/CustomFieldFilter";
 
 const rdApi = axios.create({
     baseURL: "https://crm.rdstation.com/api/v1",
@@ -82,9 +84,29 @@ export class RDController {
             });
 
 
-            // att cg new automations
-            const deal = await rdGetADeal(deal_id);
-            UpdateCustomFieldsRDToCG(deal);
+            // att cg new automations TODO: REVER PQ NESSA REQUISICAO NAO VEM O CONTACTS
+            let deal = await rdGetADeal(deal_id);
+            let contact = await rdGetContactDeal(deal_id);
+            const number = formatPhone(contact.contacts[0]?.phones[0]?.phone)
+            if (number) {
+                const chd = CustomFieldFilter("chd", deal)?.value
+                const adt = CustomFieldFilter("adt", deal)?.value
+                const check_in = CustomFieldFilter("check_in", deal)?.value
+                const check_out = CustomFieldFilter("check_out", deal)?.value
+                const points = CustomFieldFilter("points", deal)?.value
+                const redLinePoints = check_out
+            
+                EditField(number, {
+                    "ID_RD": deal.id,
+                    "CHD_IDADE": chd,
+                    "ADULTOS": adt,
+                    "Data_final_da_viagem": formatToDate(String(check_in)),
+                    "Data_inicial_da_viagem": formatToDate(String(check_out)),
+                    "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
+                    "Pontos_fidelidade": Number(points),
+                })
+            }
+            
 
             return response.json(axiosResponse.data);
         } catch (e) {

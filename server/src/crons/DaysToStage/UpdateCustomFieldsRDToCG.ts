@@ -15,7 +15,7 @@ export async function UpdateCustomFieldsRDToCG(deal: Deal) {
     const points = CustomFieldFilter("points", deal)?.value
     const redLinePoints = check_out
 
-    const response = await EditField(number, {
+    return await EditField(number, {
         "ID_RD": deal.id,
         "CHD_IDADE": chd,
         "ADULTOS": adt,
@@ -24,8 +24,8 @@ export async function UpdateCustomFieldsRDToCG(deal: Deal) {
         "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
         "Pontos_fidelidade": Number(points),
     })
-    console.log(response);
-    return response
+   
+     
 }
 
 function formatToDate(date: string) {
