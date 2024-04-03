@@ -18,7 +18,6 @@ export const DailyCourtesy = ({ corporate = false }) => {
         if (!isCourtesy) {
             setDailyCourtesy(false);
         }
-        callHandleForm();
     };
     
     useEffect(() => {
@@ -26,7 +25,9 @@ export const DailyCourtesy = ({ corporate = false }) => {
     }, [actionSelected, selectionRange, dataTable]);
 
     useEffect(() => {
-        callHandleForm();
+        setTimeout(() => {
+            callHandleForm();
+        }, 100)
     }, [dailyCourtesy])
 
     if (actionSelected?.daily_courtesy)

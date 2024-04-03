@@ -58,13 +58,13 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const callHandleForm = () => {
     console.log('chamou')
-    // handleForm(
-    //   categoryHook.occupancy.category,
-    //   selectionRangeHook.selectionRange,
-    //   unitaryDiscountHook.unitaryDiscount,
-    //   actionsDiscountHook.dailyCourtesy,
-    //   infoBudgetHook.addRows,
-    // );
+    handleForm(
+      categoryHook.occupancy.category,
+      selectionRangeHook.selectionRange,
+      unitaryDiscountHook.unitaryDiscount,
+      actionsDiscountHook.dailyCourtesy,
+      infoBudgetHook.addRows,
+    );
   };
 
   useEffect(() => {
