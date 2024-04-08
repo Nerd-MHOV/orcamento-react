@@ -1,23 +1,22 @@
 import { rdGetDeals } from "../../services/rdstation/getDeals";
 import { checkDeadLine } from "./CheckDeadLine";
-import { CustomFieldFilter, CustomFieldFilterContact, FieldsKeysRD } from "../../services/rdstation/CustomFieldFilter";
+import { CustomFieldFilter, FieldsKeysRD } from "../../services/rdstation/CustomFieldFilter";
 import { UpdateDeal } from "../../services/rdstation/updateDeal";
 import { rdCreateTask } from "../../services/rdstation/createTask";
 import { format } from "date-fns";
 import { Dialog } from "../../services/chatguru/Dialog";
 import formatPhone from "../../services/formatPhone";
-import getLoyaltPoints from "../../services/getLoyaltPoints";
-import { EditField } from "../../services/chatguru/EditField";
-import { rdstationConfig } from "../../config/rdstationConfig";
-import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
 import { UpdateCustomFieldsRDToCG } from "./UpdateCustomFieldsRDToCG";
+import updateRDInformations from "./functions/updateRDInformations";
+import { function_to_days_to_check_dead_line } from "./Days";
 
 export const Day_x = async (
     day_dead_line: number,
     current_stage: string,
     next_stage: string,
     field: FieldsKeysRD,
-    dialog?: string,
+    pre?: (params: any) => Promise<void>,
+    pos?: (params: any) => Promise<void>,
 ) => {
     console.log(` [ INFO ] - *Day_x() - init process....`)
     console.log(` [ INFO ] - *Day_x() - deadline: ${day_dead_line}`)
@@ -30,17 +29,14 @@ export const Day_x = async (
             win: "null",
             deal_stage_id: current_stage,
         })
-
-
-        // verificar se data do negocio
         console.log(` [ INFO ] - *Day_x() - deal in stage: ${deals.total}`)
 
         for (const deal of deals.deals) {
 
-            // // mock deal
-            // if (deal.id !== "65f2ed0cbf1c25000d1e3966") continue;
-            // console.log("ACHOU O YAM")
-            // // mock end
+            // mock deal
+            if (deal.id !== "65f2ed0cbf1c25000d1e3966") continue;
+            console.log("ACHOU O YAM")
+            // mock end
 
             const day_to_compare = CustomFieldFilter(field, deal)
 
@@ -73,64 +69,17 @@ export const Day_x = async (
                 continue
             }
             const [day, month, year] = day_to_compare.value.split("/")
-
-
             const checkDate = checkDeadLine(
                 new Date(`${year}-${month}-${day}`),
                 day_dead_line,
             )
 
-            const checkDateToRdInformation = checkDeadLine(
-                new Date(`${year}-${month}-${day}`),
-                day_dead_line + 2,
-            )
-
-            const checkDateToCgInformation = checkDeadLine(
-                new Date(`${year}-${month}-${day}`),
-                day_dead_line + 1,
-            )
-
-            // Atualizar informações rd 
-            if (checkDateToRdInformation) {
-                // get cpf
-                const contactDeal = await rdGetContactDeal(deal.id);
-                const cpf = CustomFieldFilterContact("cpf", contactDeal.contacts[0])?.value;
-                if (!cpf) {
-                    console.log(` [ ERROR ] - *Day_x() - GET CPF TO ${deal.name} ${cpf}`)
-                    return;
-                };
-                // pontos_fidelidade
-                const points = await getLoyaltPoints(`${cpf}`)
-                if (!points) {
-                    console.log(` [ ERROR ] - *Day_x() - GET LAUOUTS POINTS ${deal.name} ${cpf}`)
-                    return;
-                };
-
-                UpdateDeal(deal.id, {
-                    deal: {
-                        deal_custom_fields: [
-                            {
-                                custom_field_id: rdstationConfig.fields.points,
-                                value: String(points?.saldo),
-                            },
-                            {
-                                custom_field_id: rdstationConfig.fields.points_validate,
-                                value: `${day}/${month}/${+year + 1}`
-                            }
-                        ]
-                    }
-                }).then(() => {
-                    console.log(` [ SUCCESS ] - *Day_x() - ATT LAUOUTS POINTS ${deal.name} ${cpf}`)
-                }).catch(() => {
-                    console.log(` [ ERROR ] - *Day_x() - ATT LAUOUTS POINTS ${deal.name} ${cpf}`)
-                })
-            }
-
-            // Atualiza informações rd -> cg 
-            if (checkDateToCgInformation) {
-                await UpdateCustomFieldsRDToCG(deal)
-            }
-
+            //PRE-FUNCTION
+            if ( pre ) pre({
+                date: day_to_compare.value,
+                deal,
+                day_dead_line,
+            })
 
             // mudar negocio para proxima etapa
             if (checkDate) {
@@ -142,32 +91,9 @@ export const Day_x = async (
                     console.log(` [ ERROR ] - *Day_x() - **UpdateDeal() - error to change stage deal `)
                 })
 
-                // Enviar Dialog
-                if (dialog) {
-                    const number = formatPhone(deal.contacts[0].phones[0].phone)
-                    const responseDialog = await Dialog(
-                        number,
-                        dialog
-                    );
-                    console.log(` [ INFO ] - *Day_x() - Send Dialog: ${number} - ${dialog} - ${responseDialog?.code}`)
-                    if (responseDialog?.code !== 200) {
-                        // Criar task com o erro
-                        const taskDate = new Date()
-                        taskDate.setFullYear(taskDate.getFullYear() - 1);
-                        rdCreateTask({
-                            task: {
-                                deal_id: deal.id,
-                                subject: "ERRO: Dialog Chatguru",
-                                type: "task",
-                                date: format(taskDate, "yyyy-MM-dd"),
-                                hour: format(new Date(), "HH:ii"),
-                                notes: responseDialog.description ?? "Erro ao enviar menssagem",
-                            }
-                        }).then(() => {
-                            console.log(` [ INFO ] - *Day_x() - CG Erro ao executar dialogo - created tag to ${deal.name}`)
-                        })
-                    }
-                }
+                if ( pos )  pos({
+                    deal,
+                })
 
             }
 

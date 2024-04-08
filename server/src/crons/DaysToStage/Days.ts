@@ -1,15 +1,26 @@
-import {Day_x} from "./CheckDayToChangeStage";
+import { format } from "date-fns";
+import { Dialog } from "../../services/chatguru/Dialog";
+import formatPhone from "../../services/formatPhone";
+import { rdCreateTask } from "../../services/rdstation/createTask";
+import { Day_x } from "./CheckDayToChangeStage";
+import { checkDeadLine } from "./CheckDeadLine";
+import { UpdateCustomFieldsRDToCG } from "./UpdateCustomFieldsRDToCG";
+import updateRDInformations from "./functions/updateRDInformations";
+import preChangeStageDefault from "./functions/preChangeStageDefault";
+import simpleDialogDaysToStage from "./functions/simpleDialog";
+import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
+import { CustomFieldFilter, CustomFieldFilterContact } from "../../services/rdstation/CustomFieldFilter";
 
 
 
 
 export const days_to_check_dead_line = {
-    "BE_pos-venda_180": () => Day_x(-185, "651c29032f49be000fb3520f", "64b7f36d1bfc7f000d53f87d", "check_out"),
-    "BE_pos-venda_100": () => Day_x(-180, "64b7f36d1bfc7f000d53f87c", "651c29032f49be000fb3520f", "check_out"),
-    "BE_pos-venda_50": () => Day_x(-100, "64b7f36d1bfc7f000d53f87b", "64b7f36d1bfc7f000d53f87c", "check_out"),
-    "BE_pos-venda_20": () => Day_x(-50, "64b7f36d1bfc7f000d53f87a", "64b7f36d1bfc7f000d53f87b", "check_out"),
-    "BE_pos-venda_3": () => Day_x(-20, "64b7f36d1bfc7f000d53f879", "64b7f36d1bfc7f000d53f87a", "check_out"),
-    "BE_pos-venda_x": () => Day_x(-3, "651c2869b68030002280a5f2", "64b7f36d1bfc7f000d53f879", "check_out", "652e87e272abd8b911a4d18a"),
+    "BE_pos-venda_180": () => Day_x(-185, "651c29032f49be000fb3520f", "64b7f36d1bfc7f000d53f87d", "check_out", preChangeStageDefault),
+    "BE_pos-venda_100": () => Day_x(-180, "64b7f36d1bfc7f000d53f87c", "651c29032f49be000fb3520f", "check_out", preChangeStageDefault, function_to_days_to_check_dead_line["BE_pos-venda_100"].pos),
+    "BE_pos-venda_50": () => Day_x(-100, "64b7f36d1bfc7f000d53f87b", "64b7f36d1bfc7f000d53f87c", "check_out", preChangeStageDefault, function_to_days_to_check_dead_line["BE_pos-venda_50"].pos),
+    "BE_pos-venda_20": () => Day_x(-50, "64b7f36d1bfc7f000d53f87a", "64b7f36d1bfc7f000d53f87b", "check_out", preChangeStageDefault, function_to_days_to_check_dead_line["BE_pos-venda_20"].pos),
+    "BE_pos-venda_3": () => Day_x(-20, "64b7f36d1bfc7f000d53f879", "64b7f36d1bfc7f000d53f87a", "check_out", preChangeStageDefault, function_to_days_to_check_dead_line["BE_pos-venda_3"].pos),
+    "BE_pos-venda_x": () => Day_x(-3, "651c2869b68030002280a5f2", "64b7f36d1bfc7f000d53f879", "check_out", preChangeStageDefault, function_to_days_to_check_dead_line["BE_pos-venda_x"].pos),
     //
     // "E_pos-venda_180": () => Day_x(-240, "651c28d063557500187d61d1", "651c28e163bae5000f6c74ad", "check_out"),
     // "E_pos-venda_120": () => Day_x(-180, "64ca51a5c152910021b23eaf", "651c28d063557500187d61d1", "check_out"),
@@ -33,5 +44,67 @@ export const days_to_check_dead_line = {
     // "CORP_pos-venda_30": () => Day_x(-60, "64ca56257b1b98002a2f27a1", "64ca56257b1b98002a2f27a2", "check_out"),
     // "CORP_pos-venda_3": () => Day_x(-30, "64ca56257b1b98002a2f27a0", "64ca56257b1b98002a2f27a1", "check_out"),
     // "CORP_pos-venda_x": () => Day_x(-3, "651c258168c23a0018119db3", "64ca56257b1b98002a2f27a0", "check_out"),
-
 }
+
+
+export const function_to_days_to_check_dead_line = {
+    "BE_pos-venda_100": {
+        "pre": preChangeStageDefault,
+        "pos": async (params: any) => {
+            const {deal} = params;
+            const dialog = "65f3571c9fbeaf90e6caacd9";
+            await simpleDialogDaysToStage(deal, dialog);
+        }
+    },
+    "BE_pos-venda_50": {
+        "pre": preChangeStageDefault,
+        "pos": async (params: any) => {
+            const {deal} = params;
+            const dialog = "65f356f004dc2ee830f45ad6";
+            await simpleDialogDaysToStage(deal, dialog);
+        }
+    },
+    "BE_pos-venda_20": {
+        "pre": preChangeStageDefault,
+        "pos": async (params: any) => {
+            const {deal} = params;
+            const has_chd = CustomFieldFilter("chd_amount", deal)?.value;
+            if (!has_chd || Number(has_chd) === 0) {
+                const dialog = "65f34b6361127701c59d2ea8";
+                await simpleDialogDaysToStage(deal, dialog);
+            }else {
+                const dialog = "65f347d06712991c710d4b12";
+                await simpleDialogDaysToStage(deal, dialog);
+            }
+        }
+    },
+    "BE_pos-venda_3": {
+        "pre": preChangeStageDefault,
+        "pos": async (params: any) => {
+            const {deal} = params;
+            const contactDeal = await rdGetContactDeal(deal.id);
+            const cpf = CustomFieldFilterContact("cpf", contactDeal.contacts[0])?.value;
+            if (!cpf) {
+                console.log(` [ ERROR ] - *BE_pos-venda_3.pos() - GET CPF TO ${deal.name} ${cpf}`)
+                return;
+            };
+            const points = CustomFieldFilter("points", deal)?.value;
+            if(!points || Number(points) < 200) {
+                console.log(` [ ERROR ] - *BE_pos-venda_3.pos() - don't have enough points ${deal.name} ${points}`)
+                return
+            }
+            const dialog = "652e9071979df6ae0adaa0ce";
+            await simpleDialogDaysToStage(deal, dialog);
+        }
+    },
+    "BE_pos-venda_x": {
+        "pre": preChangeStageDefault,
+        "pos": async (params: any) => {
+            const {deal} = params;
+            const dialog = "652e87e272abd8b911a4d18a";
+            await simpleDialogDaysToStage(deal, dialog);
+        }
+    },
+}
+
+
