@@ -11,7 +11,7 @@ import useRoomLayout from "./hooks/useRoomLayout";
 import useRequirement from "./hooks/useRequirement";
 import useClientName from "./hooks/useClientName";
 import useInfoBudgets from "./hooks/useInfoBudgets";
-import { corporateBodySendBudgetInitial, dataInitial } from "./initial";
+import { dataInitial } from "./initial";
 import RowsProps from "./interfaces/tableBudgetRowsProps";
 import { getColumnData } from "./functions/getters/getColumnData";
 import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
@@ -35,8 +35,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleOpenBackdrop,
         handleCloseBackdrop,
     }
-    //Send Objetct To Api Budget
-    function callHandleForm() { }
+   
     const selectionRangeHook = useDateRange();
     useEffect(() => {
         setDataTable((par) => ({
@@ -50,6 +49,19 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     useEffect(() => { 
         bodySendBudget.changeCategoryToRoomCorporate(categoryHook.categoriesCorporateValues)
     }, [categoryHook.categoriesCorporateValues])
+
+    useEffect(() => {
+        callHandleForm()
+    }, [ bodySendBudget.roomsToBudget ])
+
+    //Send Objetct To Api Budget
+    function callHandleForm() {
+        if (bodySendBudget.roomsToBudget.rooms.length > 0 && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()) {
+            alert('enviado');
+            console.log( bodySendBudget.roomsToBudget )
+
+        }
+    }
     return (
         <GenerateTariffCorporateContext.Provider
             value={{
@@ -58,7 +70,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...usePermission(),                                             // Modal Permission General Discount
                 ...selectionRangeHook,                                          // CalendarPicker
                 ...useActionsDiscount(),                                        // FormOrc/corporate 
-                ...categoryHook,                                               // FormOrc/corporate 
+                ...categoryHook,                                                // FormOrc/corporate 
                 ...useRequirement(),                                            // ModalRequirement, Requirement(form)
                 ...useRoomLayout(),                                             // pension(form)
                 ...useClientName(),                                             // rdClient(form)
@@ -66,7 +78,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 callHandleForm,
                 dataTable,
                 childValue: [],                                                 // ModalRequirement
-                handleClickOpenModalDiscount: () => { }                          // TableCalc
+                handleClickOpenModalDiscount: () => { }                         // TableCalc
             }}
         >
             <Backdrop

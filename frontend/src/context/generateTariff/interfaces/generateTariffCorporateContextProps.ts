@@ -28,7 +28,7 @@ BodyCorporateBudgetGTCP
 }
 
 
-interface BodyCorporateBudgetGTCP {
+export interface BodyCorporateBudgetGTCP {
     roomsToBudget: CorporateBodySendBudget;
     addRoomCorporate: (rooms: CategoryOptionsProps[]) => void;
     deleteRoomCorporate: (rooms: CategoryOptionsProps[]) => void;
@@ -36,6 +36,9 @@ interface BodyCorporateBudgetGTCP {
     changeRequirementCorporate: (requirements: RequirementSubmitProps[]) => void;
     changeDateCorporateBudget: (dateRange: SelectionRangeProps) => void;
     changeIdClient: (idClient: string | null) => void;
+    changeLayoutRoom(adt: number, chd: number[], pet: string[], roomNumber: CategoryOptionsProps): void;
+    changeCategoryToRoomCorporate(categories: CategoryOptionsProps[]): void;
+    verifyIfAllRoomHasEnoughOnePax(): boolean;
 }
 
 export default GenerateTariffContextProps

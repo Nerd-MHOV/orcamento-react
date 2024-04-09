@@ -12,6 +12,7 @@ import { AdultFieldForm, AdultInputForm } from '../FormOrc/partForm/adult';
 import { ChildFieldForm, ChildInputForm, onChangeChildFieldFormProps } from '../FormOrc/partForm/child';
 import { OnChangePetFieldFormProps, PetFieldForm, PetInputForm } from '../FormOrc/partForm/pet';
 import { DiscountInputForm } from '../FormOrc/partForm/discount';
+import { RoomCorporate } from '../../context/generateTariff/interfaces/corporateProps';
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -24,13 +25,16 @@ const Transition = React.forwardRef(function Transition(
 
 interface ModalRoomLayoutProps {
     open: boolean,
-    handleClose: VoidFunction,
-    room: CategoryOptionsProps | null
+    handleClose: (adt: number, chd: number[], pet: string[], category: CategoryOptionsProps) => void,
+    handleApplyAll: (adt: number, chd: number[], pet: string[]) => void,
+    room: RoomCorporate | null
 }
 
 export default function ModalRoomLayout({
-    open, handleClose, room,
+    open, handleClose, room, handleApplyAll
 }: ModalRoomLayoutProps) {
+    if(!room) return <></>
+
     const [adultValue, setAdultValue] = React.useState<number>();
     const [childValue, setChildValue] = React.useState<number[]>([]);
     const [petValue, setPetValue] = React.useState<string[]>([]);
@@ -52,15 +56,21 @@ export default function ModalRoomLayout({
     const changePet: OnChangePetFieldFormProps = (_, newValue) => {
         setPetValue(newValue);
     }
+
+    React.useEffect(() => {
+        setAdultValue(room.adt)
+        setChildValue(room.chd)
+        setPetValue(room.pet)
+    }, [ room ])
     return (
         <Dialog
             open={open}
             TransitionComponent={Transition}
             keepMounted
-            onClose={handleClose}
+            onClose={() => {handleClose(adultValue || 0, childValue, petValue, room.roomNumber)}}
             aria-describedby="alert-dialog-slide-description"
         >
-            <DialogTitle>{room?.label}</DialogTitle>
+            <DialogTitle>{room?.roomNumber.label}</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
                     Informe a disposição do quarto!
@@ -83,8 +93,9 @@ export default function ModalRoomLayout({
             </DialogContent>
             <DialogActions>
 
+                <Button onClick={() => {handleApplyAll(adultValue || 0, childValue, petValue)}}>Em todos</Button>
                 <Button onClick={handleClear}>Clear</Button>
-                <Button onClick={handleClose}>Confirma</Button>
+                <Button onClick={() => {handleClose(adultValue || 0, childValue, petValue, room.roomNumber)}}>Confirma</Button>
             </DialogActions>
         </Dialog>
     );

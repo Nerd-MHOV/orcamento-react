@@ -4,8 +4,10 @@ import { corporateBodySendBudgetInitial } from "../initial";
 import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
 import { CategoryOptionsProps } from "../interfaces/categoriesProps";
+import { NonIndexRouteObject } from "react-router-dom";
+import { BodyCorporateBudgetGTCP } from "../interfaces/generateTariffCorporateContextProps";
 
-const useBodyCorporateBudget = () => {
+const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
 
     function addRoomCorporate(categories: CategoryOptionsProps[]) {
@@ -37,7 +39,6 @@ const useBodyCorporateBudget = () => {
             const index = roomsMock.findIndex(oldRoom => oldRoom.roomNumber.unit === category.unit);
             toDeleteIndex.push(index);
         })
-        console.log(toDeleteIndex)
         setRoomsToBudget(old => ( {
             ...old,
             rooms: old.rooms.filter((_, index) => !toDeleteIndex.includes(index))
@@ -82,9 +83,31 @@ const useBodyCorporateBudget = () => {
         }))
     }
 
-    useEffect(() => {
-        console.log(roomsToBudget);
-    }, [roomsToBudget])
+    function verifyIfAllRoomHasEnoughOnePax() {
+        let pass = true;
+        roomsToBudget.rooms.forEach(room => {
+            if(room.adt === 0 && room.chd.length === 0) {
+                pass = false;
+            }
+        })
+
+        return pass
+    }
+
+    function changeLayoutRoom( adt: number, chd: number[], pet: string[], roomNumber: CategoryOptionsProps  ) {
+        const rooms = [...roomsToBudget.rooms]
+        const editIndex = rooms.findIndex(room => room.roomNumber === roomNumber)
+        rooms[editIndex].adt = adt
+        rooms[editIndex].chd = chd
+        rooms[editIndex].pet = pet
+
+        setRoomsToBudget(old => ({
+            ...old,
+            rooms,
+        }))
+
+    }
+
     return {
         roomsToBudget,
         addRoomCorporate,
@@ -93,7 +116,9 @@ const useBodyCorporateBudget = () => {
         changeRequirementCorporate,
         changeDateCorporateBudget,
         changeIdClient,
+        changeLayoutRoom,
         changeCategoryToRoomCorporate,
+        verifyIfAllRoomHasEnoughOnePax,
     }
 }
 
