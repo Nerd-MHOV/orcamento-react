@@ -9,11 +9,6 @@ const preChangeStageDefault = async (params: any) => {
         deal
     } = params;
     const [day, month, year] = date.split("/")
-    const checkDate = checkDeadLine(
-        new Date(`${year}-${month}-${day}`),
-        day_dead_line,
-    )
-
     // Atualizar informações rd 
     updateRDInformations(
         date,

@@ -10,6 +10,7 @@ import preChangeStageDefault from "./functions/preChangeStageDefault";
 import simpleDialogDaysToStage from "./functions/simpleDialog";
 import { rdGetContactDeal } from "../../services/rdstation/getContactDeal";
 import { CustomFieldFilter, CustomFieldFilterContact } from "../../services/rdstation/CustomFieldFilter";
+import hasEnoughPoints from "./functions/hasEnoughPoints";
 
 
 
@@ -52,6 +53,7 @@ export const function_to_days_to_check_dead_line = {
         "pre": preChangeStageDefault,
         "pos": async (params: any) => {
             const {deal} = params;
+            if(!hasEnoughPoints(deal)) return;
             const dialog = "65f3571c9fbeaf90e6caacd9";
             await simpleDialogDaysToStage(deal, dialog);
         }
@@ -60,6 +62,7 @@ export const function_to_days_to_check_dead_line = {
         "pre": preChangeStageDefault,
         "pos": async (params: any) => {
             const {deal} = params;
+            if(!hasEnoughPoints(deal)) return;
             const dialog = "65f356f004dc2ee830f45ad6";
             await simpleDialogDaysToStage(deal, dialog);
         }
@@ -69,6 +72,7 @@ export const function_to_days_to_check_dead_line = {
         "pos": async (params: any) => {
             const {deal} = params;
             const has_chd = CustomFieldFilter("chd_amount", deal)?.value;
+            if(!hasEnoughPoints(deal)) return;
             if (!has_chd || Number(has_chd) === 0) {
                 const dialog = "65f34b6361127701c59d2ea8";
                 await simpleDialogDaysToStage(deal, dialog);
@@ -88,11 +92,7 @@ export const function_to_days_to_check_dead_line = {
                 console.log(` [ ERROR ] - *BE_pos-venda_3.pos() - GET CPF TO ${deal.name} ${cpf}`)
                 return;
             };
-            const points = CustomFieldFilter("points", deal)?.value;
-            if(!points || Number(points) < 200) {
-                console.log(` [ ERROR ] - *BE_pos-venda_3.pos() - don't have enough points ${deal.name} ${points}`)
-                return
-            }
+            if(!hasEnoughPoints(deal)) return;
             const dialog = "652e9071979df6ae0adaa0ce";
             await simpleDialogDaysToStage(deal, dialog);
         }
