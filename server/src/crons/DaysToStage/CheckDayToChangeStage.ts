@@ -33,10 +33,10 @@ export const Day_x = async (
 
         for (const deal of deals.deals) {
 
-            // mock deal
-            if (deal.id !== "65f2ed0cbf1c25000d1e3966") continue;
-            console.log("ACHOU O YAM")
-            // mock end
+            // // mock deal
+            // if (deal.id !== "65f2ed0cbf1c25000d1e3966") continue;
+            // console.log("ACHOU O YAM")
+            // // mock end
 
             const day_to_compare = CustomFieldFilter(field, deal)
 
