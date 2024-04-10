@@ -85,25 +85,28 @@ export class RDController {
             // att cg new automations
             let deal = await rdGetADeal(deal_id);
             let contact = await rdGetContactDeal(deal_id);
-            const number = formatPhone(contact.contacts[0]?.phones[0]?.phone)
-            if (number) {
-                const chd = CustomFieldFilter("chd", deal)?.value
-                const adt = CustomFieldFilter("adt", deal)?.value
-                const check_in = CustomFieldFilter("check_in", deal)?.value
-                const check_out = CustomFieldFilter("check_out", deal)?.value
-                const points = CustomFieldFilter("points", deal)?.value
-                const redLinePoints = check_out
-            
-                EditField(number, {
-                    "ID_RD": deal.id,
-                    "CHD_IDADE": chd,
-                    "ADULTOS": adt,
-                    "Data_final_da_viagem": formatToDate(String(check_in)),
-                    "Data_inicial_da_viagem": formatToDate(String(check_out)),
-                    "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
-                    "Pontos_fidelidade": Number(points),
-                })
+            if( contact ) {
+                const number = formatPhone(contact.contacts[0]?.phones[0]?.phone)
+                if (number) {
+                    const chd = CustomFieldFilter("chd", deal)?.value
+                    const adt = CustomFieldFilter("adt", deal)?.value
+                    const check_in = CustomFieldFilter("check_in", deal)?.value
+                    const check_out = CustomFieldFilter("check_out", deal)?.value
+                    const points = CustomFieldFilter("points", deal)?.value
+                    const redLinePoints = check_out
+                
+                    EditField(number, {
+                        "ID_RD": deal.id,
+                        "CHD_IDADE": chd,
+                        "ADULTOS": adt,
+                        "Data_final_da_viagem": formatToDate(String(check_in)),
+                        "Data_inicial_da_viagem": formatToDate(String(check_out)),
+                        "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
+                        "Pontos_fidelidade": Number(points),
+                    })
+                }
             }
+            
             
 
             return response.json(axiosResponse.data);
