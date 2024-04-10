@@ -1,8 +1,4 @@
 import {Request, Response} from "express";
-import {adultBudget} from "./functions/adultBudget";
-import {childBudget} from "./functions/childBudget";
-import {petBudget} from "./functions/petBudget";
-import {requirementBudget} from "./functions/requirementBudget";
 import { MainBudgetProps, mainBudget } from "./functions/mainBudget";
 
 export type RowsProps = {

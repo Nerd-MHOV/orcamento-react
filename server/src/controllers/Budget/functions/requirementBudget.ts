@@ -42,7 +42,6 @@ export async function requirementBudget(
     valueRequirement = await generateBudgetRequirement(
       initDate,
       finalDate,
-      arrForm,
       arrRequirement[countRequirement]
     );
 
