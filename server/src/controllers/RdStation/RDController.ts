@@ -95,15 +95,17 @@ export class RDController {
                     const points = CustomFieldFilter("points", deal)?.value
                     const redLinePoints = check_out
                 
-                    EditField(number, {
-                        "ID_RD": deal.id,
-                        "CHD_IDADE": chd,
-                        "ADULTOS": adt,
-                        "Data_final_da_viagem": formatToDate(String(check_in)),
-                        "Data_inicial_da_viagem": formatToDate(String(check_out)),
-                        "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
-                        "Pontos_fidelidade": Number(points),
-                    })
+                    try {
+                        EditField(number, {
+                            "ID_RD": deal.id,
+                            "CHD_IDADE": chd,
+                            "ADULTOS": adt,
+                            "Data_final_da_viagem": formatToDate(String(check_in)),
+                            "Data_inicial_da_viagem": formatToDate(String(check_out)),
+                            "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
+                            "Pontos_fidelidade": Number(points),
+                        })
+                    } catch (error) {}
                 }
             }
             
