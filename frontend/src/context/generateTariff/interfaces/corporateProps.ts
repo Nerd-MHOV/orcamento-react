@@ -17,3 +17,8 @@ export interface CorporateBodySendBudget {
     idClient: string | null,
 }
 
+export interface DateRange {
+    startDate: Date;
+    endDate: Date;
+}
+

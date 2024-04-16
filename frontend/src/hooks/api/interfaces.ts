@@ -3,6 +3,9 @@ import {
   BudgetsFavoritesProps,
   BudgetsProps,
 } from "../../components/TableCollapseBudgets/helpers";
+import { DateRange, RoomCorporate } from "../../context/generateTariff/interfaces/corporateProps";
+import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
+import RowsProps from "../../context/generateTariff/interfaces/tableBudgetRowsProps";
 
 export interface AllTariffsProps {
   name: string;
@@ -103,6 +106,32 @@ export interface ApiSavedBudgetsProps {
   favorites: BudgetsFavoritesProps[];
   name: string;
   status: string;
+}
+
+export interface RoomCorporateResponse extends RoomCorporate {
+  rowsValues: ResponseValues
+}
+
+export type RowsPropsApi = {
+  id: number;
+  desc: string;
+  values: number[];
+  total: number;
+  noDiscount: number[];
+  totalNoDiscount: number;
+  discountApplied: number;
+};
+export interface ResponseValues { 
+  rows: RowsPropsApi[],
+  total: RowsPropsApi,
+}
+export interface CorporateBodyResponseBudget {
+  rooms: RoomCorporateResponse[],
+  pension: string,
+  requirements: RequirementSubmitProps[],
+  dateRange: DateRange,
+  idClient: string | null,
+  rowsValues: ResponseValues
 }
 
 export interface ApiRequirementsProps {

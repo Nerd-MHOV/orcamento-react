@@ -30,8 +30,8 @@ export const ListUHsCorporate = () => {
         pet: string[],
         category: CategoryOptionsProps,
     ) => {
-        changeLayoutRoom(adt, chd, pet, category);
         setOpen(false);
+        changeLayoutRoom(adt, chd, pet, category);
     };
 
     const handleApplyAll = (
@@ -39,10 +39,10 @@ export const ListUHsCorporate = () => {
         chd: number[],
         pet: string[],
     ) => {
+        setOpen(false);
         roomsToBudget.rooms.forEach(room => {
             changeLayoutRoom(adt, chd, pet, room.roomNumber);
         })
-        setOpen(false);
     }
 
 

@@ -25,15 +25,9 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   
   const [openBackdrop, setOpenBackdrop] = useState(false)
   
-  const [dataTable, setDataTable] = useState<DataContentProps>(dataInitial);
 
   const onAddRows = (rows: RowsProps[]) => {
-    setDataTable((par) => {
-      return {
-        rows: rows,
-        columns: par.columns,
-      };
-    });
+    
   }
   
   const permissionHook = usePermission();
@@ -45,7 +39,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   const discountModalHook = useDiscountModal();
   const actionsDiscountHook = useActionsDiscount();
   const roomLayoutHook = useRoomLayout();
-  const infoBudgetHook = useInfoBudgets( dataTable, onAddRows );
+  const infoBudgetHook = useInfoBudgets(  );
 
   //Loading Component
   const handleOpenBackdrop = () => {
@@ -57,7 +51,6 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   }
 
   const callHandleForm = () => {
-    console.log('chamou')
     handleForm(
       categoryHook.occupancy.category,
       selectionRangeHook.selectionRange,
@@ -75,7 +68,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
 
 
   useEffect(() => {
-    setDataTable((par) => ({
+    infoBudgetHook.setDataTable((par) => ({
       rows: par.rows,
       columns: getColumnData(selectionRangeHook.selectionRange),
     }))
@@ -94,7 +87,6 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
         ...actionsDiscountHook,
         ...roomLayoutHook,
         ...infoBudgetHook,
-        dataTable,
         callHandleForm,
         handleOpenBackdrop,
         handleCloseBackdrop,

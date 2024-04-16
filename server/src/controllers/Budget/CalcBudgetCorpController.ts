@@ -14,10 +14,6 @@ export interface RoomCorporateResponse extends RoomCorporate {
     rowsValues: ResponseValues
 }
 
-export interface ArrRequirementPropsResponse extends ArrRequirementProps {
-    rowsValues: ResponseValues
-}
-
 export interface ResponseValues { 
     rows: RowsProps[],
     total: RowsProps,
@@ -34,9 +30,10 @@ export interface CorporateBodySendBudget {
 export interface CorporateBodyResponseBudget {
     rooms: RoomCorporateResponse[],
     pension: string,
-    requirements: ArrRequirementPropsResponse[],
+    requirements: ArrRequirementProps[],
     dateRange: DateRange,
     idClient: string | null,
+    rowsValues: ResponseValues
 }
 
 export interface Category {
@@ -46,17 +43,15 @@ export interface Category {
 }
 
 export interface DateRange {
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
 };
 
 
-export class CalcBudgetController {
+export class CalcBudgetCorpController {
     async handle(request: Request, response: Response) {
         const budget: CorporateBodySendBudget = request.body;
-        let {rows} = await mainCorp(budget)
-        return response.json({
-            rows,
-        });
+        let corpResponseBody = await mainCorp(budget)
+        return response.json(corpResponseBody);
     }
 }

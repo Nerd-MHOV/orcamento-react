@@ -72,7 +72,7 @@ export const CalendarPicker = ({ corporate = false }) => {
 
     useEffect( () => {
       whenChangeSelectionRange()
-      callHandleForm()
+      // callHandleForm()
     }, [selectionRange])
   return (
     <>

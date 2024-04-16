@@ -15,18 +15,10 @@ import { dataInitial } from "./initial";
 import RowsProps from "./interfaces/tableBudgetRowsProps";
 import { getColumnData } from "./functions/getters/getColumnData";
 import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
+import { useApi } from "../../hooks/api/api";
 
 const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    // initial
-    const [dataTable, setDataTable] = useState<DataContentProps>(dataInitial);
-    const onAddRows = (rows: RowsProps[]) => {
-        setDataTable((par) => {
-            return {
-                rows: rows,
-                columns: par.columns,
-            };
-        });
-    }
+    const api = useApi();
     //Loading Component
     const [openBackdrop, setOpenBackdrop] = useState(false)
     const handleOpenBackdrop = () => { setOpenBackdrop(true) }
@@ -36,16 +28,21 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleCloseBackdrop,
     }
    
-    const selectionRangeHook = useDateRange();
-    useEffect(() => {
-        setDataTable((par) => ({
-            rows: par.rows,
-            columns: getColumnData(selectionRangeHook.selectionRange),
-        }))
-    }, [selectionRangeHook.selectionRange]);
+   
     // NEW for corporate
     const bodySendBudget = useBodyCorporateBudget();
     const categoryHook = useCategory();
+
+    const infoBudgetHook = useInfoBudgets();
+    const selectionRangeHook = useDateRange();
+    useEffect(() => {
+        bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
+        infoBudgetHook.setDataTable((par) => ({
+            rows: par.rows,
+            columns: getColumnData(selectionRangeHook.selectionRange),
+        }))
+        
+    }, [selectionRangeHook.selectionRange]);
     useEffect(() => { 
         bodySendBudget.changeCategoryToRoomCorporate(categoryHook.categoriesCorporateValues)
     }, [categoryHook.categoriesCorporateValues])
@@ -55,11 +52,18 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }, [ bodySendBudget.roomsToBudget ])
 
     //Send Objetct To Api Budget
-    function callHandleForm() {
-        if (bodySendBudget.roomsToBudget.rooms.length > 0 && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()) {
-            alert('enviado');
-            console.log( bodySendBudget.roomsToBudget )
-
+    async function callHandleForm() {
+        if (bodySendBudget.roomsToBudget.rooms.length > 0 && bodySendBudget.verifyIfAllRoomHasEnoughOnePax() && bodySendBudget.roomsToBudget.dateRange) {
+            const response = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
+            
+            infoBudgetHook.addRows(response.rowsValues.rows, {
+                responseForm: {
+                    category: `${response.rooms.length} quartos`,
+                    pension: response.pension,
+                    rd_client: response.idClient || '',
+                    housingUnit: `${response.rooms.length} quartos`, 
+                }
+            })
         }
     }
     return (
@@ -74,9 +78,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...useRequirement(),                                            // ModalRequirement, Requirement(form)
                 ...useRoomLayout(),                                             // pension(form)
                 ...useClientName(),                                             // rdClient(form)
-                ...useInfoBudgets(dataTable, onAddRows),                        // infoTables
+                ...infoBudgetHook,                                              // infoTables
                 callHandleForm,
-                dataTable,
                 childValue: [],                                                 // ModalRequirement
                 handleClickOpenModalDiscount: () => { }                         // TableCalc
             }}

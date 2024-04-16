@@ -1,17 +1,15 @@
 import { ArrFormProps, ArrRequirementProps, PetProps, RowsProps, UnitaryDiscountProps } from "../CalcBudgetController";
-import { CorporateBodySendBudget, RoomCorporateResponse } from "../CalcBudgetCorpController";
+import { CorporateBodyResponseBudget, CorporateBodySendBudget, RoomCorporateResponse } from "../CalcBudgetCorpController";
 import { adultBudget } from "./adultBudget";
-import { calcTotal } from "./calcTotal";
+import { calcTotal, calcTotalBudgets } from "./calcTotal";
 import { childBudget } from "./childBudget";
 import { petBudget } from "./petBudget";
 import { requirementBudget } from "./requirementBudget";
 
 
-export async function mainCorp({
-    dateRange, rooms, requirements, pension
-}: CorporateBodySendBudget) {
+export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     
-
+    const { dateRange, rooms, pension, requirements } = bodyRequest;
 
     let initDate = new Date(dateRange.startDate);
     let finalDate = new Date(dateRange.endDate);
@@ -19,25 +17,19 @@ export async function mainCorp({
     // mock variables
     const unitaryDiscount: UnitaryDiscountProps[] = [];
     const dailyCourtesy: boolean = false;
-    let newRooms: RoomCorporateResponse[];
-    rooms.forEach(async ( room ) => {
+    const newRoomsPromisses = rooms.map(async ( room ) => {
         const arrForm = {
             adult: room.adt,
             discount: 0,
             category: room.roomNumber.category,
             pension: pension,
         }
-        //adult
+        // calculate custe for adult, child, pet and requirements 
         let adultRows = await adultBudget(arrForm, room.chd, unitaryDiscount, dailyCourtesy, initDate, finalDate);
-
-        //child
         let childRows = await childBudget(arrForm, room.chd, unitaryDiscount, dailyCourtesy, initDate, finalDate);
-
-        //pet
         let petRows = await petBudget(arrForm, room.pet, unitaryDiscount, initDate, finalDate);
-
-        //requirement
         let requirementRows = await requirementBudget(arrForm, [], unitaryDiscount, initDate, finalDate);
+
         const rows = [...adultRows, ...childRows, ...petRows, ...requirementRows]
         let newRoom: RoomCorporateResponse = {
             ...room,
@@ -46,15 +38,24 @@ export async function mainCorp({
                 total: calcTotal(rows)
             }
         };
-
-        newRooms.push(newRoom)
+        return newRoom
     })
     
+    // Awaiting to conclusion each async operation
+    const newRooms = await Promise.all(newRoomsPromisses);
 
-    //requirement
+    // requirement to budget ( all rooms )
     let requirementRows = await requirementBudget({ adult: 0 }, requirements, unitaryDiscount, initDate, finalDate);
+    const rowsFinal: RowsProps[] = [...calcTotalBudgets(newRooms), ...requirementRows];
 
-    return {
-        rows: [...adultRows, ...childRows, ...petRows, ...requirementRows,],
-    };
+    const response: CorporateBodyResponseBudget = {
+        ...bodyRequest,
+        rooms: newRooms,
+        rowsValues: {
+            rows: rowsFinal,
+            total: calcTotal(rowsFinal)
+        }
+    }
+
+    return response;
 }

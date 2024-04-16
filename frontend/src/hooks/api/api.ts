@@ -10,12 +10,14 @@ import {
     ApiSavedBudgetsProps,
     ApiUserProps,
     CheckInValuesProps,
+    CorporateBodyResponseBudget,
     FindHolidaysProps,
     FindMonthWithTariffProps,
     FoodProps,
     SpecificTariffProps,
     TariffValuesProps,
 } from "./interfaces";
+import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
 
 const storageData = localStorage.getItem("authToken");
 
@@ -92,6 +94,11 @@ export const useApi = () => ({
             rangeDate,
             unitaryDiscount,
         });
+        return response.data;
+    },
+
+    getBudgetCorp: async (request: CorporateBodySendBudget): Promise<CorporateBodyResponseBudget> => {
+        const response = await api.post('/budget-corp', request)
         return response.data;
     },
 

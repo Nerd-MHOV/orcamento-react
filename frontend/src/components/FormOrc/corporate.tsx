@@ -21,9 +21,6 @@ export const FormOrcCorporate = () => {
     clientName
   } = useGenerateTariffCorporate();
 
- 
-
-
   return (
     <div>
       <div className="modal">
@@ -38,9 +35,10 @@ export const FormOrcCorporate = () => {
             <RequirementInputForm corporate />
           </div>
         </form>
-        <div style={{ width: "100%" }}>
+        {/* SELECT DE AÇÕES PROMOCIONAIS */}
+        {/* <div style={{ width: "100%" }}>
           <ActionInputForm corporate />
-        </div>
+        </div> */}
 
         <div className="pos-form">
           <div>
@@ -52,7 +50,7 @@ export const FormOrcCorporate = () => {
             </div>
             <InfoApp stateApp={stateApp} />
           </div>
-          <DailyCourtesy corporate />
+          {/* <DailyCourtesy corporate /> */}
         </div>
         <GetClientName clientName={clientName} />
       </div>

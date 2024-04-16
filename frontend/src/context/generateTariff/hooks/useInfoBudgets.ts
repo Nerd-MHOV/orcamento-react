@@ -3,12 +3,12 @@ import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import ArrCompleteProps from "../interfaces/budgetArrCompleteProps";
 import { calcTotal } from "../functions/calcTotal";
 import RowsProps from "../interfaces/tableBudgetRowsProps";
+import { dataInitial } from "../initial";
 
-const useInfoBudgets = (
-    dataTable: DataContentProps,
-    onAddRows: (rows: RowsProps[]) => void
-) => {
+const useInfoBudgets = () => {
     const [budgets, setBudgets] = useState<DataContentProps[]>([]);
+    const [dataTable, setDataTable] = useState<DataContentProps>(dataInitial);
+
     const [arrComplete, setArrComplete] = useState<ArrCompleteProps | []>([]);
 
     async function handleSaveBudget() {
@@ -25,8 +25,13 @@ const useInfoBudgets = (
         setBudgets([]);
     }
 
-    function addRows(rows: any[], arrComplete: any) {
-        onAddRows(rows);
+    function addRows(rows: RowsProps[], arrComplete: ArrCompleteProps) {
+        setDataTable((par) => {
+            return {
+              rows: rows,
+              columns: par.columns,
+            };
+        });
         setArrComplete(arrComplete);
     }
     function deleteLine(indexDelete: number) {
@@ -41,6 +46,8 @@ const useInfoBudgets = (
         deleteLine,
         handleSaveBudget,
         clearTariffs,
+        setDataTable,
+        dataTable,
     }
 
 }
