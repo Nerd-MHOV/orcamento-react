@@ -33,9 +33,9 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
 
                 await api
                     .getTariffPipe(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
-                    .then((tariff_pipe) => {
+                    .then((tariff_id) => {
                         // pipe.addFile();
-                        api.rdAddProduct(dealId, tariff_pipe.product_rd, budget?.total?.total ?? 0)
+                        api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
                     })
                     .catch((err) => console.log(err));
             } catch (err) {
@@ -54,9 +54,9 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
 
             await api
                 .getTariffPipe(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
-                .then((tariff_pipe) => {
+                .then((tariff_id) => {
                     // pipe.addFile();
-                    api.rdAddProduct(dealId, tariff_pipe.product_rd, budget?.total?.total ?? 0)
+                    api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
                 })
                 .catch((err) => console.log(err));
         } catch (err) {
@@ -66,5 +66,12 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
 
 
 
-    await api.rdChangeStage(dealId, format(realBudget.arrComplete.selectionRange.startDate, "dd/MM/yyyy"), format(realBudget.arrComplete.selectionRange.endDate, "dd/MM/yyyy"), +realBudget.arrComplete.responseForm.adult, realBudget.arrComplete.childValue, realBudget.arrComplete.petValue)
+    await api.rdChangeStage(
+        dealId, 
+        format(realBudget.arrComplete.selectionRange.startDate, "dd/MM/yyyy"), 
+        format(realBudget.arrComplete.selectionRange.endDate, "dd/MM/yyyy"), 
+        +realBudget.arrComplete.responseForm.adult, 
+        realBudget.arrComplete.childValue, 
+        realBudget.arrComplete.petValue
+        )
 }

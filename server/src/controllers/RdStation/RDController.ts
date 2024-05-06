@@ -100,8 +100,8 @@ export class RDController {
                             "ID_RD": deal.id,
                             "CHD_IDADE": chd,
                             "ADULTOS": adt,
-                            "Data_final_da_viagem": formatToDate(String(check_in)),
-                            "Data_inicial_da_viagem": formatToDate(String(check_out)),
+                            "Data_inicial_da_viagem": formatToDate(String(check_in)),
+                            "Data_final_da_viagem": formatToDate(String(check_out)),
                             "Data_de_validade_clube_Fidelidade": formatToDate(String(redLinePoints)),
                             "Pontos_fidelidade": Number(points),
                         })
