@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import { MainBudgetProps, mainBudget } from "./functions/mainBudget";
 import { mainCorp } from "./functions/mainCorp";
 import { ArrRequirementProps, PetProps, RowsProps } from "./CalcBudgetController";
+import {doAdjustmentToCorpBudget} from "./functions/doAdjustmentToCorpBudget";
 
 export interface RoomCorporate {
     adt: number,
@@ -45,13 +45,19 @@ export interface Category {
 export interface DateRange {
     startDate: string;
     endDate: string;
-};
+}
 
 
 export class CalcBudgetCorpController {
     async handle(request: Request, response: Response) {
         const budget: CorporateBodySendBudget = request.body;
-        let corpResponseBody = await mainCorp(budget)
-        return response.json(corpResponseBody);
+        let withoutAdjustment = await mainCorp(budget)
+        let {withAdjustment, adjustment } = await doAdjustmentToCorpBudget(withoutAdjustment);
+        console.log(withoutAdjustment.rowsValues.total, withAdjustment.rowsValues);
+        return response.json({
+            withoutAdjustment,
+            withAdjustment,
+            adjustment
+        });
     }
 }

@@ -1,7 +1,7 @@
 import { RowsProps } from "../CalcBudgetController";
-import { RoomCorporate, RoomCorporateResponse } from "../CalcBudgetCorpController";
+import { RoomCorporateResponse } from "../CalcBudgetCorpController";
 
-export const calcTotal = (rows: RowsProps[]) => {
+export const calcTotal = (rows: RowsProps[], discountApplied: number) => {
     let total: RowsProps = {
         id: 900,
         desc: 'total',
@@ -17,7 +17,7 @@ export const calcTotal = (rows: RowsProps[]) => {
         total.noDiscount = rows[0].noDiscount.map((_, index) => rows.reduce((sum, row) => sum + row.noDiscount[index], 0));
         total.total = rows.reduce((total, arr) => total + arr.total, 0);
         total.totalNoDiscount = rows.reduce((total, arr) => total + arr.totalNoDiscount, 0);
-        total.discountApplied = rows.reduce((total, arr) => total + arr.discountApplied, 0);
+        total.discountApplied = discountApplied;
     }
 
     return total;

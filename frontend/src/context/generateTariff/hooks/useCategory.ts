@@ -30,7 +30,7 @@ const useCategory = () => {
             const occupancy = getOccupancyUH(newValue)
             setOccupancy(occupancy);
             changeOccupancyWrong(occupancy);
-        };
+        }
     };
     function getOccupancyUH(housingUnit: CategoryOptionsProps) {
         if (typeof housingUnit.unit === 'string') return occupancyInitial

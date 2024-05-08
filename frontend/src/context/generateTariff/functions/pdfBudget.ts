@@ -38,7 +38,7 @@ async function pdfBudget(
     if (budget.arrComplete.responseForm.numberPipe) {
       dealId = budget.arrComplete.responseForm.numberPipe;
     }
-    const rowBudget = new Array();
+    const rowBudget = [];
     let adultSting =
       Number(budget.arrComplete.responseForm.adult) < 10
         ? "\n0" + budget.arrComplete.responseForm.adult + " ADT"

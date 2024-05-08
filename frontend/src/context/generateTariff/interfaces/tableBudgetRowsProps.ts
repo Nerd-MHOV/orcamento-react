@@ -6,6 +6,6 @@ interface RowsProps  {
     noDiscount: string[] | number[] | any[];
     totalNoDiscount: string | number;
     discountApplied: string | number;
-};
+}
 
 export default RowsProps;

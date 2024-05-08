@@ -8,6 +8,6 @@ interface DataContentProps {
         total: number;
         noDiscount: number;
     };
-};
+}
 
 export default DataContentProps

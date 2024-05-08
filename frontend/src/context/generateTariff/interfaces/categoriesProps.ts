@@ -17,7 +17,7 @@ export type CategoryOptionsStringProps =
 
 export interface CategoryOptionsProps {
     label: string;
-    unit: string;
+    unit: string | number;
     category: string;
 }
 

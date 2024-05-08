@@ -2,7 +2,6 @@ import React, { ReactNode, useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import { GenerateTariffCorporateContext } from "./generateTariff";
-import DataContentProps from "./interfaces/tableBudgetDataContentProps";
 import usePermission from "./hooks/usePermission";
 import useDateRange from "./hooks/useDateRange";
 import useActionsDiscount from "./hooks/useActionsDiscount";
@@ -11,8 +10,6 @@ import useRoomLayout from "./hooks/useRoomLayout";
 import useRequirement from "./hooks/useRequirement";
 import useClientName from "./hooks/useClientName";
 import useInfoBudgets from "./hooks/useInfoBudgets";
-import { dataInitial } from "./initial";
-import RowsProps from "./interfaces/tableBudgetRowsProps";
 import { getColumnData } from "./functions/getters/getColumnData";
 import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
 import { useApi } from "../../hooks/api/api";
@@ -53,15 +50,18 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     //Send Objetct To Api Budget
     async function callHandleForm() {
-        if (bodySendBudget.roomsToBudget.rooms.length > 0 && bodySendBudget.verifyIfAllRoomHasEnoughOnePax() && bodySendBudget.roomsToBudget.dateRange) {
-            const response = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
-            
-            infoBudgetHook.addRows(response.rowsValues.rows, {
+        infoBudgetHook.clearRows();
+        if (
+            bodySendBudget.roomsToBudget.rooms.length > 0
+            && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()
+            && bodySendBudget.roomsToBudget.dateRange) {
+            const {withAdjustment} = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
+            infoBudgetHook.addRows(withAdjustment.rowsValues.rows, {
                 responseForm: {
-                    category: `${response.rooms.length} quartos`,
-                    pension: response.pension,
-                    rd_client: response.idClient || '',
-                    housingUnit: `${response.rooms.length} quartos`, 
+                    category: `${withAdjustment.rooms.length} quartos`,
+                    pension: withAdjustment.pension,
+                    rd_client: withAdjustment.idClient || '',
+                    housingUnit: `${withAdjustment.rooms.length} quartos`,
                 }
             })
         }

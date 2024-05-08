@@ -14,7 +14,7 @@ const onlyNumber = (string: string | undefined) => {
     if (!string) return 0;
     string = string.replace(/[.]/g, "");
     string = string.replace(/[,]/g, ".");
-    string = string.replace(/[^0-9 | ^.]/g, "");
+    string = string.replace(/[^0-9 |^.]/g, "");
     return Number(string);
 };
 
@@ -31,8 +31,8 @@ async function pdfDescription(
 
 
     for (const singleBudget of budgets) {
-        let rows_days = new Array();
-        let rows_extra = new Array();
+        let rows_days = [];
+        let rows_extra = [];
         // Line to Line
         for (let budget of singleBudget.rows) {
             let lineRows = [];
@@ -186,7 +186,7 @@ async function pdfDescription(
         let total =
             onlyNumber(lastRow_days.at(-1)?.text) +
             onlyNumber(lastRow_extras.at(-1)?.text);
-        const otherColumns = columns;
+        // const otherColumns = columns;
 
         let widthTable = [];
         for (let line of lastRow_days) widthTable.push("*");

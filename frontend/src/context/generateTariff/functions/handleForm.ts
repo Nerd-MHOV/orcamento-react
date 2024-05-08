@@ -21,7 +21,7 @@ export async function handleForm(
   const formUp: HTMLFormElement | null = document.querySelector("#form");
   if(!formUp) return;
 
-  const responseForm = serialize(formUp, { hash: true });
+  const responseForm: any = serialize(formUp, { hash: true });
   const childValue = JSON.parse(responseForm.child as string);
   const petValue = JSON.parse(responseForm.pet as string);
   // const selectionRange = JSON.parse(responseForm.rangeDate as string);
@@ -52,9 +52,6 @@ export async function handleForm(
   }
 
   if (!responseForm.category || !responseForm.pension) return;
-
-
-
   responseForm.housingUnit = responseForm.category;
   responseForm.category = category;
 

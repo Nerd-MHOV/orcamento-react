@@ -1,11 +1,9 @@
 import {
   BudgetsContentProps,
   BudgetsFavoritesProps,
-  BudgetsProps,
 } from "../../components/TableCollapseBudgets/helpers";
 import { DateRange, RoomCorporate } from "../../context/generateTariff/interfaces/corporateProps";
 import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
-import RowsProps from "../../context/generateTariff/interfaces/tableBudgetRowsProps";
 
 export interface AllTariffsProps {
   name: string;
@@ -126,6 +124,11 @@ export interface ResponseValues {
   total: RowsPropsApi,
 }
 export interface CorporateBodyResponseBudget {
+  withAdjustment: CorporateBodyBudget,
+  withoutAdjustment: CorporateBodyBudget,
+  adjustment: number,
+}
+export interface CorporateBodyBudget {
   rooms: RoomCorporateResponse[],
   pension: string,
   requirements: RequirementSubmitProps[],

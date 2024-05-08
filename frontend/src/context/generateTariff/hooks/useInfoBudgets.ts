@@ -34,6 +34,9 @@ const useInfoBudgets = () => {
         });
         setArrComplete(arrComplete);
     }
+    function clearRows() {
+        addRows([], {});
+    }
     function deleteLine(indexDelete: number) {
         setBudgets((old) => {
             return old.filter((arr, index) => index !== indexDelete);
@@ -46,6 +49,7 @@ const useInfoBudgets = () => {
         deleteLine,
         handleSaveBudget,
         clearTariffs,
+        clearRows,
         setDataTable,
         dataTable,
     }
