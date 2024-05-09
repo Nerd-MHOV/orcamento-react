@@ -4,8 +4,10 @@ import { ActionPromossionsGTCP, DatePartGTCP, InfoBudgetGTCP, LoadingGTCP, Modal
 import RequirementSubmitProps from "./requirementSubmitProps";
 import SelectionRangeProps from "./selectionRangeProps";
 import DataContentProps from "./tableBudgetDataContentProps";
+import {CorporateBodyResponseBudget} from "../../../hooks/api/interfaces";
+import React from "react";
 
-interface GenerateTariffContextProps 
+interface GenerateTariffCorporateContextProps
 extends 
 LoadingGTCP,
 ModalPermissionDiscountGTCP,
@@ -39,6 +41,8 @@ export interface BodyCorporateBudgetGTCP {
     changeLayoutRoom(adt: number, chd: number[], pet: string[], roomNumber: CategoryOptionsProps): void;
     changeCategoryToRoomCorporate(categories: CategoryOptionsProps[]): void;
     verifyIfAllRoomHasEnoughOnePax(): boolean;
+    bodyResponseBudget: CorporateBodyResponseBudget | null,
+    setBodyResponseBudget: React.Dispatch<React.SetStateAction<CorporateBodyResponseBudget | null>>
 }
 
-export default GenerateTariffContextProps
+export default GenerateTariffCorporateContextProps

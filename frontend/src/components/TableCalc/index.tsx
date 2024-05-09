@@ -11,8 +11,9 @@ import { useContext } from "react";
 import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
 import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
+import {useModalDescriptionUniqueRoom} from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
 
-const relationWithDiscountAndNoDiscount = (
+export const relationWithDiscountAndNoDiscount = (
   a: number | string,
   b: number | string,
   white = true
@@ -55,7 +56,7 @@ const relationWithDiscountAndNoDiscount = (
 
 const TableCalc = ({ corporate = false }) => {
   const { dataTable: data, handleClickOpenModalDiscount } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
-
+  const { open: showRoom } = corporate ? useModalDescriptionUniqueRoom() : { open: (roomID: number) => {} }
   let calc = calcTotal(data);
   let totalPerRow = calc.totalPerRow;
   let total = calc.total;
@@ -94,7 +95,8 @@ const TableCalc = ({ corporate = false }) => {
               <TableCell
                 component="th"
                 scope="row"
-                style={{ background: "rgb(248,248,248)" }}
+                style={{ background: "rgb(248,248,248)", cursor: "pointer" }}
+                onDoubleClick={() => {showRoom(row.id)}}
               >
                 {row.desc}
               </TableCell>

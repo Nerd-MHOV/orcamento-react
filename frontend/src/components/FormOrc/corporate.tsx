@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./style.scss";
 import { ModalRequirement } from "../ModalRequirement";
 import { PensionInputForm } from "./partForm/pension";
@@ -6,12 +5,8 @@ import { RdClientInputForm } from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
 import {  useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
-import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import { ActionInputForm } from "./partForm/action";
 import { GetClientName } from "./partForm/getClientName";
 import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
-import { DailyCourtesy } from "./partForm/dailyCourtesy";
 
 export const FormOrcCorporate = () => {
   const {

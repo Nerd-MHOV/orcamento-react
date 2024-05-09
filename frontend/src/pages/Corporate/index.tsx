@@ -8,23 +8,28 @@ import { ButtonsBudget } from "../../components/ButtonsBudget";
 import { CalendarPicker } from "../../components/CalendarPicker";
 import TableCalc from "../../components/TableCalc";
 import { GenerateTariffCorporateProvider} from "../../context/generateTariff/generateTariff";
-import { ModalDiscount } from "../../components/ModalDiscount";
 import ModalPermissionDiscount from "../../components/ModalPermissionDiscount";
 import { FormOrcCorporate } from "../../components/FormOrc/corporate";
-import { Box } from "@mui/system";
 import { ListUHsCorporate } from "../../components/ListUHsCorporate/ListUHsCorporate";
+import {
+  ModalDescriptionUniqueRoomProvider
+} from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
+import ModalDescriptionUniqueRoom from "./ModalDescriptionUniqueRoom";
 
 const Corporate = () => {
   return (
     <GenerateTariffCorporateProvider>
+      <ModalDescriptionUniqueRoomProvider>
+
         <div className="home">
           <Sidebar />
           <div className="homeBx">
             <Navbar />
             <div className="p20">
               {/* modal */}
-              {/* <ModalDiscount />  DISCONTO UNITARIO NÂO VAI USAR POR ENQUANTO*/}
+              {/* <ModalDiscount />  DESCONTO UNITARIO NÂO VAI USAR POR ENQUANTO*/}
               <ModalPermissionDiscount corporate />
+              <ModalDescriptionUniqueRoom />
               <div className="containerBx">
 
                 <div className="top">
@@ -33,7 +38,7 @@ const Corporate = () => {
                 </div>
                 <div className="bottom">
                   <ListUHsCorporate />
-                  <TableCalc corporate />
+                  <TableCalc corporate/>
                 </div>
                 <div className="buttons">
                   <InfoTable corporate />
@@ -43,6 +48,7 @@ const Corporate = () => {
             </div>
           </div>
         </div>
+      </ModalDescriptionUniqueRoomProvider>
     </GenerateTariffCorporateProvider>
   );
 };

@@ -6,9 +6,11 @@ import SelectionRangeProps from "../interfaces/selectionRangeProps";
 import { CategoryOptionsProps } from "../interfaces/categoriesProps";
 import { NonIndexRouteObject } from "react-router-dom";
 import { BodyCorporateBudgetGTCP } from "../interfaces/generateTariffCorporateContextProps";
+import {CorporateBodyResponseBudget} from "../../../hooks/api/interfaces";
 
 const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
+    const [bodyResponseBudget, setBodyResponseBudget] = useState<CorporateBodyResponseBudget | null>(null);
 
     function addRoomCorporate(categories: CategoryOptionsProps[]) {
         const newRooms = [...roomsToBudget.rooms];
@@ -110,6 +112,8 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
 
     return {
         roomsToBudget,
+        bodyResponseBudget,
+        setBodyResponseBudget,
         addRoomCorporate,
         deleteRoomCorporate,
         changePension,

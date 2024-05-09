@@ -32,6 +32,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const infoBudgetHook = useInfoBudgets();
     const selectionRangeHook = useDateRange();
+    const requirementHook = useRequirement();
+
     useEffect(() => {
         bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
         infoBudgetHook.setDataTable((par) => ({
@@ -48,6 +50,10 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         callHandleForm()
     }, [ bodySendBudget.roomsToBudget ])
 
+    useEffect(() => {
+        bodySendBudget.changeRequirementCorporate(requirementHook.requirementSubmit);
+    }, [requirementHook.requirementSubmit])
+
     //Send Objetct To Api Budget
     async function callHandleForm() {
         infoBudgetHook.clearRows();
@@ -55,7 +61,9 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             bodySendBudget.roomsToBudget.rooms.length > 0
             && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()
             && bodySendBudget.roomsToBudget.dateRange) {
-            const {withAdjustment} = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
+            const response = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
+            const { withAdjustment } = response;
+            bodySendBudget.setBodyResponseBudget(response);
             infoBudgetHook.addRows(withAdjustment.rowsValues.rows, {
                 responseForm: {
                     category: `${withAdjustment.rooms.length} quartos`,
@@ -66,6 +74,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             })
         }
     }
+
+
     return (
         <GenerateTariffCorporateContext.Provider
             value={{
@@ -75,7 +85,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...selectionRangeHook,                                          // CalendarPicker
                 ...useActionsDiscount(),                                        // FormOrc/corporate 
                 ...categoryHook,                                                // FormOrc/corporate 
-                ...useRequirement(),                                            // ModalRequirement, Requirement(form)
+                ...requirementHook,                                             // ModalRequirement, Requirement(form)
                 ...useRoomLayout(),                                             // pension(form)
                 ...useClientName(),                                             // rdClient(form)
                 ...infoBudgetHook,                                              // infoTables
