@@ -21,7 +21,7 @@ fi
 # Backup pelo pg_dump do proprio Postgress
 for db in "${dbs[@]}"
 do
-  /usr/bin/pg_dump $db > /var/www/bkp/bkpdbSistemaOrcamento/db_${db}_$current_date.bkp
+  docker exec postgres-0 pg_dump postgres $db > /var/www/bkp/bkpdbSistemaOrcamento/db_${db}_$current_date.bkp
 done
 
 # Enrtrando na pastas com os backups
