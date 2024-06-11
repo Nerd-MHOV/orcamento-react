@@ -73,6 +73,7 @@ export async function childBudget(
     }
 
     if (Number(amountAdults) === 1 && countChild === amountChild - 1) {
+      permitDiscount = true;
       valuesChild = await generateBudget(
         initDate,
         finalDate,
