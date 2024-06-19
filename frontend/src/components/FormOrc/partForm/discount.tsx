@@ -35,7 +35,7 @@ export const DiscountInputForm = () => {
 
   useEffect(() => {
     handleChangeDiscount(discount || -1);
-  }, [selectionRange]);
+  }, [selectionRange, actionSelected]);
   return (
     <TextField
       name="discount"
