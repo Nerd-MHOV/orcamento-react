@@ -50,7 +50,6 @@ export const ActionInputForm = () => {
         label="Aplicar em"
         onChange={(e) => {
           setActionSelected(action.find((el) => el.name === e.target.value));
-          console.log("mudou");
         }}
       >
         <MenuItem value={""}>Nenhuma</MenuItem>
