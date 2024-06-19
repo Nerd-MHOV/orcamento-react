@@ -26,12 +26,7 @@ const useInfoBudgets = () => {
     }
 
     function addRows(rows: RowsProps[], arrComplete: ArrCompleteProps) {
-        setDataTable((par) => {
-            return {
-              rows: rows,
-              columns: par.columns,
-            };
-        });
+        setDataTable((par) => ({...par, rows}));
         setArrComplete(arrComplete);
     }
     function clearRows() {

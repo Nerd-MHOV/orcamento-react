@@ -23,7 +23,7 @@ export const ModalDescriptionUniqueRoomProvider: React.FC<{children: ReactNode}>
 
     function getaRoom(roomID: number) {
         if (!bodyResponseBudget) return;
-        return bodyResponseBudget.withAdjustment.rooms.find(room => room.roomNumber.unit === roomID);
+        return bodyResponseBudget.rooms.find(room => room.roomNumber.unit === roomID);
     }
 
     function open(roomID: number) {

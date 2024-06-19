@@ -124,11 +124,6 @@ export interface ResponseValues {
   total: RowsPropsApi,
 }
 export interface CorporateBodyResponseBudget {
-  withAdjustment: CorporateBodyBudget,
-  withoutAdjustment: CorporateBodyBudget,
-  adjustment: number,
-}
-export interface CorporateBodyBudget {
   rooms: RoomCorporateResponse[],
   pension: string,
   requirements: RequirementSubmitProps[],

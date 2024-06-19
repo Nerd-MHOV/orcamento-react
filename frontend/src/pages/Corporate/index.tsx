@@ -15,6 +15,7 @@ import {
   ModalDescriptionUniqueRoomProvider
 } from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
 import ModalDescriptionUniqueRoom from "./ModalDescriptionUniqueRoom";
+import TableCalcCorp from "../../components/TableCalc/corp";
 
 const Corporate = () => {
   return (
@@ -38,7 +39,7 @@ const Corporate = () => {
                 </div>
                 <div className="bottom">
                   <ListUHsCorporate />
-                  <TableCalc corporate/>
+                  <TableCalcCorp />
                 </div>
                 <div className="buttons">
                   <InfoTable corporate />

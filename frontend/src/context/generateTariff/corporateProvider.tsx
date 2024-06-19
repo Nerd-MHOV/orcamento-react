@@ -36,8 +36,8 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
-        infoBudgetHook.setDataTable((par) => ({
-            rows: par.rows,
+        infoBudgetHook.setDataTable((par) => ({  
+            ...par,
             columns: getColumnData(selectionRangeHook.selectionRange),
         }))
         
@@ -62,14 +62,14 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()
             && bodySendBudget.roomsToBudget.dateRange) {
             const response = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
-            const { withAdjustment } = response;
+            const responseBudget = response;
             bodySendBudget.setBodyResponseBudget(response);
-            infoBudgetHook.addRows(withAdjustment.rowsValues.rows, {
+            infoBudgetHook.addRows(responseBudget.rowsValues.rows, {
                 responseForm: {
-                    category: `${withAdjustment.rooms.length} quartos`,
-                    pension: withAdjustment.pension,
-                    rd_client: withAdjustment.idClient || '',
-                    housingUnit: `${withAdjustment.rooms.length} quartos`,
+                    category: `${responseBudget.rooms.length} quartos`,
+                    pension: responseBudget.pension,
+                    rd_client: responseBudget.idClient || '',
+                    housingUnit: `${responseBudget.rooms.length} quartos`,
                 }
             })
         }

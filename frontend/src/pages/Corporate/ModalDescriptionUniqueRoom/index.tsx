@@ -20,10 +20,10 @@ import {
     TextField
 } from "@mui/material";
 import {useModalDescriptionUniqueRoom} from "../../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
-import {relationWithDiscountAndNoDiscount} from "../../../components/TableCalc";
 import RowsProps from "../../../context/generateTariff/interfaces/tableBudgetRowsProps";
 import {calcTotal} from "../../../context/generateTariff/functions/calcTotal";
 import DataContentProps from "../../../context/generateTariff/interfaces/tableBudgetDataContentProps";
+import relationWithDiscountAndNoDiscount from "../../../components/TableCalc/relationWithDiscountAndNoDiscount";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {

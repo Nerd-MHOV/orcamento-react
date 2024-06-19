@@ -45,7 +45,6 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget, discount = 
     const newRooms = await Promise.all(newRoomsPromises);
 
     // requirement to budget ( all rooms )
-    console.log(requirements)
     let requirementRows = await requirementBudget({ adult: 0 }, requirements, unitaryDiscount, initDate, finalDate);
     const rowsFinal: RowsProps[] = [...calcTotalBudgets(newRooms), ...requirementRows];
 

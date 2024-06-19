@@ -1,6 +1,8 @@
 import {CorporateBodyResponseBudget} from "../CalcBudgetCorpController";
 import {mainCorp} from "./mainCorp";
 
+
+// DELETE THIS FILE
 export async function doAdjustmentToCorpBudget(without: CorporateBodyResponseBudget) {
     let adjustment = getAdjustmentToApplied(without.rowsValues.total.total);
     if (adjustment == 0) return {
