@@ -18,7 +18,6 @@ export const getAllowedDiscount = async (
   let actionsInPeriod: ApiDiscountProps[] = [];
   let isWeekend = false;
 
-  console.log("PARAMS", days, payers, initialDate.getDay());
   while (initialDate <= finalDate) {
     discountData.map((el) => {
       el.dates.map((date) => {
