@@ -24,11 +24,12 @@ export const ActionInputForm = () => {
       getPayers(dataTable)
     );
 
-    console.log("Actions", response);
     const verifyIfSelected = response.find(
       (el) => el.name === actionSelected?.name
     );
-
+    if(!verifyIfSelected) {
+      setActionSelected(undefined);
+    }
     setAction(response);
   };
   useEffect(() => {
