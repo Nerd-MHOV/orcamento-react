@@ -28,6 +28,10 @@ export const ActionInputForm = ({ corporate = false }) => {
       (el) => el.name === actionSelected?.name
     );
 
+    if(!verifyIfSelected) {
+      setActionSelected(undefined);
+    }
+
     setAction(response);
   };
   useEffect(() => {
