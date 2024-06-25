@@ -5,9 +5,10 @@ import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
 import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
 import Btn from "../Btn";
-import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import {ModalConfirmGroup} from "../ModalConfirmGroup";
 import * as React from "react";
+import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
 
 export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
@@ -38,12 +39,27 @@ export const ButtonsBudget = ({ corporate = false }) => {
 
     handleOpenBackdrop();
 
-    generatePdfBudget();
+    if(!corporate) generatePdfBudget();
+    else generatePdfBudgetCorporate();
    };
 
   const handleCloseModalConfirmGroup = () => {
     setOpenModalConfirmGroup(false);
   };
+
+  async function generatePdfBudgetCorporate () {
+    handleCloseModalConfirmGroup();
+    const arrUser = await api.findUniqueUser(userLogin);
+    console.log(budgets)
+    await pdfBudgetCorp(
+      arrUser.name,
+      arrUser.email,
+      arrUser.phone,
+    );
+    handleCloseBackdrop();
+  }
+
+
   async function generatePdfDescription() {
     // if (
     //   budgets.find((budget) =>
@@ -53,7 +69,6 @@ export const ButtonsBudget = ({ corporate = false }) => {
     //   return;
     // }
     handleOpenBackdrop()
-    const arrUser = await api.findUniqueUser(userLogin);
     const deal_id = budgets[0].arrComplete.responseForm.rd_client;
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
