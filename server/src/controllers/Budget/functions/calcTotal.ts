@@ -10,6 +10,7 @@ export const calcTotal = (rows: RowsProps[], discountApplied: number) => {
         total: 0,
         totalNoDiscount: 0,
         discountApplied: 0,
+        type: "total",
     };
     if (rows[0]?.values) {
 
@@ -33,6 +34,7 @@ export const calcTotalBudgets = (rooms: RoomCorporateResponse[]) => {
         total: room.rowsValues.total.total,
         totalNoDiscount: room.rowsValues.total.totalNoDiscount,
         discountApplied: room.rowsValues.total.discountApplied,
+        type: 'room',
     }))
 
     return response
