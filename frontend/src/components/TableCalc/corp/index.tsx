@@ -7,9 +7,12 @@ import { useGenerateTariffCorporate } from "../../../context/generateTariff/gene
 import "../style.scss";
 import TableBodyComponent from "./table-body";
 import Head from "./table-head";
+import addLayoutRoomToDescription from "./addLayoutRoomToDescription";
 
 const TableCalcCorp = () => {
-  const { dataTable: data } = useGenerateTariffCorporate()
+  const { dataTable, bodyResponseBudget } = useGenerateTariffCorporate()
+  const data = addLayoutRoomToDescription(dataTable, bodyResponseBudget);
+  
 
   return (
     <TableContainer component={Paper}>
