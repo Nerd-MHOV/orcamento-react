@@ -50,6 +50,7 @@ export async function petBudget(
       noDiscount: valuesPet,
       totalNoDiscount: totalNoDiscount,
       discountApplied: discount * 100,
+      type: "pet",
     });
   }
 

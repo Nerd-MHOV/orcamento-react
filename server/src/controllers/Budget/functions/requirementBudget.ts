@@ -78,6 +78,7 @@ export async function requirementBudget(
       noDiscount: valueRequirement,
       totalNoDiscount: totalNoDiscount,
       discountApplied: discount * 100,
+      type: "requirement",
     });
   }
 

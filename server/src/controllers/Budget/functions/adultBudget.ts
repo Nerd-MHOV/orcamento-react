@@ -68,6 +68,7 @@ export async function adultBudget(
       noDiscount: valuesAdult,
       totalNoDiscount: totalNoDiscount,
       discountApplied: discount * 100,
+      type: "adult",
     });
   }
 

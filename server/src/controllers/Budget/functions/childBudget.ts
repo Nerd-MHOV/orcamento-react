@@ -113,6 +113,7 @@ export async function childBudget(
       noDiscount: valuesChild,
       totalNoDiscount,
       discountApplied,
+      type: "child",
     });
   }
 

@@ -6,6 +6,7 @@ export type RowsProps = {
     desc: string;
     values: number[];
     total: number;
+    type: string;
     noDiscount: number[];
     totalNoDiscount: number;
     discountApplied: number;
