@@ -22,9 +22,9 @@ const Corporate = () => {
     <GenerateTariffCorporateProvider>
       <ModalDescriptionUniqueRoomProvider>
 
-        <div className="home">
+        <div className="corporate">
           <Sidebar />
-          <div className="homeBx">
+          <div className="corporateBx">
             <Navbar />
             <div className="p20">
               {/* modal */}
@@ -37,14 +37,16 @@ const Corporate = () => {
                   <CalendarPicker corporate />
                   <FormOrcCorporate />
                 </div>
+                
                 <div className="bottom">
                   <ListUHsCorporate />
+                  
                   <TableCalcCorp />
                 </div>
                 <div className="buttons">
-                  <InfoTable corporate />
-                  <ButtonsBudget corporate />
-                </div>
+                    {/* <InfoTable corporate /> */}
+                    <ButtonsBudget corporate />
+                  </div>
               </div>
             </div>
           </div>

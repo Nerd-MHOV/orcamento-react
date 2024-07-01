@@ -14,14 +14,13 @@ export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
   const { 
     budgets, 
+    bodyResponseBudget,
     handleSaveBudget, 
     clearTariffs, 
     handleOpenBackdrop, 
     handleCloseBackdrop 
-  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
+  } = corporate ? useGenerateTariffCorporate() : { ...useGenerateTariff(), bodyResponseBudget: null};
   const api = useApi();
-
-
   const [openModalConfirmGroup, setOpenModalConfirmGroup] = React.useState(false);
 
   const handleOpenModalConfirmGroup = () => {
@@ -49,9 +48,14 @@ export const ButtonsBudget = ({ corporate = false }) => {
 
   async function generatePdfBudgetCorporate () {
     handleCloseModalConfirmGroup();
+    if(!bodyResponseBudget) {
+      handleCloseBackdrop();
+      return;
+    }
     const arrUser = await api.findUniqueUser(userLogin);
-    console.log(budgets)
+    console.log(bodyResponseBudget)
     await pdfBudgetCorp(
+      bodyResponseBudget!,
       arrUser.name,
       arrUser.email,
       arrUser.phone,
@@ -115,7 +119,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
        handleClose={handleCloseModalConfirmGroup}
        handleConclusion={generatePdfBudget}
       />
-      <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />
+      { !corporate && <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />}
       <Btn
         action="Gerar PDF Orçamento"
         color="darkBlue"
@@ -126,7 +130,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
         color="dashboard"
         onClick={generatePdfDescription}
       />
-      <Btn action="Limpar" color="red" onClick={clearTariffs} />
+      { !corporate && <Btn action="Limpar" color="red" onClick={clearTariffs} /> }
     </div>
   );
 };

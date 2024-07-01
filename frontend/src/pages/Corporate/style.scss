@@ -1,6 +1,6 @@
-.home {
+.corporate {
     display: flex;
-    .homeBx{
+    .corporateBx{
       width: 100%;
       .containerBx {
         // border: 0.5px solid var(--blue);
@@ -16,9 +16,10 @@
         }
 
         .buttons {
-          margin-top: 15px;
+          margin: 20px;
           display: flex;
-          justify-content: space-around;
+          justify-content: end;
+          
           flex-wrap: wrap;
           .boxButtons {
             display: flex;

@@ -3,6 +3,7 @@ import { TDocumentDefinitions } from "pdfmake/interfaces";
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import getLayoutRooms from "./file-part/getLayoutRooms";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const months = [
@@ -39,52 +40,12 @@ async function pdfBudget(
       dealId = budget.arrComplete.responseForm.numberPipe;
     }
     const rowBudget = [];
-    let adultSting =
-      Number(budget.arrComplete.responseForm.adult) < 10
-        ? "\n0" + budget.arrComplete.responseForm.adult + " ADT"
-        : Number(budget.arrComplete.responseForm.adult) !== 0
-        ? "\n" + budget.arrComplete.responseForm.adult + " ADT"
-        : "";
-
-    let ageChild = "de (";
-    const arrChild = budget.arrComplete.childValue;
-    for (let childIndex = 0; childIndex < arrChild.length; childIndex++) {
-      if (childIndex === 0) {
-        ageChild += arrChild[childIndex];
-      } else if (childIndex === arrChild.length - 1) {
-        ageChild += ` e ${arrChild[childIndex]}`;
-      } else {
-        ageChild += `, ${arrChild[childIndex]}`;
-      }
-    }
-    ageChild += ") ano(s)";
-    let childString =
-      arrChild.length === 0
-        ? ""
-        : arrChild.length < 10
-        ? "\n0" + arrChild.length + " CHD " + ageChild
-        : "\n" + arrChild.length + " CHD " + ageChild;
-
-    const arrPet = budget.arrComplete.petValue;
-    let carryingPet = " de (";
-    for (let petIndex = 0; petIndex < arrPet.length; petIndex++) {
-      if (petIndex === 0) {
-        carryingPet += arrPet[petIndex];
-      } else if (petIndex === arrPet.length) {
-        carryingPet += ` e ${arrPet[petIndex]}`;
-      } else {
-        carryingPet += `, ${arrPet[petIndex]}`;
-      }
-    }
-    carryingPet += ") porte";
-
-    let petString =
-      arrPet.length === 0
-        ? ""
-        : arrPet.length < 10
-        ? "\n0" + arrPet.length + " PET" + carryingPet
-        : "\n" + arrPet.length + " PET" + carryingPet;
-
+    const layoutRooms = getLayoutRooms(
+      budget.arrComplete.responseForm.adult,
+      budget.arrComplete.childValue,
+      budget.arrComplete.petValue
+    );
+ 
     let total = 0;
     let totalNoDiscount = 0;
     budget.rows.map((row: any) => {
@@ -152,7 +113,7 @@ async function pdfBudget(
           text: budget.arrComplete.responseForm.category.toUpperCase(),
           bold: true,
         },
-        adultSting + childString + petString,
+        layoutRooms,
         ...requirementString,
       ],
       style: "tbody",

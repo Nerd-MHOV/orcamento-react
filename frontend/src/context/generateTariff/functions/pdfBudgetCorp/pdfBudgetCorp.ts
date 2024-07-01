@@ -1,13 +1,23 @@
-import { TDocumentDefinitions } from "pdfmake/interfaces";
+import { Content, ContentTable, TDocumentDefinitions, TableCell } from "pdfmake/interfaces";
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { addDays, format } from "date-fns";
+import { CorporateBodyResponseBudget } from "../../../../hooks/api/interfaces";
+import getLayoutRooms from "../file-part/getLayoutRooms";
+import { applyBoder } from "./applyBorder";
+import { doBodyAccommodation } from "./accommodation";
+import { doTableBudgetCorp } from "./doTableBudgetCorp";
+import { stylesBudgetCorp } from "./styles.pdfBudgetCorp";
+import { doBodyRequirements } from "./requirements";
+import { layoutPageCollaborators } from "./LayoutPageCollaborator";
+import { breakPage } from "./breakPage";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const slideImagesPath = 'http://localhost:5173/budgetCorpImages/';
 
 async function pdfBudgetCorp(
+  budget: CorporateBodyResponseBudget,
   name: string,
   email: string,
   numberPhone: string,
@@ -23,6 +33,21 @@ async function pdfBudgetCorp(
     })
   }
 
+  const callLayoutPageCollaborators = () => {
+    return layoutPageCollaborators(
+      name, numberPhone, email, now, validate
+    )
+  }
+
+  const callBreakPage = () => {
+   return breakPage( callLayoutPageCollaborators )
+  }
+
+  const accommodationTable = doTableBudgetCorp([
+    applyBoder(["HOSPEDAGEM", "DISPOSIÇÃO", "PREÇO"], 'total_block'),
+    ...doBodyAccommodation(budget),
+  ], callBreakPage, !!budget.rooms.length)
+  
   const docDefinitions: TDocumentDefinitions = {
     defaultStyle: {
       //   font: "Helvetica",
@@ -55,77 +80,30 @@ async function pdfBudgetCorp(
     },
     content: [
       // ...slidesContent,
-      {
-        image: `top`,
-        width: 600,
-        // pageBreak: 'before',
-      },
-      {
-        image: `bottom`,
-        width: 600,
-        absolutePosition: {x: 0, y: 740},
-        // pageBreak: 'before',
-      },
-      {
-        layout: "noBorders",
-        alignment: 'left',
-        absolutePosition: {x: 130, y: 760},
-        table: {
-          body: [
-              [{ text: `${name}`, style: "vendedora_left_title", bold: true }],
-              [{ text: `Consultor(a) de eventos`, style: "vendedora_left", bold: true }],
-              [{ text: `telefone: ${numberPhone}`,style: "vendedora_left" }],
-              [{ text: `e-mail: ${email}`, style: "vendedora_left" }],
-          ]
-        }
-      },
-      {
-        layout: "noBorders",
-        alignment: 'left',
-        absolutePosition: {x: 350, y: 745},
-        table: {
-          body: [
-              [{ text: `DATA DA COTAÇÃO:          ${now}`, style: "vendedora_right", bold: true }],
-              [{ text: `VALIDADE DA COTAÇÃO:  ${validate}`, style: "vendedora_right", bold: true }],
-              [{ text: `Considerar o valor adicional de 5% de taxa de serviço sob a tabela acima.`, style: "vendedora_right_desc" }],
-              [{ text: `Esse orçamento não simboliza pré reserva.`, style: "vendedora_right_desc" }],
-              [{ text: `Valores sujeitos a alteração sem aviso prévio.`, style: "vendedora_right_desc" }],
-          ]
-        }
-      },
-      {
-        text: ``,
-        style: "vendedora",
-        bold: true,
-      },
-      
+      callLayoutPageCollaborators(),
+      accommodationTable.content,
+      doTableBudgetCorp([
+        applyBoder(["REQUERIMENTOS", "QUANTIDADE", "PREÇO"], 'total_block'),
+        ...doBodyRequirements(budget),
+      ], callBreakPage, !!budget.requirements.length, accommodationTable.rows).content,
+      doTableBudgetCorp([
+        applyBoder(["TOTAL", "",
+          "R$ " + budget.rowsValues.total.total.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }),
+        ], 'total_block'),
+      ], callBreakPage, true).content,
       {
         image: `slide14`,
         width: 600,
         // pageBreak: 'before',
       }
     ],
-    styles: {
-      vendedora_left: {
-        fontSize: 9,
-        color: "#ffffff",
-        marginTop: 2.4,
-      },
-      vendedora_left_title: {
-        fontSize: 15,
-        color: "#ffffff",
-        marginTop: 2.4,
-      },
-      vendedora_right: {
-        fontSize: 9,
-        color: "#646464",
-        marginBottom: 2.4,
-      },
-      vendedora_right_desc: {
-        fontSize: 8,
-        color: "#646464",
-      }
-    },
+    styles: stylesBudgetCorp,
+    // pageBreakBefore: (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) => {
+    //   return currentNode.startPosition.top > 700; // Adjust this value as needed
+    // },
   };
 
   const pdf = pdfMake.createPdf(docDefinitions);
