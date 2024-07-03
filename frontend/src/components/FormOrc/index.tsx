@@ -1,4 +1,3 @@
-import { useContext, useEffect, useState } from "react";
 import "./style.scss";
 import { ModalRequirement } from "../ModalRequirement";
 import { AdultInputForm } from "./partForm/adult";
@@ -11,12 +10,9 @@ import { PipeNumberInputForm } from "./partForm/pipeNumber";
 import { RdClientInputForm} from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
-import { GenerateTariffContext, useGenerateTariff } from "../../context/generateTariff/generateTariff";
-import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
 import { ActionInputForm } from "./partForm/action";
 import {GetClientName} from "./partForm/getClientName";
-import { DailyCalcMemory } from "../../context/generateTariff/functions/file-part/calc-memory/daily";
 import { DailyCourtesy } from "./partForm/dailyCourtesy";
 
 export const FormOrc = () => {
@@ -24,11 +20,6 @@ export const FormOrc = () => {
     stateApp,
     occupancyWrong,
     occupancy,
-    selectionRange,
-    setDailyCourtesy: setCheckCourtesy,
-    dailyCourtesy: checkCourtesy,
-    actionSelected,
-    dataTable,
     clientName,
   } = useGenerateTariff();
 

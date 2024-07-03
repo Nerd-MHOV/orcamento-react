@@ -1,5 +1,5 @@
 import { CategoryOptionsProps } from "./categoriesProps";
-import { CorporateBodySendBudget, RoomCorporate } from "./corporateProps";
+import { CorporateBodySendBudget } from "./corporateProps";
 import { ActionPromossionsGTCP, DatePartGTCP, InfoBudgetGTCP, LoadingGTCP, ModalPermissionDiscountGTCP, PensionGTCP, RequirementPartGTCP, RoomPartGTCP } from "./generateTariffContextProps";
 import RequirementSubmitProps from "./requirementSubmitProps";
 import SelectionRangeProps from "./selectionRangeProps";
@@ -43,6 +43,7 @@ export interface BodyCorporateBudgetGTCP {
     verifyIfAllRoomHasEnoughOnePax(): boolean;
     bodyResponseBudget: CorporateBodyResponseBudget | null,
     setBodyResponseBudget: React.Dispatch<React.SetStateAction<CorporateBodyResponseBudget | null>>
+    changeGenereralDiscount: ( discount: number ) => void;
 }
 
 export default GenerateTariffCorporateContextProps

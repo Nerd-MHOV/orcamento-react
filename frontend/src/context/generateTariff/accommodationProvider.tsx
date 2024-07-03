@@ -1,11 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { getColumnData } from "./functions/getters/getColumnData";
-import { getUnitUsing } from "./functions/getters/getUnitUsing";
 import { handleForm } from "./functions/handleForm";
-import { calcTotal } from "./functions/calcTotal";
-import { dataInitial } from "./initial";
-import ArrCompleteProps from "./interfaces/budgetArrCompleteProps";
-import DataContentProps from "./interfaces/tableBudgetDataContentProps";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import usePermission from "./hooks/usePermission";
@@ -18,17 +13,11 @@ import useDiscountModal from "./hooks/useDiscountModal";
 import { GenerateTariffContext } from "./generateTariff";
 import useActionsDiscount from "./hooks/useActionsDiscount";
 import useRoomLayout from "./hooks/useRoomLayout";
-import RowsProps from "./interfaces/tableBudgetRowsProps";
 import useInfoBudgets from "./hooks/useInfoBudgets";
 
 const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   
   const [openBackdrop, setOpenBackdrop] = useState(false)
-  
-
-  const onAddRows = (rows: RowsProps[]) => {
-    
-  }
   
   const permissionHook = usePermission();
   const unitaryDiscountHook = useUnitaryDiscount();
@@ -39,7 +28,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   const discountModalHook = useDiscountModal();
   const actionsDiscountHook = useActionsDiscount();
   const roomLayoutHook = useRoomLayout();
-  const infoBudgetHook = useInfoBudgets(  );
+  const infoBudgetHook = useInfoBudgets();
 
   //Loading Component
   const handleOpenBackdrop = () => {

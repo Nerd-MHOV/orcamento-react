@@ -30,15 +30,6 @@ const usePermission = () => {
       functionChangeDiscount.func(valuePermissionModal);
       return true;
     }
-
-    // if (
-    //   password === "ajuste" &&
-    //   valuePermissionModal &&
-    //   valuePermissionModal <= 20
-    // ) {
-    //   functionChangeDiscount.func(valuePermissionModal);
-    //   return true;
-    // }
     return false;
   };
 

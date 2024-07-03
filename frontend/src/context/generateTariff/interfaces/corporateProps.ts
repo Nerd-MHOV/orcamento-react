@@ -13,6 +13,7 @@ export interface CorporateBodySendBudget {
     rooms: RoomCorporate[],
     pension: string,
     requirements: RequirementSubmitProps[],
+    discount: number,
     dateRange: SelectionRangeProps | null,
     idClient: string | null,
 }

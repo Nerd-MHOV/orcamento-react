@@ -33,6 +33,10 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const infoBudgetHook = useInfoBudgets();
     const selectionRangeHook = useDateRange();
     const requirementHook = useRequirement();
+    const permissionHook = usePermission();
+    const actionDiscountHook = useActionsDiscount();
+    const roomLayoutHook = useRoomLayout();
+    const clientNameHook = useClientName();
 
     useEffect(() => {
         bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
@@ -81,13 +85,13 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             value={{
                 ...bodySendBudget,
                 ...loadingComponent,
-                ...usePermission(),                                             // Modal Permission General Discount
+                ...permissionHook,                                             // Modal Permission General Discount
                 ...selectionRangeHook,                                          // CalendarPicker
-                ...useActionsDiscount(),                                        // FormOrc/corporate 
+                ...actionDiscountHook,                                        // FormOrc/corporate 
                 ...categoryHook,                                                // FormOrc/corporate 
                 ...requirementHook,                                             // ModalRequirement, Requirement(form)
-                ...useRoomLayout(),                                             // pension(form)
-                ...useClientName(),                                             // rdClient(form)
+                ...roomLayoutHook,                                             // pension(form)
+                ...clientNameHook,                                             // rdClient(form)
                 ...infoBudgetHook,                                              // infoTables
                 callHandleForm,
                 childValue: [],                                                 // ModalRequirement

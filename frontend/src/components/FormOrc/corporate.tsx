@@ -4,9 +4,10 @@ import { PensionInputForm } from "./partForm/pension";
 import { RdClientInputForm } from "./partForm/rdClient";
 import { RequirementInputForm } from "./partForm/requirement";
 import { InfoApp } from "../InfoApp";
-import {  useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import { GetClientName } from "./partForm/getClientName";
 import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
+import { DiscountInputForm } from "./partForm/discount_corp";
 
 export const FormOrcCorporate = () => {
   const {
@@ -27,6 +28,7 @@ export const FormOrcCorporate = () => {
             <CategoryCorporateInputForm />
             <PensionInputForm corporate />
             <RdClientInputForm corporate />
+            <DiscountInputForm />
             <RequirementInputForm corporate />
           </div>
         </form>

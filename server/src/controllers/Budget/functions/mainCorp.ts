@@ -7,7 +7,7 @@ import { petBudget } from "./petBudget";
 import { requirementBudget } from "./requirementBudget";
 
 
-export async function mainCorp(bodyRequest: CorporateBodySendBudget, discount = 0) {
+export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     
     const { dateRange, rooms, pension, requirements } = bodyRequest;
 
@@ -20,7 +20,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget, discount = 
     const newRoomsPromises = rooms.map(async ( room ) => {
         const arrForm = {
             adult: room.adt,
-            discount,
+            discount: bodyRequest.discount,
             category: room.roomNumber.category,
             pension: pension,
         }
@@ -35,7 +35,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget, discount = 
             ...room,
             rowsValues: {
                 rows: rows,
-                total: calcTotal(rows, discount)
+                total: calcTotal(rows, bodyRequest.discount)
             }
         };
         return newRoom
@@ -53,7 +53,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget, discount = 
         rooms: newRooms,
         rowsValues: {
             rows: rowsFinal,
-            total: calcTotal(rowsFinal, discount)
+            total: calcTotal(rowsFinal, bodyRequest.discount)
         }
     }
 

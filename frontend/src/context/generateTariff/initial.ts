@@ -29,6 +29,7 @@ export const rowDiscountInitial: RowModalDiscount = {
 export const corporateBodySendBudgetInitial: CorporateBodySendBudget = {
   rooms: [],
   pension: 'completa',
+  discount: 0,
   requirements: [],
   dateRange: null,
   idClient: null,

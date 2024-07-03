@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { CorporateBodySendBudget, RoomCorporate } from "../interfaces/corporateProps";
+import { useState } from "react";
+import { CorporateBodySendBudget } from "../interfaces/corporateProps";
 import { corporateBodySendBudgetInitial } from "../initial";
 import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
 import { CategoryOptionsProps } from "../interfaces/categoriesProps";
-import { NonIndexRouteObject } from "react-router-dom";
 import { BodyCorporateBudgetGTCP } from "../interfaces/generateTariffCorporateContextProps";
 import {CorporateBodyResponseBudget} from "../../../hooks/api/interfaces";
 
 const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
+    
     const [bodyResponseBudget, setBodyResponseBudget] = useState<CorporateBodyResponseBudget | null>(null);
 
     function addRoomCorporate(categories: CategoryOptionsProps[]) {
@@ -110,6 +110,13 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
 
     }
 
+    function changeGenereralDiscount( discount: number ) {
+        setRoomsToBudget( old => ({
+            ...old,
+            discount,
+        }))
+    }
+
     return {
         roomsToBudget,
         bodyResponseBudget,
@@ -123,6 +130,7 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         changeLayoutRoom,
         changeCategoryToRoomCorporate,
         verifyIfAllRoomHasEnoughOnePax,
+        changeGenereralDiscount,
     }
 }
 
