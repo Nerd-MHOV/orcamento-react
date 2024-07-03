@@ -13,6 +13,8 @@ import useInfoBudgets from "./hooks/useInfoBudgets";
 import { getColumnData } from "./functions/getters/getColumnData";
 import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
 import { useApi } from "../../hooks/api/api";
+import useUnitaryDiscount from "./hooks/useUnitaryDiscount";
+import useDiscountModal from "./hooks/useDiscountModal";
 
 const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const api = useApi();
@@ -25,7 +27,6 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleCloseBackdrop,
     }
    
-   
     // NEW for corporate
     const bodySendBudget = useBodyCorporateBudget();
     const categoryHook = useCategory();
@@ -37,6 +38,10 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const actionDiscountHook = useActionsDiscount();
     const roomLayoutHook = useRoomLayout();
     const clientNameHook = useClientName();
+    const unitaryDiscountHook = useUnitaryDiscount();
+    const UnitaryDiscountModalHook = useDiscountModal();
+
+
 
     useEffect(() => {
         bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
@@ -57,6 +62,10 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     useEffect(() => {
         bodySendBudget.changeRequirementCorporate(requirementHook.requirementSubmit);
     }, [requirementHook.requirementSubmit])
+
+    useEffect(() => {
+        bodySendBudget.changeUnitaryDiscounts(unitaryDiscountHook.unitaryDiscount);
+    }, [ unitaryDiscountHook.unitaryDiscount ])
 
     //Send Objetct To Api Budget
     async function callHandleForm() {
@@ -93,9 +102,10 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...roomLayoutHook,                                             // pension(form)
                 ...clientNameHook,                                             // rdClient(form)
                 ...infoBudgetHook,                                              // infoTables
+                ...unitaryDiscountHook,
+                ...UnitaryDiscountModalHook,
                 callHandleForm,
                 childValue: [],                                                 // ModalRequirement
-                handleClickOpenModalDiscount: () => { }                         // TableCalc
             }}
         >
             <Backdrop

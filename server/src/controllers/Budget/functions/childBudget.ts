@@ -11,7 +11,8 @@ export async function childBudget(
   unitaryDiscount: UnitaryDiscountProps[],
   daily_courtesy: boolean,
   initDate: Date,
-  finalDate: Date
+  finalDate: Date,
+  room = 0,
 ) {
   let amountAdults = arrForm.adult ?? 0;
   let amountChild = arrChild.length;
@@ -27,8 +28,9 @@ export async function childBudget(
     let discountApplied = 0;
     let uChild = Number(arrChild[countChild]);
     let permitDiscount = true;
-    const id = 200 + numChild;
+    const id = 200 + numChild + room;
     const desc = "CHD " + uChild + " ano(s)";
+    const type = "child";
 
     if (uChild <= 3 && numChild === 1) {
       valuesChild = await generateBudget(
@@ -85,7 +87,7 @@ export async function childBudget(
 
     //verify unitary discount
     unitaryDiscount.map((unit) => {
-      if (unit.id === id && unit.name === desc) {
+      if (unit.id === id && unit.name.includes(desc) && unit.type === type) {
         discount = unit.discount / 100;
         permitDiscount = true;
       }
@@ -113,7 +115,7 @@ export async function childBudget(
       noDiscount: valuesChild,
       totalNoDiscount,
       discountApplied,
-      type: "child",
+      type: type,
     });
   }
 

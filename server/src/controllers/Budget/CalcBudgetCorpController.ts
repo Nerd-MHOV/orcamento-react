@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import { mainCorp } from "./functions/mainCorp";
-import { ArrRequirementProps, PetProps, RowsProps } from "./CalcBudgetController";
+import { ArrRequirementProps, PetProps, RowsProps, UnitaryDiscountProps } from "./CalcBudgetController";
 
 export interface RoomCorporate {
     adt: number,
@@ -25,6 +25,7 @@ export interface CorporateBodySendBudget {
     discount: number,
     dateRange: DateRange,
     idClient: string | null,
+    unitaryDiscount: UnitaryDiscountProps[],
 }
 
 export interface CorporateBodyResponseBudget {

@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { TextField } from "@mui/material";
 import "./style.scss";
-import { useGenerateTariff } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 
 export function ModalDiscount() {
   const {
@@ -17,7 +17,7 @@ export function ModalDiscount() {
     discountBeingEdited,
     addUnitaryDiscount,
     actionSelected,
-  } = useGenerateTariff();
+  } = useGenerateTariffCorporate();
 
   const [password, setPassword] = React.useState("");
   const [passIsRequired, setPassIsRequired] = React.useState(false);

@@ -7,13 +7,14 @@ const useUnitaryDiscount = () => {
 
 
     const addUnitaryDiscount = (row: RowModalDiscount) => {
+        console.log(row);
         setUnitaryDiscount((old) => {
             let editable: RowModalDiscount[] = [];
             let editableOld = old;
             let newItem = true;
 
             editableOld = old.map((item) => {
-                if (item.id === row.id) {
+                if (item.id === row.id && item.type === row.type) {
                     newItem = false;
                     item.discount = row.discount;
                 }

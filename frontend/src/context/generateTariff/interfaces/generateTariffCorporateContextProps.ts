@@ -6,6 +6,8 @@ import SelectionRangeProps from "./selectionRangeProps";
 import DataContentProps from "./tableBudgetDataContentProps";
 import {CorporateBodyResponseBudget} from "../../../hooks/api/interfaces";
 import React from "react";
+import { UnitaryDiscountGTCP } from "./unitaryDiscountProps";
+import RowModalDiscount from "./rowModalDiscount";
 
 interface GenerateTariffCorporateContextProps
 extends 
@@ -17,7 +19,8 @@ RoomPartGTCP,
 RequirementPartGTCP,
 PensionGTCP,
 InfoBudgetGTCP,
-BodyCorporateBudgetGTCP
+BodyCorporateBudgetGTCP,
+UnitaryDiscountGTCP
 {
     clientName: string;
     getClientName: (id: string) => Promise<string>;
@@ -26,7 +29,6 @@ BodyCorporateBudgetGTCP
     callHandleForm: VoidFunction;
 
     childValue: [];
-    handleClickOpenModalDiscount: VoidFunction;
 }
 
 
@@ -44,6 +46,7 @@ export interface BodyCorporateBudgetGTCP {
     bodyResponseBudget: CorporateBodyResponseBudget | null,
     setBodyResponseBudget: React.Dispatch<React.SetStateAction<CorporateBodyResponseBudget | null>>
     changeGenereralDiscount: ( discount: number ) => void;
+    changeUnitaryDiscounts(discounts: RowModalDiscount[]): void;
 }
 
 export default GenerateTariffCorporateContextProps

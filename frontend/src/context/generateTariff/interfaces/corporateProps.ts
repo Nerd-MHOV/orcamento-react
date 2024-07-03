@@ -1,5 +1,6 @@
 import { CategoryOptionsProps } from "./categoriesProps";
 import RequirementSubmitProps from "./requirementSubmitProps";
+import RowModalDiscount from "./rowModalDiscount";
 import SelectionRangeProps from "./selectionRangeProps";
 
 export interface RoomCorporate {
@@ -15,6 +16,7 @@ export interface CorporateBodySendBudget {
     requirements: RequirementSubmitProps[],
     discount: number,
     dateRange: SelectionRangeProps | null,
+    unitaryDiscount: RowModalDiscount[],
     idClient: string | null,
 }
 

@@ -11,10 +11,11 @@ export async function requirementBudget(
   arrRequirement: ArrRequirementProps[],
   unitaryDiscount: UnitaryDiscountProps[],
   initDate: Date,
-  finalDate: Date
+  finalDate: Date,
+  room = 0
 ) {
   let requirementRows: RowsProps[] = [];
-
+  const type = "requirement";
   //voucher municipal:
   if (arrForm.adult)
     arrRequirement.push({
@@ -36,7 +37,7 @@ export async function requirementBudget(
     let valueRequirement: number[] = [];
     let totalRequirement = 0;
     let uRequirement = arrRequirement[countRequirement].requirement;
-    const id = 400 + numRequirement;
+    const id = 400 + numRequirement + room;
     let totalNoDiscount = 0;
 
     valueRequirement = await generateBudgetRequirement(
@@ -47,7 +48,7 @@ export async function requirementBudget(
 
     //verify unitary discount
     let discount = (unitaryDiscount.find(
-        unit => unit.id === id && unit.name === nameRequirement
+        unit => unit.id === id && unit.name.includes(nameRequirement) && unit.type === type
     )?.discount ?? 0) / 100
 
     const valueWithDiscount = valueRequirement.map((value) => {
@@ -78,7 +79,7 @@ export async function requirementBudget(
       noDiscount: valueRequirement,
       totalNoDiscount: totalNoDiscount,
       discountApplied: discount * 100,
-      type: "requirement",
+      type: type,
     });
   }
 

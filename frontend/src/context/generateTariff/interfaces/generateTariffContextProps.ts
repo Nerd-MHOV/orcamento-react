@@ -7,6 +7,7 @@ import OccupancyProps from "./occupancyProps";
 import { CategoryOptionsProps } from "./categoriesProps";
 import PensionsOptionsProps from "./pensionOptionsProps";
 import RowModalDiscount from "./rowModalDiscount";
+import { UnitaryDiscountGTCP } from "./unitaryDiscountProps";
 
 interface GenerateTariffContextProps extends
  DatePartGTCP, 
@@ -110,16 +111,7 @@ export interface ActionPromossionsGTCP {
     >;
     actionSelected: ApiDiscountProps | undefined;
 }
-export interface DiscountGTCP extends ModalPermissionDiscountGTCP, ActionPromossionsGTCP {
-    handleCloseModalDiscount: VoidFunction;
-    handleSaveModalDiscount: VoidFunction;
-    handleClickOpenModalDiscount: (row: RowModalDiscount) => void;
-    openModalDiscount: boolean;
-    discountBeingEdited: RowModalDiscount;
-    addUnitaryDiscount: (row: RowModalDiscount) => void;
-    clearUnitaryDiscount: VoidFunction;
-    unitaryDiscount: RowModalDiscount[];
-}
+export interface DiscountGTCP extends ModalPermissionDiscountGTCP, ActionPromossionsGTCP, UnitaryDiscountGTCP {}
 
 export interface PensionGTCP {
     disabledPension: boolean;

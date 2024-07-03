@@ -24,6 +24,7 @@ export const rowDiscountInitial: RowModalDiscount = {
   id: 0,
   name: "",
   discount: 0,
+  type: "",
 };
 
 export const corporateBodySendBudgetInitial: CorporateBodySendBudget = {
@@ -33,4 +34,5 @@ export const corporateBodySendBudgetInitial: CorporateBodySendBudget = {
   requirements: [],
   dateRange: null,
   idClient: null,
+  unitaryDiscount: [],
 }

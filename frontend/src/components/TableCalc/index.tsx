@@ -79,6 +79,7 @@ const TableCalc = ({ corporate = false }) => {
                         id: +row.id,
                         name: row.desc,
                         discount: +row.discountApplied,
+                        type: row.type,
                       });
                     }}
                   >

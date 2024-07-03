@@ -24,6 +24,7 @@ export interface UnitaryDiscountProps {
     id: number;
     name: string;
     discount: number;
+    type: string;
 }
 
 export interface ArrRequirementProps {

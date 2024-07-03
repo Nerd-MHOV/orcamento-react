@@ -17,7 +17,7 @@ const Row = ({ row, data, collapse = true }: RowProps) => {
 
 
     //collapse rows
-    const {bodyResponseBudget } = useGenerateTariffCorporate();
+    const { bodyResponseBudget, handleClickOpenModalDiscount } = useGenerateTariffCorporate();
     const room = bodyResponseBudget?.rooms.find(room => room.roomNumber.unit === row.id);
     const dataRowCollapse: DataContentProps = room ? {
         rows: room.rowsValues.rows,
@@ -70,13 +70,14 @@ const Row = ({ row, data, collapse = true }: RowProps) => {
                         <TableCell
                             align="center"
                             style={{ cursor: "pointer" }}
-                        // onDoubleClick={() => {
-                        //   handleClickOpenModalDiscount({
-                        //     id: +row.id,
-                        //     name: row.desc,
-                        //     discount: +row.discountApplied,
-                        //   });
-                        // }}
+                            onDoubleClick={() => {
+                                handleClickOpenModalDiscount({
+                                    id: +row.id,
+                                    name: row.desc,
+                                    discount: +row.discountApplied,
+                                    type: row.type,
+                                });
+                            }}
                         >
                             {row.discountApplied} %
                         </TableCell>
@@ -101,7 +102,7 @@ const Row = ({ row, data, collapse = true }: RowProps) => {
                     <TableRow>
                         <TableCell style={{ paddingBottom: 1, paddingTop: 1 }} colSpan={row.values.length + 4}>
                             <Collapse in={open} timeout="auto" unmountOnExit>
-                               <TableContainer component={Paper} style={{ marginTop: 30, marginBottom: 30 }}>
+                                <TableContainer component={Paper} style={{ marginTop: 30, marginBottom: 30 }}>
                                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                         <Head collapse data={data} />
                                         <TableBodyComponent data={dataRowCollapse} collapse={false} />

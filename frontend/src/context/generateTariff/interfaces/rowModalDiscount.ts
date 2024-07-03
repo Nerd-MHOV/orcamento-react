@@ -1,6 +1,7 @@
 interface RowModalDiscount {
     id: number;
     name: string;
+    type: string;
     discount: number;
 }
 

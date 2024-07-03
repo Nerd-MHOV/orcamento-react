@@ -6,6 +6,7 @@ import SelectionRangeProps from "../interfaces/selectionRangeProps";
 import { CategoryOptionsProps } from "../interfaces/categoriesProps";
 import { BodyCorporateBudgetGTCP } from "../interfaces/generateTariffCorporateContextProps";
 import {CorporateBodyResponseBudget} from "../../../hooks/api/interfaces";
+import RowModalDiscount from "../interfaces/rowModalDiscount";
 
 const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
@@ -117,6 +118,13 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         }))
     }
 
+    function changeUnitaryDiscounts( discounts: RowModalDiscount[] ) {
+        setRoomsToBudget( old => ({
+            ...old,
+            unitaryDiscount: discounts
+        }))
+    }
+
     return {
         roomsToBudget,
         bodyResponseBudget,
@@ -131,6 +139,7 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         changeCategoryToRoomCorporate,
         verifyIfAllRoomHasEnoughOnePax,
         changeGenereralDiscount,
+        changeUnitaryDiscounts,
     }
 }
 
