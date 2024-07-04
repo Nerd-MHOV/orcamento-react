@@ -23,7 +23,6 @@ export const getAllowedDiscount = async (
       el.dates.map((date) => {
         if (date.date === format(initialDate, "yyyy-MM-dd")) {
           const isDuplicated = actionsInPeriod.find((obj) => obj.id === el.id);
-          console.log("compativel com data", el);
           if (
             days >= el.daily_minimum &&
             days <= el.daily_maximum &&

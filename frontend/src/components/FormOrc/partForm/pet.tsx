@@ -1,37 +1,30 @@
-import { Autocomplete, TextField } from "@mui/material";
-import {useContext, useEffect} from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, TextField } from "@mui/material";
+import { useContext, useEffect } from "react";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 import useQuery from "../../../hooks/urlQuery/query";
 
 const petOptions = ["pequeno", "médio", "grande"];
 
-export const PetInputForm = () => {
-  const { petValue, setPetValue } = useContext(GenerateTariffContext);
-  const query = useQuery();
 
-    useEffect(() => {
-        if(query.get("pet")) {
-            const pet = query.get("pet")?.split(",")
-            if(!pet) return
-            const filter =( pet.filter(item => {
-                const lowercaseItem = item.toLowerCase();
-                return lowercaseItem === "pequeno" || lowercaseItem === "médio" || lowercaseItem === "grande";
-            })).map(item => item.toLowerCase());
-
-            if(!filter) return
-            setPetValue(filter)
-        }
-    }, []);
-  return (
+export type OnChangePetFieldFormProps = (
+  event: React.SyntheticEvent<Element, Event>,
+  value: string[],
+  reason: AutocompleteChangeReason,
+  details?: AutocompleteChangeDetails<string> | undefined
+) => void
+interface PetFieldFormProps {
+  value: string[],
+  onChange: OnChangePetFieldFormProps
+}
+export const PetFieldForm = ({ value, onChange }: PetFieldFormProps) => (
+  <>
     <Autocomplete
       multiple
       options={petOptions}
       isOptionEqualToValue={() => false}
       className="textField"
-      onChange={(_, newValue) => {
-        setPetValue(newValue);
-      }}
-      value={petValue}
+      onChange={onChange}
+      value={value}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -42,6 +35,41 @@ export const PetInputForm = () => {
           variant="standard"
         />
       )}
+    />
+    <input type="hidden" name="pet" value={JSON.stringify(value)} />
+  </>
+)
+
+export const PetInputForm = () => {
+  const { petValue, setPetValue, clearUnitaryDiscount, callHandleForm } = useGenerateTariff();
+  const query = useQuery();
+
+  useEffect(() => {
+    if (query.get("pet")) {
+      const pet = query.get("pet")?.split(",")
+      if (!pet) return
+      const filter = (pet.filter(item => {
+        const lowercaseItem = item.toLowerCase();
+        return lowercaseItem === "pequeno" || lowercaseItem === "médio" || lowercaseItem === "grande";
+      })).map(item => item.toLowerCase());
+
+      if (!filter) return
+      setPetValue(filter)
+    }
+  }, []);
+
+  const onChange: OnChangePetFieldFormProps = (_, newValue) => {
+    setPetValue(newValue);
+  }
+
+  useEffect(() => {
+    clearUnitaryDiscount()
+    callHandleForm()
+  }, [petValue])
+  return (
+    <PetFieldForm
+      value={petValue}
+      onChange={onChange}
     />
   );
 };

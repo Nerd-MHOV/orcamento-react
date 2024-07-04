@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import { Box, CircularProgress, TextField } from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(
@@ -19,13 +19,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ModalPermissionDiscount() {
+export default function ModalPermissionDiscount({ corporate = false }) {
   const {
     isOpenModalPermission: isOpen,
     handleCloseModalPermission: close,
     handleConfirmModalPermission: confirm,
     callHandleForm,
-  } = React.useContext(GenerateTariffContext);
+  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
 
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);

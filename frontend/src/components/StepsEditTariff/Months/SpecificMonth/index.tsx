@@ -28,7 +28,6 @@ export const SpecificMonth = () => {
 
   const handleGetDays = (ranges: { startDate: Date; endDate: Date }) => {
     if (isDate(ranges.startDate) && isDate(ranges.endDate)) {
-      console.log(ranges);
       let stringDates = [];
       let init = ranges.startDate;
       while (init <= ranges.endDate) {

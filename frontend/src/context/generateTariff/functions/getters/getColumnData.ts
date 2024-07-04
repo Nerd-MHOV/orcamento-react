@@ -1,5 +1,5 @@
 import { addDays, format } from "date-fns";
-import { SelectionRangeProps } from "../../interfaces";
+import SelectionRangeProps from "../../interfaces/selectionRangeProps";
 
 export function getColumnData(date: SelectionRangeProps) {
   let newColumn: string[] = ["Desc"];

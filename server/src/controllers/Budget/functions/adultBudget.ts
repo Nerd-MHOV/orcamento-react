@@ -7,7 +7,8 @@ export async function adultBudget(
   unitaryDiscount: UnitaryDiscountProps[],
   daily_courtesy: boolean,
   initDate: Date,
-  finalDate: Date
+  finalDate: Date,
+  room = 0
 ) {
   //ADULT
   let adultRows: RowsProps[] = [];
@@ -16,8 +17,9 @@ export async function adultBudget(
   while (countAdult < amountAdults) {
     let discount = (Number(arrForm.discount) || 0) / 100;
     countAdult++;
-    const id = 100 + countAdult;
+    const id = 100 + countAdult + room;
     const desc = "Adulto " + countAdult;
+    const type = "adult";
     let valuesAdult: number[] = [];
     let totalAdult = 0;
     let totalNoDiscount = 0;
@@ -47,8 +49,8 @@ export async function adultBudget(
     }
 
     //verify Discount Unitary
-    unitaryDiscount.map((unit) => {
-      if (unit.id === id && unit.name === desc) {
+    unitaryDiscount.forEach((unit) => {
+      if (unit.id === id && unit.name.includes(desc) && unit.type === type) {
         discount = unit.discount / 100;
       }
     });
@@ -68,6 +70,7 @@ export async function adultBudget(
       noDiscount: valuesAdult,
       totalNoDiscount: totalNoDiscount,
       discountApplied: discount * 100,
+      type: type,
     });
   }
 

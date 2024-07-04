@@ -12,17 +12,14 @@ export const PrivateRole = ({ level }: { level: number }) => {
 
   const api = useApi();
   const verifyAllowed = async () => {
-    console.log("verificando....");
     api
       .getaUser(userLogin)
       .then((res) => {
-        console.log(res);
         if (res.level >= level) {
           setAllowed(true);
         }
         setLoading(false);
       })
-      .catch((err) => console.log(err));
   };
 
   useEffect(() => {

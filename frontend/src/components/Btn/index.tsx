@@ -1,4 +1,3 @@
-import { MouseEventHandler } from "react";
 import "./style.scss";
 
 const Btn = ({

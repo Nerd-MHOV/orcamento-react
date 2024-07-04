@@ -1,5 +1,5 @@
 import {useApi} from "../../../hooks/api/api";
-import {DataContentProps} from "../interfaces";
+import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import {format} from "date-fns";
 
 export async function rdSaveProcess(userId: string, budgets: DataContentProps[], group = false) {
@@ -25,7 +25,6 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
         await api.rdDeleteProduct(dealId, prod.id)
     }
 
-    console.log("GROUP: ", group);
     if(group) {
         // add all budgets
         for (const budget of budgets) {
@@ -37,11 +36,8 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
                         // pipe.addFile();
                         api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
                     })
-                    .catch((err) => console.log(err));
-            } catch (err) {
-                console.log(err);
-            }
-        }
+            } catch (error) {}
+        } 
     } else {
         const budget = budgets.reduce((old, current) => {
             const oldValue = old?.total?.total ?? 0;
@@ -51,17 +47,13 @@ export async function rdSaveProcess(userId: string, budgets: DataContentProps[],
         }, budgets[0]);
 
         try {
-
             await api
                 .getTariffPipe(budget.arrComplete.selectionRange.startDate, budget.arrComplete.selectionRange.endDate)
                 .then((tariff_id) => {
                     // pipe.addFile();
                     api.rdAddProduct(dealId, tariff_id.product_rd, budget?.total?.total ?? 0)
                 })
-                .catch((err) => console.log(err));
-        } catch (err) {
-            console.log(err);
-        }
+        } catch (error) {}
     }
 
 

@@ -8,11 +8,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useContext } from "react";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 
-export const InfoTable = () => {
-  const { budgets, deleteLine } = useContext(GenerateTariffContext);
+export const InfoTable = ({ corporate = false }) => {
+  const { budgets, deleteLine } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   return (
     <div className="infoTable">
       <>
@@ -21,7 +20,7 @@ export const InfoTable = () => {
         </Typography>
         {budgets.map((budget, index) => {
           let countDaily = budget.columns.length - 1;
-          let primary = `${countDaily} diárias no ${budget.arrComplete.responseForm.category}`;
+          let primary = `${countDaily} diárias - ${budget.arrComplete.responseForm.category}`;
           let total = 0;
           budget.rows.map((row) => {
             total += Number(row.total);

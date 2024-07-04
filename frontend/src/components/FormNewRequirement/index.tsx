@@ -18,7 +18,6 @@ export const FormNewRequirement = () => {
   const [errForm, setErrForm] = useState("");
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
     api
       .createRequirement(data.name, Number(data.price))
       .then((response) => {
@@ -28,7 +27,6 @@ export const FormNewRequirement = () => {
         setErrForm("Erro do servidor");
         if (err?.response?.data?.message?.message)
           setErrForm(err.response.data.message.message);
-        console.log(err);
       });
   };
 

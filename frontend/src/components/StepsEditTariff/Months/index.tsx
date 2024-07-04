@@ -6,7 +6,6 @@ import { SpecificMonth } from "./SpecificMonth";
 export const MonthsCommon = () => {
   const { getTariffType } = useContext(EditTariffContext);
   const typeTariff = getTariffType();
-  console.log("chegou aqui");
   return (
     <div className="months-common">
       {typeTariff !== "specific" && <CommonMonths />}

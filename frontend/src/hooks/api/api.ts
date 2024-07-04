@@ -1,10 +1,8 @@
 import axios from "axios";
 import {selectionRange} from "../../context/generateTariff/functions/handleForm";
-import {
-    RequirementSubmitProps,
-    RowModalDiscount,
-    DataContentProps,
-} from "../../context/generateTariff/interfaces";
+import RowModalDiscount from "../../context/generateTariff/interfaces/rowModalDiscount";
+import RequirementSubmitProps from "../../context/generateTariff/interfaces/requirementSubmitProps";
+import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
 import {
     AllTariffsProps,
     ApiDiscountProps,
@@ -12,17 +10,19 @@ import {
     ApiSavedBudgetsProps,
     ApiUserProps,
     CheckInValuesProps,
+    CorporateBodyResponseBudget,
     FindHolidaysProps,
     FindMonthWithTariffProps,
     FoodProps,
     SpecificTariffProps,
     TariffValuesProps,
 } from "./interfaces";
+import { CorporateBodySendBudget } from "../../context/generateTariff/interfaces/corporateProps";
 
 const storageData = localStorage.getItem("authToken");
 
 const api = axios.create({
-    baseURL: "http://192.168.10.87:3335",
+    baseURL: "http://localhost:3335",
     headers: {
         Authorization: `Bearer ${storageData}`,
     },
@@ -94,6 +94,11 @@ export const useApi = () => ({
             rangeDate,
             unitaryDiscount,
         });
+        return response.data;
+    },
+
+    getBudgetCorp: async (request: CorporateBodySendBudget): Promise<CorporateBodyResponseBudget> => {
+        const response = await api.post('/budget-corp', request)
         return response.data;
     },
 

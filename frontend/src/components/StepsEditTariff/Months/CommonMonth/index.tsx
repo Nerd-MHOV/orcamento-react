@@ -23,7 +23,6 @@ export const CommonMonths = () => {
     let maxMonth = addYears(nowMonth, 2);
     let monthOptions = [];
     const selectedMonths = await api.findMonthWithTariff();
-    console.log(selectedMonths);
 
     while (nowMonth < maxMonth) {
       let disabled = false;
@@ -43,7 +42,6 @@ export const CommonMonths = () => {
       nowMonth = addMonths(nowMonth, 1);
     }
 
-    console.log(monthOptions);
     setOptions(monthOptions);
   };
 
@@ -65,7 +63,6 @@ export const CommonMonths = () => {
         Number(arrayDate[0]),
         Number(arrayDate[1]) - 1
       );
-      console.log(dateSingle);
       return {
         label: format(dateSingle, "MMMM yyyy", { locale: ptBR }),
         date: date,
@@ -73,7 +70,6 @@ export const CommonMonths = () => {
       };
     });
 
-    console.log(selectDates, "selectDates");
 
     setSelected(selectDates);
   }, [options]);
@@ -89,7 +85,6 @@ export const CommonMonths = () => {
         sx={{ maxWidth: 400, margin: "0 auto" }}
         onChange={(event, value) => {
           let dates = value.map((date) => date.date);
-          console.log(dates, "dates here");
           setDates(dates);
           setSelected(value);
         }}

@@ -1,7 +1,6 @@
 import { TextField } from "@mui/material";
-import { useContext, useEffect, useRef, useState } from "react";
-import { getAllowedDiscount } from "../../../context/generateTariff/functions/getters/getAllowedDiscount";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { useEffect, useState } from "react";
+import { useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 
 export const DiscountInputForm = () => {
   const {
@@ -10,7 +9,7 @@ export const DiscountInputForm = () => {
     handleOpenModalPermission,
     selectionRange,
     actionSelected,
-  } = useContext(GenerateTariffContext);
+  } = useGenerateTariff();
   const [discount, setDiscount] = useState<number | null>(null);
   const handleChangeDiscount = async (value: number) => {
     let limit = actionSelected?.percent_general ?? 10;
@@ -29,7 +28,6 @@ export const DiscountInputForm = () => {
   };
 
   const verifyPermission = (value: number) => {
-    console.log("verify...", value);
     handleOpenModalPermission(value, setDiscount);
   };
 

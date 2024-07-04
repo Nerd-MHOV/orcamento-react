@@ -1,6 +1,5 @@
 import { useApi } from "../../../../hooks/api/api";
-import { CategoryOptionsProps } from "../../interfaces";
-
+import { CategoryOptionsProps } from "../../interfaces/categoriesProps";
 export async function getCategoryOptions() {
   const api = useApi();
   const response = await api.findAllHousingUnits();

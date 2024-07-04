@@ -202,7 +202,6 @@ export const EditTariffContextProvider = ({
         tariff.food as FoodProps
       );
 
-      console.log(response);
       setStateResponse(response.msg);
       setLoading(false);
     } else {

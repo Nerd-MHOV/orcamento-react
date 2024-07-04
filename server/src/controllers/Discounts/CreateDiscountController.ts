@@ -36,7 +36,6 @@ export class CreateDiscountController {
         return response.json({ msg: "success", debug: newDiscounts });
       })
       .catch((err) => {
-        console.log(err.meta.target[0]);
         return response
           .status(500)
           .json({ msg: "error", debug: err, target: err.meta.target[0] });

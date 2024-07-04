@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
 import {useContext, useEffect, useState} from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
 import useQuery from "../../../hooks/urlQuery/query";
 
 export const PipeNumberInputForm = () => {
-  const { callHandleForm } = useContext(GenerateTariffContext);
+  const { callHandleForm } = useGenerateTariff();
   const query = useQuery()
   const [value, setValue] = useState<Number>()
   

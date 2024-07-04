@@ -76,7 +76,6 @@ export const FormNewDiscount = () => {
       setDates.add(dates.date);
       return !duplicated;
     });
-    console.log("NO DUPLICATE", filteredDates);
 
     api
       .createDiscount(
@@ -91,20 +90,17 @@ export const FormNewDiscount = () => {
         applicableIn
       )
       .then((response) => {
-        //console.log(response);
         navigate("/discounts");
       })
       .catch((err) => {
         setErrForm("Erro do servidor");
         if (err?.response?.data?.message?.message)
           setErrForm(err.response.data.message.message);
-        console.log(err);
       });
   };
 
   const addRange = () => {
     const key = datesRange.length;
-    console.log();
     setDatesRange([
       ...datesRange,
       {
@@ -116,7 +112,6 @@ export const FormNewDiscount = () => {
   };
 
   const handleChangeRange = (item: RangeKeyDict) => {
-    console.log(item[Object.keys(item)[0]]);
     const obj = item[Object.keys(item)[0]];
     if (obj.key === undefined) return;
     const arr = datesRange;

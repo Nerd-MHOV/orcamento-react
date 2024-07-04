@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useContext } from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
-import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces";
+import { useContext, useEffect } from "react";
+import { GenerateTariffContext, useGenerateTariff } from "../../../context/generateTariff/generateTariff";
+import { CategoryOptionsProps } from "../../../context/generateTariff/interfaces/categoriesProps";
 
 export const CategoryInputForm = () => {
   const {
@@ -10,7 +10,8 @@ export const CategoryInputForm = () => {
     categoryValue,
     selectionRange,
     unitUsing,
-  } = useContext(GenerateTariffContext);
+    callHandleForm,
+  } = useGenerateTariff();
 
   const optionDisabled = (options: CategoryOptionsProps) => {
     if (
@@ -44,7 +45,12 @@ export const CategoryInputForm = () => {
     return <span {...props}>{option.label}</span>;
   };
 
+  useEffect(() => {
+    callHandleForm()
+  },[categoryValue])
+
   return (
+    <>
     <Autocomplete
       options={categoryOptions}
       className="textField"
@@ -64,5 +70,7 @@ export const CategoryInputForm = () => {
         />
       )}
     />
+    <input type="hidden" name="categoryComplete" value={JSON.stringify(categoryValue)}/>
+    </>
   );
 };

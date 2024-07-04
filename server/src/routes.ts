@@ -53,6 +53,7 @@ import {RDController} from "./controllers/RdStation/RDController";
 import {RoutinesAutomations} from "./controllers/RoutinesAutomations/RoutinesAutomations";
 import assist48hInWalking from "./crons/DBStatus/assist48hInWalking";
 import {assistDBStatus} from "./crons/DBStatus/assistDBStatus";
+import { CalcBudgetCorpController } from "./controllers/Budget/CalcBudgetCorpController";
 
 const routes = express.Router();
 
@@ -102,6 +103,7 @@ const activeRequirement = new ActiveRequirementController();
 const priceRequirement = new PriceRequirementController();
 
 const calcBudget = new CalcBudgetController();
+const calcCorpBudget = new CalcBudgetCorpController();
 const calcBudgetDU = new CalcBudgetDUController();
 const saveBudget = new SaveBudgetController();
 const getBudget = new GetBudgetController();
@@ -179,6 +181,7 @@ routes.delete("/requirement/:name", deleteRequirement.handle);
 
 routes.post("/budget", calcBudget.handle);
 routes.post("/budget-du", calcBudgetDU.handle);
+routes.post("/budget-corp", calcCorpBudget.handle);
 routes.post("/save-budget", saveBudget.handle);
 routes.put("/save-budget/rename", saveBudget.renameBudget);
 routes.get("/budget", getBudget.handle);

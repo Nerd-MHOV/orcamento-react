@@ -8,7 +8,6 @@ const daysOfWeekend = ["Fri", "Sat", "Sun"];
 export async function generateBudgetRequirement(
   initDate: Date,
   finalDate: Date,
-  arrForm: ArrFormProps,
   arrRequirement: {
     requirement: string;
     type: string;

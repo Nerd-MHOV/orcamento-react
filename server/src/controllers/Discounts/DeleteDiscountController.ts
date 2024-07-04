@@ -15,7 +15,6 @@ export class DeleteDiscountController {
         return response.json({ msg: "success", debug: deleted });
       })
       .catch((err) => {
-        console.log(err);
         return response.json({ msg: "error", debug: err });
       });
   }

@@ -16,6 +16,7 @@ import { EditUsers } from "./pages/Users/EditUsers";
 import { BudgetsPage } from "./pages/Budgets";
 import { DiscountsPage } from "./pages/Discounts";
 import { NewDiscountPage } from "./pages/Discounts/NewDiscount";
+import Corporate from "./pages/Corporate";
 
 function App() {
 
@@ -27,6 +28,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route element={<Private />}>
               <Route index element={<Home />} />
+
+              <Route path="/corporate">
+                <Route index element={<Corporate />} />
+              </Route>
 
               <Route path="/budgets">
                 <Route index element={<BudgetsPage />} />

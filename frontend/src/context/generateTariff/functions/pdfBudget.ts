@@ -3,6 +3,7 @@ import { TDocumentDefinitions } from "pdfmake/interfaces";
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import getLayoutRooms from "./file-part/getLayoutRooms";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const months = [
@@ -31,7 +32,6 @@ async function pdfBudget(
   const monthNum = Number(budgets[0].columns[1].substr(-2));
   const titleMonth = months[monthNum - 1];
 
-  console.log(budgets);
   const arrValues: any[] = [];
   let dealId = 0;
 
@@ -39,53 +39,13 @@ async function pdfBudget(
     if (budget.arrComplete.responseForm.numberPipe) {
       dealId = budget.arrComplete.responseForm.numberPipe;
     }
-    const rowBudget = new Array();
-    let adultSting =
-      Number(budget.arrComplete.responseForm.adult) < 10
-        ? "\n0" + budget.arrComplete.responseForm.adult + " ADT"
-        : Number(budget.arrComplete.responseForm.adult) !== 0
-        ? "\n" + budget.arrComplete.responseForm.adult + " ADT"
-        : "";
-
-    let ageChild = "de (";
-    const arrChild = budget.arrComplete.childValue;
-    for (let childIndex = 0; childIndex < arrChild.length; childIndex++) {
-      if (childIndex === 0) {
-        ageChild += arrChild[childIndex];
-      } else if (childIndex === arrChild.length - 1) {
-        ageChild += ` e ${arrChild[childIndex]}`;
-      } else {
-        ageChild += `, ${arrChild[childIndex]}`;
-      }
-    }
-    ageChild += ") ano(s)";
-    let childString =
-      arrChild.length === 0
-        ? ""
-        : arrChild.length < 10
-        ? "\n0" + arrChild.length + " CHD " + ageChild
-        : "\n" + arrChild.length + " CHD " + ageChild;
-
-    const arrPet = budget.arrComplete.petValue;
-    let carryingPet = " de (";
-    for (let petIndex = 0; petIndex < arrPet.length; petIndex++) {
-      if (petIndex === 0) {
-        carryingPet += arrPet[petIndex];
-      } else if (petIndex === arrPet.length) {
-        carryingPet += ` e ${arrPet[petIndex]}`;
-      } else {
-        carryingPet += `, ${arrPet[petIndex]}`;
-      }
-    }
-    carryingPet += ") porte";
-
-    let petString =
-      arrPet.length === 0
-        ? ""
-        : arrPet.length < 10
-        ? "\n0" + arrPet.length + " PET" + carryingPet
-        : "\n" + arrPet.length + " PET" + carryingPet;
-
+    const rowBudget = [];
+    const layoutRooms = getLayoutRooms(
+      budget.arrComplete.responseForm.adult,
+      budget.arrComplete.childValue,
+      budget.arrComplete.petValue
+    );
+ 
     let total = 0;
     let totalNoDiscount = 0;
     budget.rows.map((row: any) => {
@@ -153,7 +113,7 @@ async function pdfBudget(
           text: budget.arrComplete.responseForm.category.toUpperCase(),
           bold: true,
         },
-        adultSting + childString + petString,
+        layoutRooms,
         ...requirementString,
       ],
       style: "tbody",
@@ -657,14 +617,6 @@ async function pdfBudget(
     // Abre a janela pop-up com o PDF
     window.open(url, '_blank', features);
   });
-
-  // if (dealId) {
-  //   const document = pdf.getBlob(async (blob) => {
-  //     const pipe = usePipe();
-  //     const response = await pipe.addFile(token, dealId, blob, "Orçamento.pdf");
-  //     console.log(response);
-  //   });
-  // }
 }
 
 export default pdfBudget;

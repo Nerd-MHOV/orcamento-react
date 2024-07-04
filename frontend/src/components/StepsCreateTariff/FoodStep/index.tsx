@@ -48,7 +48,6 @@ export const FoodStep = ({
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
-    console.log(newAlignment);
     if (newAlignment === "pad") setAllFoodValues(type, foodPad);
     else setAllFoodValues(type, initValues);
     setAlignment(newAlignment);

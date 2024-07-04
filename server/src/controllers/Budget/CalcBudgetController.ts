@@ -1,14 +1,12 @@
 import {Request, Response} from "express";
-import {adultBudget} from "./functions/adultBudget";
-import {childBudget} from "./functions/childBudget";
-import {petBudget} from "./functions/petBudget";
-import {requirementBudget} from "./functions/requirementBudget";
+import { MainBudgetProps, mainBudget } from "./functions/mainBudget";
 
 export type RowsProps = {
     id: number;
     desc: string;
     values: number[];
     total: number;
+    type: string;
     noDiscount: number[];
     totalNoDiscount: number;
     discountApplied: number;
@@ -26,6 +24,7 @@ export interface UnitaryDiscountProps {
     id: number;
     name: string;
     discount: number;
+    type: string;
 }
 
 export interface ArrRequirementProps {
@@ -40,46 +39,10 @@ export type PetProps = "pequeno" | "médio" | "grande";
 
 export class CalcBudgetController {
     async handle(request: Request, response: Response) {
-        const {
-            arrForm, arrChild, arrPet, arrRequirement, rangeDate, unitaryDiscount, dailyCourtesy,
-        }: {
-            arrForm: ArrFormProps;
-            arrChild: number[];
-            arrPet: PetProps[];
-            arrRequirement: ArrRequirementProps[];
-            rangeDate: {
-                startDate: string; endDate: string; [key: string]: any;
-            };
-            unitaryDiscount: UnitaryDiscountProps[];
-            dailyCourtesy: boolean;
-        } = request.body;
-
-        //vars:
-        let adultRows: RowsProps[] = [];
-        let childRows: RowsProps[] = [];
-        let petRows: RowsProps[] = [];
-
-        let requirementRows: RowsProps[] = [];
-
-        let initDate = new Date(rangeDate.startDate);
-        let finalDate = new Date(rangeDate.endDate);
-
-        //adult
-        adultRows = await adultBudget(arrForm, arrChild, unitaryDiscount, dailyCourtesy, initDate, finalDate);
-
-        //child
-        childRows = await childBudget(arrForm, arrChild, unitaryDiscount, dailyCourtesy, initDate, finalDate);
-
-        //pet
-        petRows = await petBudget(arrForm, arrPet, unitaryDiscount, initDate, finalDate);
-
-        //requirement
-        requirementRows = await requirementBudget(arrForm, arrRequirement, unitaryDiscount, initDate, finalDate);
-
-        let completeRows = [...adultRows, ...childRows, ...petRows, ...requirementRows,];
-
+        const budget: MainBudgetProps = request.body;
+        let {rows} = await mainBudget(budget)
         return response.json({
-            rows: completeRows,
+            rows,
         });
     }
 }

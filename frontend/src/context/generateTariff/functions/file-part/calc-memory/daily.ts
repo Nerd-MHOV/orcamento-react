@@ -1,4 +1,3 @@
-import {ContentTable} from "pdfmake/interfaces";
 import {LayoutTableMemoryCalc} from "./layout_table";
 
 

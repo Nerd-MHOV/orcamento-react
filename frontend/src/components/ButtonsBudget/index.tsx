@@ -5,18 +5,22 @@ import pdfBudget from "../../context/generateTariff/functions/pdfBudget";
 import pdfDescription from "../../context/generateTariff/functions/pdfDescription";
 import { rdSaveProcess } from "../../context/generateTariff/functions/rdSaveProcess";
 import Btn from "../Btn";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import {ModalConfirmGroup} from "../ModalConfirmGroup";
 import * as React from "react";
+import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
 
-export const ButtonsBudget = () => {
+export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
-  const { budgets, handleSaveBudget, clearTariffs, handleOpenBackdrop, handleCloseBackdrop } = useContext(
-    GenerateTariffContext
-  );
+  const { 
+    budgets, 
+    bodyResponseBudget,
+    handleSaveBudget, 
+    clearTariffs, 
+    handleOpenBackdrop, 
+    handleCloseBackdrop 
+  } = corporate ? useGenerateTariffCorporate() : { ...useGenerateTariff(), bodyResponseBudget: null};
   const api = useApi();
-
-
   const [openModalConfirmGroup, setOpenModalConfirmGroup] = React.useState(false);
 
   const handleOpenModalConfirmGroup = () => {
@@ -34,12 +38,32 @@ export const ButtonsBudget = () => {
 
     handleOpenBackdrop();
 
-    generatePdfBudget();
+    if(!corporate) generatePdfBudget();
+    else generatePdfBudgetCorporate();
    };
 
   const handleCloseModalConfirmGroup = () => {
     setOpenModalConfirmGroup(false);
   };
+
+  async function generatePdfBudgetCorporate () {
+    handleCloseModalConfirmGroup();
+    if(!bodyResponseBudget) {
+      handleCloseBackdrop();
+      return;
+    }
+    const arrUser = await api.findUniqueUser(userLogin);
+    console.log(bodyResponseBudget)
+    await pdfBudgetCorp(
+      bodyResponseBudget!,
+      arrUser.name,
+      arrUser.email,
+      arrUser.phone,
+    );
+    handleCloseBackdrop();
+  }
+
+
   async function generatePdfDescription() {
     // if (
     //   budgets.find((budget) =>
@@ -49,11 +73,9 @@ export const ButtonsBudget = () => {
     //   return;
     // }
     handleOpenBackdrop()
-    const arrUser = await api.findUniqueUser(userLogin);
     const deal_id = budgets[0].arrComplete.responseForm.rd_client;
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
-    console.log(response, "here")
     let name = response?.name || "undefined";
     await pdfDescription(budgets, name);
     handleCloseBackdrop()
@@ -64,7 +86,6 @@ export const ButtonsBudget = () => {
     if (budgets.length < 1) {
       return;
     }
-    console.log("BUDGET:", budgets)
     await rdSaveProcess(userLogin, budgets, group);
     if (
       budgets.find((budget) =>
@@ -85,10 +106,7 @@ export const ButtonsBudget = () => {
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
 
-    api
-      .saveBudget(userLogin, budgets, true, response?.name)
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err));
+    api.saveBudget(userLogin, budgets, true, response?.name)
 
 
     handleCloseBackdrop();
@@ -101,7 +119,7 @@ export const ButtonsBudget = () => {
        handleClose={handleCloseModalConfirmGroup}
        handleConclusion={generatePdfBudget}
       />
-      <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />
+      { !corporate && <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />}
       <Btn
         action="Gerar PDF Orçamento"
         color="darkBlue"
@@ -112,7 +130,7 @@ export const ButtonsBudget = () => {
         color="dashboard"
         onClick={generatePdfDescription}
       />
-      <Btn action="Limpar" color="red" onClick={clearTariffs} />
+      { !corporate && <Btn action="Limpar" color="red" onClick={clearTariffs} /> }
     </div>
   );
 };

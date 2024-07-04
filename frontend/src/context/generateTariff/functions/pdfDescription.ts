@@ -4,8 +4,7 @@ import {HeaderCalcMemory} from "./file-part/calc-memory/header";
 import {DailyCalcMemory} from "./file-part/calc-memory/daily";
 import {ExtraCalcMemory} from "./file-part/calc-memory/extra";
 import {TotalCalcMemory} from "./file-part/calc-memory/total";
-import {DataContentProps} from "../interfaces";
-
+import DataContentProps from "../interfaces/tableBudgetDataContentProps";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
@@ -15,7 +14,7 @@ const onlyNumber = (string: string | undefined) => {
     if (!string) return 0;
     string = string.replace(/[.]/g, "");
     string = string.replace(/[,]/g, ".");
-    string = string.replace(/[^0-9 | ^.]/g, "");
+    string = string.replace(/[^0-9 |^.]/g, "");
     return Number(string);
 };
 
@@ -23,7 +22,6 @@ async function pdfDescription(
     budgets: DataContentProps[],
     namePerson: string
 ) {
-    console.log(budgets);
     const contentFor = [];
     //housing unit
 
@@ -33,8 +31,8 @@ async function pdfDescription(
 
 
     for (const singleBudget of budgets) {
-        let rows_days = new Array();
-        let rows_extra = new Array();
+        let rows_days = [];
+        let rows_extra = [];
         // Line to Line
         for (let budget of singleBudget.rows) {
             let lineRows = [];
@@ -188,7 +186,7 @@ async function pdfDescription(
         let total =
             onlyNumber(lastRow_days.at(-1)?.text) +
             onlyNumber(lastRow_extras.at(-1)?.text);
-        const otherColumns = columns;
+        // const otherColumns = columns;
 
         let widthTable = [];
         for (let line of lastRow_days) widthTable.push("*");
@@ -276,20 +274,6 @@ async function pdfDescription(
         // Abre a janela pop-up com o PDF
         window.open(url, '_blank', features);
     });
-
-    // let deal_id = realBudget.arrComplete.responseForm.numberPipe;
-    // if (deal_id) {
-    //   const document = pdf.getBlob(async (blob) => {
-    //     const pipe = usePipe();
-    //     const response = await pipe.addFile(
-    //       token,
-    //       deal_id,
-    //       blob,
-    //       `Descrição-${format(new Date(), "dd-MM-yy")}.pdf`
-    //     );
-    //     console.log(response);
-    //   });
-    // }
 }
 
 export default pdfDescription;

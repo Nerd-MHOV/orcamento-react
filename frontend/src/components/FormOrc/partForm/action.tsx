@@ -6,15 +6,15 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllowedDiscount } from "../../../context/generateTariff/functions/getters/getAllowedDiscount";
 import { getPayers } from "../../../context/generateTariff/functions/getters/getPayers";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 import { ApiDiscountProps } from "../../../hooks/api/interfaces";
 
-export const ActionInputForm = () => {
+export const ActionInputForm = ({ corporate = false }) => {
   const { selectionRange, dataTable, setActionSelected, actionSelected } =
-    useContext(GenerateTariffContext);
+    corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   const [action, setAction] = useState<ApiDiscountProps[]>([]);
   const [select, setSelect] = useState("");
 
@@ -27,14 +27,20 @@ export const ActionInputForm = () => {
     const verifyIfSelected = response.find(
       (el) => el.name === actionSelected?.name
     );
+
     if(!verifyIfSelected) {
       setActionSelected(undefined);
     }
+
     setAction(response);
   };
   useEffect(() => {
     getAction();
   }, [selectionRange, dataTable]);
+
+  useEffect(() => {
+    setActionSelected(undefined);
+  }, [selectionRange])
 
   useEffect(() => {
     setSelect(actionSelected?.name ?? "");

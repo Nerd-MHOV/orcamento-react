@@ -211,13 +211,11 @@ export const CreateTariffContextProvider = ({
   const createTariff = async () => {
     if (arrTariffs.type === "common") {
       api.createCommonTariff(relationTariffs).then((response) => {
-        console.log(response, "common");
         setLoading(false);
         setStateResponse(response);
       });
     } else {
       api.createSpecificTariff(relationTariffs).then((response) => {
-        console.log(response, "specific");
         setLoading(false);
         setStateResponse(response);
       });

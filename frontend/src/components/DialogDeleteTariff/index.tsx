@@ -49,8 +49,6 @@ export function DialogDeleteTariff({
 
     let specific = rowDelete.SpecificDates[0];
 
-    console.log("common", common, specific);
-
     let tariffsString = common
       ? `${common.tariff_to_midweek_id} e ${common.tariff_to_weekend_id}`
       : specific.tariffs_id;

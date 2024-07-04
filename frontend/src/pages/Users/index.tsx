@@ -17,7 +17,6 @@ export const UsersPage = () => {
 
   const getUsers = async () => {
     const users = await api.getUsers();
-    console.log(users);
     makeRows(users);
   };
 

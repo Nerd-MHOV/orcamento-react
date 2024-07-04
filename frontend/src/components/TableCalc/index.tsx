@@ -7,57 +7,15 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
-import { useContext } from "react";
 import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import "./style.scss";
+import {useModalDescriptionUniqueRoom} from "../../context/generateTariff/context/ModalDescriptionUniqueRoomContext";
+import relationWithDiscountAndNoDiscount from "./relationWithDiscountAndNoDiscount";
 
-const relationWithDiscountAndNoDiscount = (
-  a: number | string,
-  b: number | string,
-  white = true
-) => (
-  <>
-    {a === b ? (
-      a
-    ) : (
-      <>
-        <div
-          style={{
-            color: "gray",
-            position: "absolute",
-            left: 2,
-            top: 3,
-            fontSize: 12,
-          }}
-        >
-          {b}
-        </div>
-        <div
-          style={
-            white
-              ? {
-                  background: "white",
-                  fontWeight: "bold",
-                }
-              : {
-                  background: "rgb(248,248,248)",
-                  fontWeight: "bold",
-                }
-          }
-        >
-          {a}
-        </div>
-      </>
-    )}
-  </>
-);
-
-const TableCalc = () => {
-  const { dataTable: data, handleClickOpenModalDiscount } = useContext(
-    GenerateTariffContext
-  );
-
+const TableCalc = ({ corporate = false }) => {
+  const { dataTable: data, handleClickOpenModalDiscount } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
+  const { open: showRoom } = corporate ? useModalDescriptionUniqueRoom() : { open: (roomID: number) => {} }
   let calc = calcTotal(data);
   let totalPerRow = calc.totalPerRow;
   let total = calc.total;
@@ -96,7 +54,8 @@ const TableCalc = () => {
               <TableCell
                 component="th"
                 scope="row"
-                style={{ background: "rgb(248,248,248)" }}
+                style={{ background: "rgb(248,248,248)", cursor: "pointer" }}
+                onDoubleClick={() => {showRoom(row.id)}}
               >
                 {row.desc}
               </TableCell>
@@ -120,6 +79,7 @@ const TableCalc = () => {
                         id: +row.id,
                         name: row.desc,
                         discount: +row.discountApplied,
+                        type: row.type,
                       });
                     }}
                   >

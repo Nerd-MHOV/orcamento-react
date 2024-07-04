@@ -11,13 +11,10 @@ export const ValuesRowsStep = ({
   const { setUHValues, getValues, arrTariffs } =
     useContext(CreateTariffContext);
 
-  const log = () => {
-    console.log(arrTariffs);
-  };
   return (
     <TableBody>
       <TableRow>
-        <TableCell onClick={log}>Padrão</TableCell>
+        <TableCell >Padrão</TableCell>
         <TableCell>
           <CurrencyFormat
             value={getValues(type).UHsValues.PAD.adt}

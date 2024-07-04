@@ -13,8 +13,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {useApi} from "../../hooks/api/api";
 import Btn from "../Btn";
 import {
-    CategoryOptionsProps, PensionsOptionsProps, RowsProps, SelectionRangeProps,
-} from "../../context/generateTariff/interfaces";
+    CategoryOptionsProps
+} from "../../context/generateTariff/interfaces/categoriesProps";
+import PensionsOptionsProps from "../../context/generateTariff/interfaces/pensionOptionsProps";
+import RowsProps from "../../context/generateTariff/interfaces/tableBudgetRowsProps";
+import SelectionRangeProps from "../../context/generateTariff/interfaces/selectionRangeProps";
 import {format} from "date-fns";
 import {ptBR} from "date-fns/locale";
 import {AuthContext} from "../../context/authContext";
@@ -125,7 +128,6 @@ export function Row(props: {
     async function handleFavorite(id: string) {
         api.favoriteBudget(id).then((response) => {
             reloadRows();
-            console.log("CHAMOU");
         });
     }
 

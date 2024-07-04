@@ -1,14 +1,23 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useContext } from "react";
-import { GenerateTariffContext } from "../../../context/generateTariff/generateTariff";
+import { useContext, useEffect } from "react";
+import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 
-export const RequirementInputForm = () => {
+export const RequirementInputForm = ({ corporate = false }) => {
   const {
     listRequirements,
     requirementValue,
     handleClickOpenModalRequirement,
-  } = useContext(GenerateTariffContext);
+    requirementSubmit,
+    callHandleForm,
+  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
+
+
+  useEffect(() => {
+    callHandleForm();
+  }, [ requirementValue ])
+  
   return (
+    <>
     <Autocomplete
       multiple
       isOptionEqualToValue={() => false}
@@ -29,5 +38,7 @@ export const RequirementInputForm = () => {
         />
       )}
     />
+    <input type="hidden" name="requirementComplete" value={JSON.stringify(requirementSubmit)} />
+    </>
   );
 };
