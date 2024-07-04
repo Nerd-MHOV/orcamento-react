@@ -19,7 +19,7 @@ export function ModalRequirement({ corporate = false }) {
   } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
   const [child, setChild] = React.useState<any[]>([]);
   const [adult, setAdult] = React.useState<number>(0);
-  const [amount, setAmount] = React.useState<number>(0);
+  const [amount, setAmount] = React.useState<number>(1);
 
   React.useEffect(() => {
     const formUp: HTMLFormElement | any = document.querySelector("#form");

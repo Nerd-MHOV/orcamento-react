@@ -35,14 +35,17 @@ const Row = ({ row, data, collapse = true }: RowProps) => {
                         <TableCell
                             style={{ background: "rgb(248,248,248)" }}
                         >
-                            <IconButton
-                                aria-label="expand row"
-                                size="small"
-                                onClick={() => setOpen(!open)}
-                                style={{ background: "white" }}
-                            >
-                                {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                            </IconButton>
+                            {
+                                row.type === 'room' &&
+                                <IconButton
+                                    aria-label="expand row"
+                                    size="small"
+                                    onClick={() => setOpen(!open)}
+                                    style={{ background: "white" }}
+                                >
+                                    {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                                </IconButton>
+                            }
                         </TableCell>
                     )
                 }
