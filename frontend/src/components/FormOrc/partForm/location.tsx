@@ -1,22 +1,21 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useContext, useEffect } from "react";
-import { useGenerateTariff, useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
+import { useEffect } from "react";
+import { useGenerateTariffCorporate } from "../../../context/generateTariff/generateTariff";
 
-export const RequirementInputForm = ({ corporate = false }) => {
+export const LocationInputForm = () => {
   const {
     listRequirements,
-    requirementValue,
+    locationValue,
     handleClickOpenModalRequirement,
     requirementSubmit,
     callHandleForm,
-  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff()
+  } =  useGenerateTariffCorporate()
 
 
   useEffect(() => {
     callHandleForm();
-  }, [ requirementValue ])
-  const param = corporate ? 'corporate' : 'accommodation';
-  const list = listRequirements.filter(lr => lr.type === param || lr.type === 'both' )
+  }, [ locationValue ])
+  const list = listRequirements.filter(lr => lr.type === 'location' )
   
   return (
     <>
@@ -29,19 +28,19 @@ export const RequirementInputForm = ({ corporate = false }) => {
         const listValue = newValue.map(val => listRequirements.find(req => req.name === val)!)
         handleClickOpenModalRequirement(listValue);
       }}
-      value={requirementValue}
+      value={locationValue}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Requerimento"
+          label="Locação"
           type="text"
-          name="requirement"
+          name="location"
           className="textField"
           variant="standard"
         />
       )}
     />
-    <input type="hidden" name="requirementComplete" value={JSON.stringify(requirementSubmit)} />
+    <input type="hidden" name="location" value={JSON.stringify(requirementSubmit)} />
     </>
   );
 };

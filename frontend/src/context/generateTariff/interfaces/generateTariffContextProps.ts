@@ -1,5 +1,5 @@
 import SelectionRangeProps from "./selectionRangeProps";
-import {ApiDiscountProps} from "../../../hooks/api/interfaces";
+import {ApiDiscountProps, ApiRequirementsProps} from "../../../hooks/api/interfaces";
 import {AppHotelProps} from "../../../hooks/appHotel/interfaces";
 import DataContentProps from "./tableBudgetDataContentProps";
 import RequirementSubmitProps, { RequirementSubmitValuesProps } from "./requirementSubmitProps";
@@ -27,7 +27,7 @@ interface GenerateTariffContextProps extends
     callHandleForm: VoidFunction;
 }
 
-export type TypeModalProps = "person" | "ticket" | "tourism";
+export type TypeModalProps = "person" | "ticket" | "participant" | "amount";
 export type occupacyUHProps = {
     text: string,
     max: number, 
@@ -58,17 +58,18 @@ export interface RequirementPartGTCP {
     openModalRequirement: boolean;
     handleCloseModalRequirement: VoidFunction;
     handleSaveModalRequirement: (
-        requirements: string[],
         requirement: string,
-        type: string,
+        typeModal: 'ticket' | 'person' | 'amount' | 'participant',
+        type: "accommodation" | 'corporate' | 'both' | 'location',
         values: RequirementSubmitValuesProps
     ) => void;
     typeModal: "" | TypeModalProps;
-    requirementsModal: string[];
-    listRequirements: string[];
+    requirementsModal: ApiRequirementsProps[];
+    listRequirements: ApiRequirementsProps[];
+    locationValue: string[];
     requirementValue: string[];
     requirementSubmit: RequirementSubmitProps[];
-    handleClickOpenModalRequirement: (requirement: string[]) => void;
+    handleClickOpenModalRequirement: (requirement: ApiRequirementsProps[]) => void;
 }
 
 export interface RoomPartGTCP {

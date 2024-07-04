@@ -28,12 +28,13 @@ export function ModalRequirement({ corporate = false }) {
     setChild(childValue);
   }, [open]);
 
-  const title = requirementsModal[requirementsModal.length - 1]
+  const title = requirementsModal[requirementsModal.length - 1]?.name ?? "";
+  const type = requirementsModal[requirementsModal.length - 1]?.type ?? "";
   const callHandleSalve = (submitProps: RequirementSubmitValuesProps) => {
     handleSave(
-      requirementsModal,
-      requirementsModal[requirementsModal.length - 1],
-      typeModal,
+      title,
+      typeModal || 'amount',
+      type,
       submitProps
     )
   }
@@ -62,6 +63,6 @@ export function ModalRequirement({ corporate = false }) {
 
   if (typeModal === "person") return modalPerson;
   if (typeModal === "ticket") return modalTicket;
-  if (typeModal === "tourism") return modalParticipant;
+  if (typeModal === "participant") return modalParticipant;
   return modalAmount;
 }

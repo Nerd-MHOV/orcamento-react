@@ -3,13 +3,15 @@ import { prismaClient } from "../../database/prismaClient";
 
 export class NewRequirementController {
   async handle(request: Request, response: Response) {
-    const { name, price } = request.body;
+    const { name, price, typeModal, type } = request.body;
 
     try {
       const requirement = await prismaClient.requirement.create({
         data: {
           name,
           price: Number(price),
+          typeModal,
+          type
         },
       });
 

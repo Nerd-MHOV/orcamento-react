@@ -8,6 +8,7 @@ import { useGenerateTariffCorporate } from "../../context/generateTariff/generat
 import { GetClientName } from "./partForm/getClientName";
 import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
 import { DiscountInputForm } from "./partForm/discount_corp";
+import { LocationInputForm } from "./partForm/location";
 
 export const FormOrcCorporate = () => {
   const {
@@ -30,6 +31,7 @@ export const FormOrcCorporate = () => {
             <RdClientInputForm corporate />
             <DiscountInputForm />
             <RequirementInputForm corporate />
+            <LocationInputForm />
           </div>
         </form>
         {/* SELECT DE AÇÕES PROMOCIONAIS */}

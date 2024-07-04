@@ -2,70 +2,50 @@ import { useEffect, useState } from "react";
 import RequirementSubmitProps, { RequirementSubmitValuesProps } from "../interfaces/requirementSubmitProps";
 import { TypeModalProps } from "../interfaces/generateTariffContextProps";
 import { getListRequirements } from "../functions/getters/getListRequirements";
+import { ApiRequirementsProps } from "../../../hooks/api/interfaces";
 
 const useRequirement = () => {
     const [openModalRequirement, setOpenModalRequirement] = useState(false);
-    const [requirementSubmit, setRequirementSubmit] = useState<
-        RequirementSubmitProps[]
-    >([]);
-    const [requirementsModal, setRequirementsModal] = useState<string[]>([]);
+    const [requirementSubmit, setRequirementSubmit] = useState<RequirementSubmitProps[]>([]);
+    const [requirementsModal, setRequirementsModal] = useState<ApiRequirementsProps[]>([]);
     const [requirementValue, setRequirementValue] = useState<string[]>([]);
     const [typeModal, setTypeModal] = useState<TypeModalProps | "">("");
-    const [listRequirements, setListRequirements] = useState<string[]>([]);
+    const [listRequirements, setListRequirements] = useState<ApiRequirementsProps[]>([]);
 
+    const [locationValue, setLocationValue] = useState<string[]>([]);
 
     const handleCloseModalRequirement = () => {
         setOpenModalRequirement(false);
     };
 
-    const handleClickOpenModalRequirement = (requirement: string[]) => {
+    const handleClickOpenModalRequirement = (requirement: ApiRequirementsProps[]) => {
         if (requirement.length < requirementSubmit.length) {
             setRequirementSubmit((old) => {
-                return old.filter((arr) => requirement.includes(arr.requirement));
+                return old.filter((arr) => requirement.some( req => req.name.includes(arr.requirement)));
             });
             return;
         }
         let lastRequirement = requirement[requirement.length - 1];
-        if (lastRequirement.match(/decoração romântica/)) {
-            handleSaveModalRequirement(requirement, lastRequirement, "romantic", {
-                adult: 0,
-                child: [],
-                amount: 1,
-            });
-            return;
-        }
-        if (lastRequirement.match(/check-in às/)) setTypeModal("person");
-        if (lastRequirement.match(/observação C.E.U/)) setTypeModal("ticket");
-        if (
-            lastRequirement.match(/Território -/) ||
-            lastRequirement.match(/Eco A. -/)
-        )
-            setTypeModal("tourism");
-
+        setTypeModal(lastRequirement.typeModal);
         setRequirementsModal(requirement);
         setOpenModalRequirement(true);
     };
 
     const handleSaveModalRequirement = (
-        requirements: string[],
         requirement: string,
-        type: string,
+        typeModal: 'ticket' | 'person' | 'amount' | 'participant',
+        type: "accommodation" | 'corporate' | 'both' | 'location',
         values: RequirementSubmitValuesProps
     ) => {
         setOpenModalRequirement(false);
         setRequirementSubmit((old) => {
-            return [...old, { requirement, type, values }];
+            return [...old, { requirement, type, typeModal, values }];
         });
-        //setRequirementValue(requirements);
     };
 
     const changeRequirementValue = () => {
-        let array: string[] = [];
-        requirementSubmit.map((val) => {
-            array.push(val.requirement);
-        });
-
-        setRequirementValue(array);
+        setRequirementValue(requirementSubmit.filter(req => req.type !== 'location').map(req => req.requirement));
+        setLocationValue(requirementSubmit.filter(req => req.type === 'location').map(req => req.requirement))
     }
 
     async function getVariables() {

@@ -7,9 +7,9 @@ export interface RequirementSubmitValuesProps {
 
 interface RequirementSubmitProps {
     requirement: string;
-    type: string;
+    typeModal: 'ticket' | 'person' | 'amount' | 'participant';
+    type: "accommodation" | 'corporate' | 'both' | 'location';
     values: RequirementSubmitValuesProps;
 }
-
 
 export default RequirementSubmitProps

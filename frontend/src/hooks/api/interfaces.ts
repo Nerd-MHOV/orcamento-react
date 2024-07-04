@@ -136,6 +136,8 @@ export interface CorporateBodyResponseBudget {
 export interface ApiRequirementsProps {
   name: string;
   price: number;
+  typeModal: 'ticket' | 'person' | 'amount' | 'participant';
+  type: "accommodation" | 'corporate' | 'both' | 'location';
   active: boolean;
 }
 
