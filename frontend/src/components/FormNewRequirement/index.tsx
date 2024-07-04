@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, TextField } from "@mui/material";
+import { Alert, AlertTitle, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import serialize from "form-serialize";
 import InputMask from "react-input-mask";
@@ -19,7 +19,7 @@ export const FormNewRequirement = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     api
-      .createRequirement(data.name, Number(data.price))
+      .createRequirement(data.name, Number(data.price), data.type, data.typeModal)
       .then((response) => {
         navigate("/requirements");
       })
@@ -51,10 +51,37 @@ export const FormNewRequirement = () => {
             type="text"
             variant="outlined"
           />
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Age"
+              {...register("type")}
+            >
+              <MenuItem value={'accommodation'}>Hospedagem</MenuItem>
+              <MenuItem value={'corporate'}>Corporativo</MenuItem>
+              <MenuItem value={'both'}>Ambos</MenuItem>
+              <MenuItem value={'location'}>Locação</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Modal</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Age"
+              {...register("typeModal")}
+            >
+              <MenuItem value={'ticket'}>Ingresso</MenuItem>
+              <MenuItem value={'amount'}>Quantidade</MenuItem>
+              <MenuItem value={'participant'}>Participante</MenuItem>
+            </Select>
+          </FormControl>
         </div>
 
         <div className="button">
-          <Btn action="Cadastrar" color="darkBlue" onClick={() => {}} />
+          <Btn action="Cadastrar" color="darkBlue" onClick={() => { }} />
         </div>
       </form>
     </div>

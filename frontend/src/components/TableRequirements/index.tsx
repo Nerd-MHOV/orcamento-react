@@ -20,15 +20,39 @@ import DialogPriceRequirement from "../DialogPriceRequirement";
 export interface dataRequirementsProps {
   name: string;
   price: number;
+  type: string;
+  typeModal: string;
   active: boolean;
 }
 
 export function createRequirementsData(
   name: string,
   price: number,
+  type: string,
+  typeModal: string,
   active: boolean
 ) {
-  return { name, price, active };
+
+  return { name, type: translateType(type), typeModal: translateTypeModal(typeModal), price, active };
+}
+
+const translateType = (type: string) => {
+  const translations: { [key: string]: string } = {
+    accommodation: 'Hospedagem',
+    corporate: 'Corporativo',
+    location: 'Locação',
+    both: 'Ambos'
+  };
+  return translations[type] || type;
+}
+const translateTypeModal = (type: string) => {
+  const translations: { [key: string]: string } = {
+    ticket: 'Ingresso',
+    person: 'Especial não usar',
+    amount: 'Quantidade',
+    participant: 'Participante'
+  };
+  return translations[type] || type;
 }
 
 export default function TableRequirements({
@@ -77,6 +101,8 @@ export default function TableRequirements({
           <TableRow>
             <TableCell>Nome</TableCell>
             <TableCell align="right">Valor</TableCell>
+            <TableCell align="right">Tipo</TableCell>
+            <TableCell align="right">Modal</TableCell>
             <TableCell align="right">Editar</TableCell>
             <TableCell align="right">Ativo</TableCell>
             <TableCell align="right">Apagar</TableCell>
@@ -92,6 +118,8 @@ export default function TableRequirements({
                 {row.name}
               </TableCell>
               <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right">{row.type}</TableCell>
+              <TableCell align="right">{row.typeModal}</TableCell>
               <TableCell align="right">
                 <button
                   style={{ cursor: "pointer" }}

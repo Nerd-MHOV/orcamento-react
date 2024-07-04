@@ -197,10 +197,12 @@ export const useApi = () => ({
         return response.data.msg;
     },
 
-    createRequirement: async (name: string, price: number) => {
+    createRequirement: async (name: string, price: number, type: string, typeModal: string) => {
         const response = await api.post("/requirement", {
             name,
             price,
+            type,
+            typeModal,
         });
         return response.data;
     },

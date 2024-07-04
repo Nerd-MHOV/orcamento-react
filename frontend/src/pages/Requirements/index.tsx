@@ -32,7 +32,9 @@ export const RequirementsPage = () => {
           createRequirementsData(
             requirement.name,
             requirement.price,
-            requirement.active
+            requirement.type,
+            requirement.typeModal,
+            requirement.active,
           )
         );
     });
