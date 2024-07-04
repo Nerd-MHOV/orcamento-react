@@ -12,6 +12,7 @@ export async function childBudget(
   daily_courtesy: boolean,
   initDate: Date,
   finalDate: Date,
+  isCorp = false,
   room = 0,
 ) {
   let amountAdults = arrForm.adult ?? 0;
@@ -39,7 +40,8 @@ export async function childBudget(
         arrForm,
         "chd0",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
       permitDiscount = false;
     } else if ((uChild > 3 && uChild < 8) || (uChild < 8 && numChild > 1))
@@ -49,7 +51,8 @@ export async function childBudget(
         arrForm,
         "chd4",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
     else
       valuesChild = await generateBudget(
@@ -58,7 +61,8 @@ export async function childBudget(
         arrForm,
         "chd8",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
 
     //COBRAR SO ALIMENTAÇÃO
@@ -70,7 +74,8 @@ export async function childBudget(
         arrForm,
         "chd8",
         true,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
     }
 
@@ -82,7 +87,8 @@ export async function childBudget(
         arrForm,
         "adt",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
     }
 

@@ -1,7 +1,7 @@
-import { Categories } from "@prisma/client";
 import { addDays, format } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
 import { getTariff } from "./getTariff";
+import getPercentAdjustmentCorp from "./getPercentAdjustmentCorp";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
@@ -11,7 +11,8 @@ export async function generateBudget(
   arrForm: any,
   ageGroup: "adt" | "adtex" | "chd0" | "chd4" | "chd8",
   onlyFood: boolean,
-  daily_courtesy: boolean
+  daily_courtesy: boolean,
+  isCorporate: boolean,
 ) {
   const valuesBudget = [];
 
@@ -52,7 +53,11 @@ export async function generateBudget(
         (arr: any) => arr.category_id === numCategory.id
       )[0];
 
-      tariffBudget = tariffDay[ageGroup] + tariffFood;
+      let tariffDayAgeGroup = tariffDay[ageGroup]
+      if(isCorporate) {
+        tariffDayAgeGroup = Math.round(tariffDayAgeGroup * (1 - getPercentAdjustmentCorp(initDate)));
+      }
+      tariffBudget = tariffDayAgeGroup + tariffFood;
 
       if (onlyFood) tariffBudget = 90;
     }

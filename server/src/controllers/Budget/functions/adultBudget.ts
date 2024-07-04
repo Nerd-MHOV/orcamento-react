@@ -8,7 +8,8 @@ export async function adultBudget(
   daily_courtesy: boolean,
   initDate: Date,
   finalDate: Date,
-  room = 0
+  isCorp = false,
+  room = 0,
 ) {
   //ADULT
   let adultRows: RowsProps[] = [];
@@ -30,7 +31,8 @@ export async function adultBudget(
         arrForm,
         "adt",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp
       );
     } else {
       valuesAdult = await generateBudget(
@@ -39,7 +41,8 @@ export async function adultBudget(
         arrForm,
         "adtex",
         false,
-        daily_courtesy
+        daily_courtesy,
+        isCorp,
       );
     }
 

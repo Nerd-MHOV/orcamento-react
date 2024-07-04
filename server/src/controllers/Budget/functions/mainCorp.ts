@@ -26,8 +26,8 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
         }
         const idRoom = Number(room.roomNumber.unit) * 100
         // calculate cost for adult, child, pet and requirements
-        let adultRows = await adultBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, idRoom);
-        let childRows = await childBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, idRoom);
+        let adultRows = await adultBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, true, idRoom);
+        let childRows = await childBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, true, idRoom);
         let petRows = await petBudget(arrForm, room.pet, bodyRequest.unitaryDiscount, initDate, finalDate, idRoom);
         let requirementRows = await requirementBudget(arrForm, [], bodyRequest.unitaryDiscount, initDate, finalDate, idRoom);
 
