@@ -1,10 +1,10 @@
 import { CorporateBodyResponseBudget } from "../../../../hooks/api/interfaces";
 import { applyBoder } from "./applyBorder";
-export const doBodyRequirements = (budget: CorporateBodyResponseBudget) => {
-  const isNotLocation = (match: string) => {
-    return budget.requirements.some( requirement => match.includes(requirement.requirement) && requirement.type !== 'location' )
+export const doBodyLocations = (budget: CorporateBodyResponseBudget) => {
+  const isLocation = (match: string) => {
+    return budget.requirements.some( requirement => match.includes(requirement.requirement) && requirement.type === 'location' )
   }
-  const requirements = budget.rowsValues.rows.filter( row => row.type === "requirement" && isNotLocation(row.desc) );
+  const requirements = budget.rowsValues.rows.filter( row => row.type === "requirement" && isLocation(row.desc) );
   const bodyRequirements = requirements.map(requirement => {
     const desc = requirement.desc.split('[');
     const nome = desc[0];
@@ -21,7 +21,7 @@ export const doBodyRequirements = (budget: CorporateBodyResponseBudget) => {
   const totalRequirements = () => {
     const totalRequirementsValue = requirements.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0)
     return applyBoder([
-      "TOTAL REQUERIMENTOS",
+      "TOTAL LOCAÇÃO",
       "",
       "R$ " + totalRequirementsValue.toLocaleString("pt-BR", {
           minimumFractionDigits: 2,

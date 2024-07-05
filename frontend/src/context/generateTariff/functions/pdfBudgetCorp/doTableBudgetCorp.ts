@@ -24,10 +24,10 @@ export const doTableBudgetCorp = (
             content.push(breakPage())
         }
     })
-
+    const rows_in_last_chunck = contentChunck[contentChunck.length -1].length
     return {
         content: content,
-        rows: contentChunck[contentChunck.length -1].length,
+        rows: contentChunck.length > 1 ? rows_in_last_chunck : (rows_in_last_chunck + rows_in_page),
     }
 
 }
@@ -54,8 +54,9 @@ const doContent = (content: TableCell[][]): ContentTable => {
 }
 
 const sliceContent = (array: TableCell[][], rows_in_page: number) => {
-    let lineToBreak = 22
+    let lineToBreak = 20
     let contentChunck = [];
+    console.log(rows_in_page);
     for (let i = -(rows_in_page); i < array.length; i += lineToBreak) {
         const init = (i < 0) ? 0 : i
         contentChunck.push(array.slice(init, i + lineToBreak))

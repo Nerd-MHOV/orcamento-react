@@ -12,6 +12,7 @@ import { stylesBudgetCorp } from "./styles.pdfBudgetCorp";
 import { doBodyRequirements } from "./requirements";
 import { layoutPageCollaborators } from "./LayoutPageCollaborator";
 import { breakPage } from "./breakPage";
+import { doBodyLocations } from "./location";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
 const slideImagesPath = 'http://localhost:5173/budgetCorpImages/';
@@ -47,6 +48,16 @@ async function pdfBudgetCorp(
     applyBoder(["HOSPEDAGEM", "DISPOSIÇÃO", "PREÇO"], 'total_block'),
     ...doBodyAccommodation(budget),
   ], callBreakPage, !!budget.rooms.length)
+
+  const requirementTable = doTableBudgetCorp([
+    applyBoder(["REQUERIMENTOS", "QUANTIDADE", "PREÇO"], 'total_block'),
+    ...doBodyRequirements(budget),
+  ], callBreakPage,!!budget.requirements.some(req => req.type !== "location"), accommodationTable.rows)
+  
+  const locationTable = doTableBudgetCorp([
+    applyBoder(["LOCAÇÃO", "QUANTIDADE", "PREÇO"], 'total_block'),
+    ...doBodyLocations(budget),
+  ], callBreakPage, !!budget.requirements.some(req => req.type === "location"), requirementTable.rows)
   
   const docDefinitions: TDocumentDefinitions = {
     defaultStyle: {
@@ -79,13 +90,11 @@ async function pdfBudgetCorp(
       bottom: { url: `${slideImagesPath}bottom.JPG` },
     },
     content: [
-      ...slidesContent,
+      // ...slidesContent,
       callLayoutPageCollaborators(),
       accommodationTable.content,
-      doTableBudgetCorp([
-        applyBoder(["REQUERIMENTOS", "QUANTIDADE", "PREÇO"], 'total_block'),
-        ...doBodyRequirements(budget),
-      ], callBreakPage, !!budget.requirements.length, accommodationTable.rows).content,
+      requirementTable.content,
+      locationTable.content,
       doTableBudgetCorp([
         applyBoder(["TOTAL", "",
           "R$ " + budget.rowsValues.total.total.toLocaleString("pt-BR", {
@@ -93,7 +102,7 @@ async function pdfBudgetCorp(
             maximumFractionDigits: 2,
           }),
         ], 'total_block'),
-      ], callBreakPage, true).content,
+      ], callBreakPage, true, locationTable.rows).content,
       {
         image: `slide14`,
         width: 600,

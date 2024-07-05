@@ -15,7 +15,7 @@ const TableCalcCorp = () => {
   
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="corp_table">
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <Head data={data} />
         <TableBodyComponent data={data} />
