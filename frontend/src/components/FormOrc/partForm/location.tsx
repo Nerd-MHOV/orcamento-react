@@ -6,6 +6,7 @@ export const LocationInputForm = () => {
   const {
     listRequirements,
     locationValue,
+    requirementValue,
     handleClickOpenModalRequirement,
     requirementSubmit,
     callHandleForm,
@@ -13,6 +14,7 @@ export const LocationInputForm = () => {
 
 
   useEffect(() => {
+    console.log(requirementValue, locationValue);
     callHandleForm();
   }, [ locationValue ])
   const list = listRequirements.filter(lr => lr.type === 'location' )
@@ -26,7 +28,7 @@ export const LocationInputForm = () => {
       className="textField"
       onChange={(_, newValue) => {
         const listValue = newValue.map(val => listRequirements.find(req => req.name === val)!)
-        handleClickOpenModalRequirement(listValue);
+        handleClickOpenModalRequirement(listValue, true);
       }}
       value={locationValue}
       renderInput={(params) => (

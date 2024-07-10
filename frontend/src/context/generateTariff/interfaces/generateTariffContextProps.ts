@@ -69,7 +69,7 @@ export interface RequirementPartGTCP {
     locationValue: string[];
     requirementValue: string[];
     requirementSubmit: RequirementSubmitProps[];
-    handleClickOpenModalRequirement: (requirement: ApiRequirementsProps[]) => void;
+    handleClickOpenModalRequirement: (requirement: ApiRequirementsProps[], isLocation?: boolean) => void;
 }
 
 export interface RoomPartGTCP {

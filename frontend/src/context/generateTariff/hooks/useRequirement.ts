@@ -18,10 +18,19 @@ const useRequirement = () => {
         setOpenModalRequirement(false);
     };
 
-    const handleClickOpenModalRequirement = (requirement: ApiRequirementsProps[]) => {
-        if (requirement.length < requirementSubmit.length) {
+    const handleClickOpenModalRequirement = (requirement: ApiRequirementsProps[], isLocation = false) => {
+        const safe = requirementSubmit.filter(req => isLocation ? req.type !== 'location' : req.type === 'location')
+        if ((requirement.length + safe.length) < requirementSubmit.length) {
             setRequirementSubmit((old) => {
-                return old.filter((arr) => requirement.some( req => req.name.includes(arr.requirement)));
+                const excluded =  old.filter((arr) => requirement.some( req => req.name.includes(arr.requirement) ));
+                console.log('safe:', safe)
+                console.log('exluded: ', excluded)
+                console.log('submit: ', requirementSubmit)
+                console.log('requiremnts: ', requirement)
+                return [
+                    ...excluded,
+                    ...safe
+                ]
             });
             return;
         }
@@ -63,6 +72,7 @@ const useRequirement = () => {
     return ({
         requirementSubmit,
         requirementValue,
+        locationValue,
         openModalRequirement,
         handleClickOpenModalRequirement,
         handleCloseModalRequirement,

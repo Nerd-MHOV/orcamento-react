@@ -71,9 +71,11 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     async function callHandleForm() {
         infoBudgetHook.clearRows();
         if (
-            bodySendBudget.roomsToBudget.rooms.length > 0
-            && bodySendBudget.verifyIfAllRoomHasEnoughOnePax()
-            && bodySendBudget.roomsToBudget.dateRange) {
+            bodySendBudget.roomsToBudget.dateRange
+            && ((bodySendBudget.roomsToBudget.rooms.length > 0 
+                && bodySendBudget.verifyIfAllRoomHasEnoughOnePax())
+                || requirementHook.requirementSubmit.length > 0)
+        ) {
             const response = await api.getBudgetCorp(bodySendBudget.roomsToBudget);
             const responseBudget = response;
             bodySendBudget.setBodyResponseBudget(response);
