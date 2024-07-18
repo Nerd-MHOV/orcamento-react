@@ -46,9 +46,21 @@ export async function requirementBudget(
       arrRequirement[countRequirement]
     );
 
+    const quantity = arrRequirement[countRequirement].values;
+
+
+    //  NOME DO REQUERIMENTO
+    let nameRequirement = uRequirement + " [";
+    if (quantity.adult > 0) nameRequirement += ` ${quantity.adult} ADT`;
+    if (quantity.child.length > 0)
+      nameRequirement += ` ${quantity.child.length} CHD`;
+    if (quantity.amount > 0) nameRequirement += ` ${quantity.amount}x`;
+    nameRequirement += " ]";
+
+
     //verify unitary discount
     let discount = (unitaryDiscount.find(
-        unit => unit.id === id && unit.name.includes(nameRequirement) && unit.type === type
+      unit => unit.id === id && unit.name === nameRequirement && unit.type === type
     )?.discount ?? 0) / 100
 
     const valueWithDiscount = valueRequirement.map((value) => {
@@ -59,17 +71,6 @@ export async function requirementBudget(
 
       return result;
     });
-
-    const quantity = arrRequirement[countRequirement].values;
-
-    let nameRequirement = uRequirement + " [";
-
-    if (quantity.adult > 0) nameRequirement += ` ${quantity.adult} ADT`;
-    if (quantity.child.length > 0)
-      nameRequirement += ` ${quantity.child.length} CHD`;
-    if (quantity.amount > 0) nameRequirement += ` ${quantity.amount}x`;
-
-    nameRequirement += " ]";
 
     requirementRows.push({
       id,
