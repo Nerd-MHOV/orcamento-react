@@ -9,6 +9,8 @@ import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/gen
 import {ModalConfirmGroup} from "../ModalConfirmGroup";
 import * as React from "react";
 import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
+import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
+import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
 
 export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
@@ -18,6 +20,9 @@ export const ButtonsBudget = ({ corporate = false }) => {
     handleSaveBudget, 
     clearTariffs, 
     handleOpenBackdrop, 
+    
+    dataTable,
+
     handleCloseBackdrop 
   } = corporate ? useGenerateTariffCorporate() : { ...useGenerateTariff(), bodyResponseBudget: null};
   const api = useApi();
@@ -53,7 +58,6 @@ export const ButtonsBudget = ({ corporate = false }) => {
       return;
     }
     const arrUser = await api.findUniqueUser(userLogin);
-    console.log(bodyResponseBudget)
     await pdfBudgetCorp(
       bodyResponseBudget!,
       arrUser.name,
@@ -62,6 +66,29 @@ export const ButtonsBudget = ({ corporate = false }) => {
     );
     handleCloseBackdrop();
   }
+
+  async function generatePdfDescriptionCorporate() {
+    handleOpenBackdrop()
+    if(!bodyResponseBudget) {
+      handleCloseBackdrop();
+      return;
+    }
+    const deal_id = bodyResponseBudget.idClient;
+    const descriptionData: DataContentProps[] = [
+      {
+        columns: dataTable.columns,
+        rows: dataTable.rows,
+        total: calcTotal(dataTable).total,
+      }
+    ]
+    console.log(budgets);
+    let response;
+    if (deal_id) response = await api.rdGetaDeal(deal_id);
+    let name = response?.name || "undefined";
+    await pdfDescription(descriptionData, name);
+    handleCloseBackdrop()
+  }
+
 
 
   async function generatePdfDescription() {
@@ -128,7 +155,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
       <Btn
         action="Memória de Cálculo"
         color="dashboard"
-        onClick={generatePdfDescription}
+        onClick={corporate ? generatePdfDescriptionCorporate : generatePdfDescription}
       />
       { !corporate && <Btn action="Limpar" color="red" onClick={clearTariffs} /> }
     </div>

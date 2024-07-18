@@ -49,6 +49,8 @@ export const CategoryCorporateInputForm = () => {
     handleCategoriesCorporateInput(value as CategoryOptionsProps[]);
   };
 
+  const options = categoryOptions.filter( cat => !cat.category.match(/Day-Use/) ).reverse()
+
   const optionDisabled = (options: CategoryOptionsProps) => {
     if (
       selectionRange.startDate === selectionRange.endDate &&
@@ -86,7 +88,7 @@ export const CategoryCorporateInputForm = () => {
           )}
           MenuProps={MenuProps}
         >
-          {categoryOptions.map((category, key) => (
+          {options.map((category, key) => (
               //@ts-ignore
             <MenuItem
               key={category.unit}

@@ -90,7 +90,7 @@ async function pdfBudgetCorp(
       bottom: { url: `${slideImagesPath}bottom.JPG` },
     },
     content: [
-      // ...slidesContent,
+      ...slidesContent,
       callLayoutPageCollaborators(),
       accommodationTable.content,
       requirementTable.content,
