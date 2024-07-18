@@ -97,7 +97,7 @@ export async function generateBudgetRequirement(
           tariffBudget = adultValues + childValues;
         }
       } else if (typeRequirement === "voucher") {
-        let tariff = 2;
+        let tariff = 3;
         tariffBudget = tariff * values.amount;
       } else {
         let tariff = await prismaClient.requirement.findUnique({
