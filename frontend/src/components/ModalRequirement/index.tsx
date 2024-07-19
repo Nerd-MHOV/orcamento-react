@@ -16,16 +16,28 @@ export function ModalRequirement({ corporate = false }) {
     handleSaveModalRequirement: handleSave,
     typeModal,
     childValue,
-  } = corporate ? useGenerateTariffCorporate() : useGenerateTariff();
+    bodyResponseBudget,
+  } = corporate ? useGenerateTariffCorporate() : {...useGenerateTariff(), bodyResponseBudget: null};
   const [child, setChild] = React.useState<any[]>([]);
   const [adult, setAdult] = React.useState<number>(0);
   const [amount, setAmount] = React.useState<number>(1);
 
   React.useEffect(() => {
+    // Set Adult and Chield
     const formUp: HTMLFormElement | any = document.querySelector("#form");
     const responseForm = serialize(formUp, { hash: true });
     setAdult(Number(responseForm.adult));
     setChild(childValue);
+
+    // Set amount when corporate
+    if(bodyResponseBudget) {
+      let amountPreview = 0;
+      bodyResponseBudget.rooms.forEach(room => {
+        amountPreview += room.adt;
+        amountPreview += room.chd.length
+      })
+      setAmount(amountPreview)
+    }
   }, [open]);
 
   const title = requirementsModal[requirementsModal.length - 1]?.name ?? "";
