@@ -2,6 +2,7 @@ import { addDays, format } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
 import { ArrFormProps } from "../CalcBudgetController";
 import { getTariff } from "./getTariff";
+import getPercentAdjustmentCorp from "./getPercentAdjustmentCorp";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
@@ -11,18 +12,22 @@ export async function generateBudgetRequirement(
   arrRequirement: {
     requirement: string;
     type: string;
+    typeModal: string;
     values: {
       adult: number;
       child: number[];
       amount: number;
     };
-  }
+  },
+  isCorporate = false
 ) {
   const requirement = arrRequirement.requirement;
   const typeRequirement = arrRequirement.type;
+  const typeModalRequirement = arrRequirement.typeModal;
   const values = arrRequirement.values;
   const valuesBudget = [];
   let firstDate = initDate;
+  console.log(arrRequirement);
   while (initDate < finalDate) {
     let dayMonthYear = format(initDate, "yyyy-MM-dd");
     let monthYear = format(initDate, "yyyy-MM");
@@ -31,7 +36,7 @@ export async function generateBudgetRequirement(
     let tariffBudget = 0;
 
     if (initDate === firstDate) {
-      if (typeRequirement === "person") {
+      if (typeRequirement === "both" && typeModalRequirement === "person") {
         const tariffValues = await getTariff(dayMonthYear, monthYear);
         let typeCheck = "";
         let adultValues = 0;
@@ -95,6 +100,10 @@ export async function generateBudgetRequirement(
           }
 
           tariffBudget = adultValues + childValues;
+
+          if(isCorporate) {
+            tariffBudget = Math.round(tariffBudget * (1 - getPercentAdjustmentCorp(initDate)));
+          }
         }
       } else if (typeRequirement === "voucher") {
         let tariff = 3;

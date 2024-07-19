@@ -12,7 +12,8 @@ export async function requirementBudget(
   unitaryDiscount: UnitaryDiscountProps[],
   initDate: Date,
   finalDate: Date,
-  room = 0
+  room = 0,
+  isCorporate = false,
 ) {
   let requirementRows: RowsProps[] = [];
   const type = "requirement";
@@ -21,6 +22,7 @@ export async function requirementBudget(
     arrRequirement.push({
       requirement: "voucher",
       type: "voucher",
+      typeModal: "voucher",
       values: {
         adult: 0,
         child: [],
@@ -43,7 +45,8 @@ export async function requirementBudget(
     valueRequirement = await generateBudgetRequirement(
       initDate,
       finalDate,
-      arrRequirement[countRequirement]
+      arrRequirement[countRequirement],
+      isCorporate
     );
 
     const quantity = arrRequirement[countRequirement].values;

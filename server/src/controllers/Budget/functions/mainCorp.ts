@@ -29,7 +29,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
         let adultRows = await adultBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, true, idRoom);
         let childRows = await childBudget(arrForm, room.chd, bodyRequest.unitaryDiscount, dailyCourtesy, initDate, finalDate, true, idRoom);
         let petRows = await petBudget(arrForm, room.pet, bodyRequest.unitaryDiscount, initDate, finalDate, idRoom);
-        let requirementRows = await requirementBudget(arrForm, [], bodyRequest.unitaryDiscount, initDate, finalDate, idRoom);
+        let requirementRows = await requirementBudget(arrForm, [], bodyRequest.unitaryDiscount, initDate, finalDate, idRoom, true);
 
         const rows = [...adultRows, ...childRows, ...petRows, ...requirementRows]
         let newRoom: RoomCorporateResponse = {
@@ -46,7 +46,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     const newRooms = await Promise.all(newRoomsPromises);
 
     // requirement to budget ( all rooms )
-    let requirementRows = await requirementBudget({ adult: 0 }, requirements, bodyRequest.unitaryDiscount, initDate, finalDate);
+    let requirementRows = await requirementBudget({ adult: 0 }, requirements, bodyRequest.unitaryDiscount, initDate, finalDate, 0, true);
     const rowsFinal: RowsProps[] = [...calcTotalBudgets(newRooms), ...requirementRows];
 
     const response: CorporateBodyResponseBudget = {

@@ -30,6 +30,7 @@ export interface UnitaryDiscountProps {
 export interface ArrRequirementProps {
     requirement: string;
     type: string;
+    typeModal: string;
     values: {
         adult: number; child: number[]; amount: number;
     };
