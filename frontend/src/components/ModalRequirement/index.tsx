@@ -29,8 +29,8 @@ export function ModalRequirement({ corporate = false }) {
     setAdult(Number(responseForm.adult));
     setChild(childValue);
 
-    // Set amount when corporate
-    if(bodyResponseBudget) {
+    // Set amount when corporate and participant
+    if(bodyResponseBudget && typeModal === 'participant') {
       let amountPreview = 0;
       bodyResponseBudget.rooms.forEach(room => {
         amountPreview += room.adt;
@@ -38,6 +38,13 @@ export function ModalRequirement({ corporate = false }) {
       })
       setAmount(amountPreview)
     }
+
+    // Set amount when corporate and not participant
+
+    if(bodyResponseBudget && typeModal !== 'participant') {
+      setAmount(1);
+    }
+
   }, [open]);
 
   const title = requirementsModal[requirementsModal.length - 1]?.name ?? "";

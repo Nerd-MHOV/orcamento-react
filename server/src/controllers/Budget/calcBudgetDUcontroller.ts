@@ -38,13 +38,9 @@ export class CalcBudgetDUController {
 
 
     let initDate = new Date(rangeDate.startDate);
-    let finalDate = new Date(rangeDate.endDate);
-    finalDate = addDays(finalDate, 1);
-    const mainPeriod = getPeriod([{
-      startDate: rangeDate.startDate,
-      endDate: finalDate.toISOString(),
-      key: rangeDate.key
-    }])
+    // let finalDate = new Date(rangeDate.endDate);
+    // finalDate = addDays(finalDate, 1);
+    const mainPeriod = getPeriod([rangeDate])
 
     
 
@@ -65,9 +61,6 @@ export class CalcBudgetDUController {
       mainPeriod,
       mainPeriod
     );
-
-    //discountRow
-    //discountRow = await discountBudget(arrForm, arrChild, initDate, finalDate);
 
     let completeRows = [
       ...adultRows,

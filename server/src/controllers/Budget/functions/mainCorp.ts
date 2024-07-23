@@ -12,8 +12,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     
     const { dateRange, rooms, pension, requirements } = bodyRequest;
 
-    let initDate = new Date(dateRange[0].startDate);
-    let finalDate = new Date(dateRange[0].endDate);
+    
 
     const completePeriod = getPeriod(dateRange);
     const dateSelection = dateRange.find(range => range.key === 'selection') ?? dateRange[0];

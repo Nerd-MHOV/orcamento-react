@@ -14,6 +14,7 @@ function getPeriod(date: DateRange[]) {
     dateRanges.forEach(dateRange => {
         let init = new Date(dateRange.startDate);
         let final = new Date(dateRange.endDate);
+        if(isSameDay(init, final)) final = addDays(final, 1); 
         while (init < final) {
             period.push(init);
             init = addDays(init, 1);
