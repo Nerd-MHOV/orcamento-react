@@ -8,6 +8,7 @@ export interface RoomCorporate {
     chd: number[],
     pet: string[],
     roomNumber: CategoryOptionsProps,
+    isStaff: boolean,
 }
 
 export interface CorporateBodySendBudget {
@@ -15,7 +16,7 @@ export interface CorporateBodySendBudget {
     pension: string,
     requirements: RequirementSubmitProps[],
     discount: number,
-    dateRange: SelectionRangeProps | null,
+    dateRange: SelectionRangeProps[] | null,
     unitaryDiscount: RowModalDiscount[],
     idClient: string | null,
 }

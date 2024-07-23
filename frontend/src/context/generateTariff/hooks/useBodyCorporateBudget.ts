@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CorporateBodySendBudget } from "../interfaces/corporateProps";
+import { CorporateBodySendBudget, RoomCorporate } from "../interfaces/corporateProps";
 import { corporateBodySendBudgetInitial } from "../initial";
 import RequirementSubmitProps from "../interfaces/requirementSubmitProps";
 import SelectionRangeProps from "../interfaces/selectionRangeProps";
@@ -10,7 +10,6 @@ import RowModalDiscount from "../interfaces/rowModalDiscount";
 
 const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
     const [roomsToBudget, setRoomsToBudget] = useState<CorporateBodySendBudget>(corporateBodySendBudgetInitial);
-    
     const [bodyResponseBudget, setBodyResponseBudget] = useState<CorporateBodyResponseBudget | null>(null);
 
     function addRoomCorporate(categories: CategoryOptionsProps[]) {
@@ -24,7 +23,8 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
                     adt: 0,
                     chd: [],
                     pet: [],
-                    roomNumber: category
+                    roomNumber: category,
+                    isStaff: false,
                 });
             }  
         })
@@ -46,6 +46,16 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
             ...old,
             rooms: old.rooms.filter((_, index) => !toDeleteIndex.includes(index))
         } ))
+    }
+
+    function changeRoomToStaff(room: RoomCorporate, isStaff: boolean) {
+        const rooms = [...roomsToBudget.rooms]
+        const editIndex = rooms.findIndex(froom => froom === room)
+        rooms[editIndex].isStaff = isStaff;
+        setRoomsToBudget(old => ({
+            ...old,
+            rooms,
+        }))
     }
 
     function changeCategoryToRoomCorporate(categories: CategoryOptionsProps[]) {
@@ -72,7 +82,7 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         } ))
     }
 
-    function changeDateCorporateBudget(dateRange: SelectionRangeProps) {
+    function changeDateCorporateBudget(dateRange: SelectionRangeProps[]) {
         setRoomsToBudget(old => ({
             ...old,
             dateRange,
@@ -140,6 +150,7 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         verifyIfAllRoomHasEnoughOnePax,
         changeGenereralDiscount,
         changeUnitaryDiscounts,
+        changeRoomToStaff,
     }
 }
 

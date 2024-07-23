@@ -15,6 +15,8 @@ import useBodyCorporateBudget from "./hooks/useBodyCorporateBudget";
 import { useApi } from "../../hooks/api/api";
 import useUnitaryDiscount from "./hooks/useUnitaryDiscount";
 import useDiscountModal from "./hooks/useDiscountModal";
+import useStaff from "./hooks/useStaff";
+import { getColumnDataCorp } from "./functions/getters/getColumnDataCorp";
 
 const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const api = useApi();
@@ -26,7 +28,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         handleOpenBackdrop,
         handleCloseBackdrop,
     }
-   
+
     // NEW for corporate
     const bodySendBudget = useBodyCorporateBudget();
     const categoryHook = useCategory();
@@ -40,24 +42,24 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const clientNameHook = useClientName();
     const unitaryDiscountHook = useUnitaryDiscount();
     const UnitaryDiscountModalHook = useDiscountModal();
-
+    const StaffHook = useStaff();
 
 
     useEffect(() => {
         bodySendBudget.changeDateCorporateBudget(selectionRangeHook.selectionRange);
-        infoBudgetHook.setDataTable((par) => ({  
+        infoBudgetHook.setDataTable((par) => ({
             ...par,
-            columns: getColumnData(selectionRangeHook.selectionRange),
+            columns: getColumnDataCorp(selectionRangeHook.selectionRange),
         }))
-        
+
     }, [selectionRangeHook.selectionRange]);
-    useEffect(() => { 
+    useEffect(() => {
         bodySendBudget.changeCategoryToRoomCorporate(categoryHook.categoriesCorporateValues)
     }, [categoryHook.categoriesCorporateValues])
 
     useEffect(() => {
         callHandleForm()
-    }, [ bodySendBudget.roomsToBudget ])
+    }, [bodySendBudget.roomsToBudget])
 
     useEffect(() => {
         bodySendBudget.changeRequirementCorporate(requirementHook.requirementSubmit);
@@ -65,14 +67,14 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         bodySendBudget.changeUnitaryDiscounts(unitaryDiscountHook.unitaryDiscount);
-    }, [ unitaryDiscountHook.unitaryDiscount ])
+    }, [unitaryDiscountHook.unitaryDiscount])
 
     //Send Objetct To Api Budget
     async function callHandleForm() {
         infoBudgetHook.clearRows();
         if (
             bodySendBudget.roomsToBudget.dateRange
-            && ((bodySendBudget.roomsToBudget.rooms.length > 0 
+            && ((bodySendBudget.roomsToBudget.rooms.length > 0
                 && bodySendBudget.verifyIfAllRoomHasEnoughOnePax())
                 || requirementHook.requirementSubmit.length > 0)
         ) {
@@ -98,7 +100,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...loadingComponent,
                 ...permissionHook,                                             // Modal Permission General Discount
                 ...selectionRangeHook,                                          // CalendarPicker
-                ...actionDiscountHook,                                        // FormOrc/corporate 
+                ...actionDiscountHook,                                          // FormOrc/corporate 
                 ...categoryHook,                                                // FormOrc/corporate 
                 ...requirementHook,                                             // ModalRequirement, Requirement(form)
                 ...roomLayoutHook,                                             // pension(form)
@@ -106,6 +108,7 @@ const CorporateProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 ...infoBudgetHook,                                              // infoTables
                 ...unitaryDiscountHook,
                 ...UnitaryDiscountModalHook,
+                ...StaffHook,
                 callHandleForm,
                 childValue: [],                                                 // ModalRequirement
             }}

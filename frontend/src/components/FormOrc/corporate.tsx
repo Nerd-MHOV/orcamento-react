@@ -9,6 +9,7 @@ import { GetClientName } from "./partForm/getClientName";
 import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
 import { DiscountInputForm } from "./partForm/discount_corp";
 import { LocationInputForm } from "./partForm/location";
+import { StaffCorp } from "./partForm/staff_corp";
 
 export const FormOrcCorporate = () => {
   const {
@@ -32,6 +33,7 @@ export const FormOrcCorporate = () => {
             <DiscountInputForm />
             <RequirementInputForm corporate />
             <LocationInputForm />
+            <StaffCorp />
           </div>
         </form>
         {/* SELECT DE AÇÕES PROMOCIONAIS */}

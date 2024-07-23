@@ -15,14 +15,14 @@ export const CategoryInputForm = () => {
 
   const optionDisabled = (options: CategoryOptionsProps) => {
     if (
-      selectionRange.startDate === selectionRange.endDate &&
+      selectionRange[0].startDate === selectionRange[0].endDate &&
       !options.category.match(/Day-Use/)
     ) {
       return true;
     }
 
     if (
-      selectionRange.startDate !== selectionRange.endDate &&
+      selectionRange[0].startDate !== selectionRange[0].endDate &&
       options.category.match(/Day-Use/)
     ) {
       return true;

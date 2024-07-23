@@ -42,7 +42,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   const callHandleForm = () => {
     handleForm(
       categoryHook.occupancy.category,
-      selectionRangeHook.selectionRange,
+      selectionRangeHook.selectionRange[0],
       unitaryDiscountHook.unitaryDiscount,
       actionsDiscountHook.dailyCourtesy,
       infoBudgetHook.addRows,
@@ -59,7 +59,7 @@ const AccommodadtionProvider: React.FC<{ children: ReactNode }> = ({ children })
   useEffect(() => {
     infoBudgetHook.setDataTable((par) => ({
       rows: par.rows,
-      columns: getColumnData(selectionRangeHook.selectionRange),
+      columns: getColumnData(selectionRangeHook.selectionRange[0]),
     }))
   }, [selectionRangeHook.selectionRange]);
 

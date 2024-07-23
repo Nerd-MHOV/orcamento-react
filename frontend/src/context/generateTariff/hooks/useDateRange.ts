@@ -10,10 +10,36 @@ const useDateRange = () => {
   const [holidays, setHolidays] = useState<string[]>([]);
   const [monthsWithTariffs, setMonthsWithTariffs] = useState<string[]>([]);
 
-  async function handleSelectDate(ranges: any) {
+  function handleSelectDate(ranges: any) {
     setStateApp(null);
-    setSelectionRange(ranges.selection);
-  }
+    if (ranges.selection) setSelectionRange(selections => {
+      const result = selections.map( range => {
+        if(range.key === 'selection') {
+          return ranges.selection
+        }
+        return range
+      })
+      return result
+    });
+    if (ranges.second) setSelectionRange(selections => {
+      let find = false;
+      const result = selections.map( range => {
+        if(range.key === 'second') {
+          find = true;
+          console.log('aqui')
+
+          return ranges.second
+        }
+        return range
+      })
+      if (!find) return [
+        ...result,
+        ranges.second,
+      ]
+      return result
+    });
+    if (ranges.clear) setSelectionRange([selectionRange[0]]);
+  }  
 
   async function getVariables() {
     setHolidays(await getHolidays());

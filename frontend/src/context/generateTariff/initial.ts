@@ -7,11 +7,11 @@ export const dataInitial = {
   columns: [],
 };
 
-export const selectionRangeInitial = {
+export const selectionRangeInitial = [{
   startDate: new Date(),
   endDate: new Date(),
   key: "selection",
-};
+}];
 
 export const occupancyInitial = {
   text: "",

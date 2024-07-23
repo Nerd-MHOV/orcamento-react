@@ -1,14 +1,11 @@
-import { CategoryOptionsProps } from "../../context/generateTariff/interfaces/categoriesProps"
 import { occupacyUHProps } from "../../context/generateTariff/interfaces/generateTariffContextProps"
 import * as React from 'react';
 import { experimentalStyled as styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { useContext } from "react";
-import { GenerateTariffContext } from "../../context/generateTariff/generateTariff";
-import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { Avatar, FormControlLabel, ListItem, ListItemAvatar, ListItemText, Switch } from "@mui/material";
 import { RoomCorporate } from "../../context/generateTariff/interfaces/corporateProps";
+import { useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 
 
 const getStatusColor = (status: "completed" | "fail" | null) => {
@@ -50,10 +47,14 @@ const UHCorporateCard = ({ occupancy, index, room, onClick }: UHCorporateCardPro
     const is_occupancy_pax = pax >= occupancy.min && pax <= occupancy.max ? true : false
     const is_occupancy = !is_completed ? true : is_occupancy_pax
 
+    const {
+        staff,
+        changeRoomToStaff,
+    } = useGenerateTariffCorporate();
     return (
-        <Grid item xs={2} sm={4} md={4} key={index} onClick={onClick} style={{ cursor: 'pointer' }}>
+        <Grid item xs={2} sm={4} md={4} key={index} >
             <Item status={getStatusColor(color_params)}>
-                <ListItem>
+                <ListItem onClick={onClick} style={{ cursor: 'pointer' }} >
                     <ListItemAvatar>
                         <Avatar sx={{ bgcolor: "#fff", color: "#696969" }} >
                             {room.roomNumber.unit}
@@ -64,6 +65,23 @@ const UHCorporateCard = ({ occupancy, index, room, onClick }: UHCorporateCardPro
                         secondary={getLayout(room)}
                     />
                 </ListItem>
+                {
+                    staff &&
+                    <FormControlLabel
+                        sx={{
+                            display: 'block',
+                        }}
+                        control={
+                            <Switch
+                                checked={room.isStaff}
+                                onChange={() => changeRoomToStaff(room, !room.isStaff)}
+                                name="isStaff"
+                                color="primary"
+                            />
+                        }
+                        label={room.isStaff ? "Staff" : "Comum"}
+                    />
+                }
                 <p style={{
                     position: "absolute",
                     right: 4,

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import React, { useContext } from "react";
-import { GenerateTariffContext, useGenerateTariff, useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
+import React from "react";
+import { useGenerateTariffCorporate } from "../../context/generateTariff/generateTariff";
 import UHCorporateCard from './UHCorporateCard';
 import ModalRoomLayout from './ModalRoomLayout';
 import { CategoryOptionsProps } from '../../context/generateTariff/interfaces/categoriesProps';

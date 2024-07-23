@@ -1,5 +1,5 @@
 import { CategoryOptionsProps } from "./categoriesProps";
-import { CorporateBodySendBudget } from "./corporateProps";
+import { CorporateBodySendBudget, RoomCorporate } from "./corporateProps";
 import { ActionPromossionsGTCP, DatePartGTCP, InfoBudgetGTCP, LoadingGTCP, ModalPermissionDiscountGTCP, PensionGTCP, RequirementPartGTCP, RoomPartGTCP } from "./generateTariffContextProps";
 import RequirementSubmitProps from "./requirementSubmitProps";
 import SelectionRangeProps from "./selectionRangeProps";
@@ -20,7 +20,8 @@ RequirementPartGTCP,
 PensionGTCP,
 InfoBudgetGTCP,
 BodyCorporateBudgetGTCP,
-UnitaryDiscountGTCP
+UnitaryDiscountGTCP,
+StaffGTCP
 {
     clientName: string;
     getClientName: (id: string) => Promise<string>;
@@ -38,7 +39,7 @@ export interface BodyCorporateBudgetGTCP {
     deleteRoomCorporate: (rooms: CategoryOptionsProps[]) => void;
     changePension: (pension: string) => void;
     changeRequirementCorporate: (requirements: RequirementSubmitProps[]) => void;
-    changeDateCorporateBudget: (dateRange: SelectionRangeProps) => void;
+    changeDateCorporateBudget: (dateRange: SelectionRangeProps[]) => void;
     changeIdClient: (idClient: string | null) => void;
     changeLayoutRoom(adt: number, chd: number[], pet: string[], roomNumber: CategoryOptionsProps): void;
     changeCategoryToRoomCorporate(categories: CategoryOptionsProps[]): void;
@@ -47,6 +48,12 @@ export interface BodyCorporateBudgetGTCP {
     setBodyResponseBudget: React.Dispatch<React.SetStateAction<CorporateBodyResponseBudget | null>>
     changeGenereralDiscount: ( discount: number ) => void;
     changeUnitaryDiscounts(discounts: RowModalDiscount[]): void;
+    changeRoomToStaff(room: RoomCorporate, isStaff: boolean): void;
+}
+
+export interface StaffGTCP {
+    staff: boolean,
+    toggleStaff: VoidFunction,
 }
 
 export default GenerateTariffCorporateContextProps

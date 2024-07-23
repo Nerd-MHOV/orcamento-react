@@ -48,10 +48,10 @@ export interface LoadingGTCP {
     handleCloseBackdrop: VoidFunction;
 }
 export interface DatePartGTCP {
-    handleSelectDate(ranges: any): Promise<void>;
+    handleSelectDate(ranges: any): void;
     holidays: string[];
     monthsWithTariffs: string[];
-    selectionRange: SelectionRangeProps;
+    selectionRange: SelectionRangeProps[];
 }
 
 export interface RequirementPartGTCP {
