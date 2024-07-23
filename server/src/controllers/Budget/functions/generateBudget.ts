@@ -2,26 +2,28 @@ import { addDays, format } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
 import { getTariff } from "./getTariff";
 import getPercentAdjustmentCorp from "./getPercentAdjustmentCorp";
+import inMainPeriod from "./inMainPeriod";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
 export async function generateBudget(
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date[],
+  completePeriod: Date[],
   arrForm: any,
   ageGroup: "adt" | "adtex" | "chd0" | "chd4" | "chd8",
   onlyFood: boolean,
   daily_courtesy: boolean,
   isCorporate: boolean,
 ) {
-  const valuesBudget = [];
-
-  while (initDate < finalDate) {
-    let dayMonthYear = format(initDate, "yyyy-MM-dd");
-    let monthYear = format(initDate, "yyyy-MM");
-    let dayWeek = format(initDate, "E");
-    let month = format(initDate, "MM");
+  const valuesBudget =  await Promise.all(completePeriod.map( async (date) => {
     let tariffBudget = 0;
+    // verifica se essa data é cobrada
+    if(!inMainPeriod(mainPeriod, date)) return tariffBudget
+
+    let dayMonthYear = format(date, "yyyy-MM-dd");
+    let monthYear = format(date, "yyyy-MM");
+    let dayWeek = format(date, "E");
+    let month = format(date, "MM");
     let tariffs = await getTariff(dayMonthYear, monthYear);
 
     let numCategory = (await prismaClient.categories.findFirst({
@@ -55,21 +57,18 @@ export async function generateBudget(
 
       let tariffDayAgeGroup = tariffDay[ageGroup]
       if(isCorporate) {
-        tariffDayAgeGroup = Math.round(tariffDayAgeGroup * (1 - getPercentAdjustmentCorp(initDate)));
+        tariffDayAgeGroup = Math.round(tariffDayAgeGroup * (1 - getPercentAdjustmentCorp(date)));
       }
       tariffBudget = tariffDayAgeGroup + tariffFood;
 
       if (onlyFood) tariffBudget = 90;
     }
 
-    if (daily_courtesy && addDays(initDate, 2) > finalDate) {
+    if (daily_courtesy && date > mainPeriod[mainPeriod.length - 1]) {
       tariffBudget = 0;
     }
 
-    valuesBudget.push(tariffBudget);
-
-    initDate = addDays(initDate, 1);
-  }
-
+    return tariffBudget;
+  } ))
   return valuesBudget;
 }

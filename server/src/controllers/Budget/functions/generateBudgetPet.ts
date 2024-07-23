@@ -1,29 +1,25 @@
 import { addDays, format } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
+import inMainPeriod from "./inMainPeriod";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
 export async function generateBudgetPet(
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date [],
+  completePeriod: Date [],
   arrForm: any,
   carrying: "pequeno" | "médio" | "grande"
 ) {
-  const valuesBudget = [];
-  while (initDate < finalDate) {
-    let dayMonthYear = format(initDate, "yyyy-MM-dd");
+   const valuesBudget =  Promise.all(completePeriod.map(async (date) => {
     let tariffBudget = 0;
+    if(!inMainPeriod(mainPeriod, date)) return tariffBudget
     let tariffs = await prismaClient.pet.findMany();
-
     let tariffSpecific = tariffs.filter(
       (arr: any) => arr.carrying === carrying
     );
     if (tariffSpecific[0]) tariffBudget = tariffSpecific[0].daily_price;
+    return tariffBudget;
 
-    valuesBudget.push(tariffBudget);
-
-    initDate = addDays(initDate, 1);
-  }
-
+  }))
   return valuesBudget;
 }

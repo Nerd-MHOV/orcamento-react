@@ -5,6 +5,7 @@ import { duAdultBudget } from "./functions/duAdultBudget";
 import { duChildBudget } from "./functions/duChildBudget";
 import { petBudget } from "./functions/petBudget";
 import { requirementBudget } from "./functions/requirementBudget";
+import getPeriod from "./functions/getPeriod";
 export type PetProps = "pequeno" | "médio" | "grande";
 
 export class CalcBudgetDUController {
@@ -23,7 +24,7 @@ export class CalcBudgetDUController {
       rangeDate: {
         startDate: string;
         endDate: string;
-        [key: string]: any;
+        key: string;
       };
     } = request.body;
 
@@ -35,10 +36,17 @@ export class CalcBudgetDUController {
     let requirementRows: RowsProps[];
     let discountRow: RowsProps[] = [];
 
+
     let initDate = new Date(rangeDate.startDate);
     let finalDate = new Date(rangeDate.endDate);
-
     finalDate = addDays(finalDate, 1);
+    const mainPeriod = getPeriod([{
+      startDate: rangeDate.startDate,
+      endDate: finalDate.toISOString(),
+      key: rangeDate.key
+    }])
+
+    
 
     //adult
     adultRows = await duAdultBudget(arrForm, arrChild, initDate);
@@ -47,15 +55,15 @@ export class CalcBudgetDUController {
     childRows = await duChildBudget(arrChild, arrForm, initDate);
 
     //pet
-    petRows = await petBudget(arrForm, arrPet, [], initDate, finalDate);
+    petRows = await petBudget(arrForm, arrPet, [], mainPeriod, mainPeriod);
 
     // requirement;
     requirementRows = await requirementBudget(
       arrForm,
       arrRequirement,
       [],
-      initDate,
-      finalDate
+      mainPeriod,
+      mainPeriod
     );
 
     //discountRow
@@ -74,3 +82,4 @@ export class CalcBudgetDUController {
     });
   }
 }
+

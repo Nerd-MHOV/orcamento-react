@@ -1,14 +1,13 @@
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { prismaClient } from "../../../database/prismaClient";
-import { ArrFormProps } from "../CalcBudgetController";
 import { getTariff } from "./getTariff";
 import getPercentAdjustmentCorp from "./getPercentAdjustmentCorp";
 
 const daysOfWeekend = ["Fri", "Sat", "Sun"];
 
 export async function generateBudgetRequirement(
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date[],
+  completePeriod: Date[],
   arrRequirement: {
     requirement: string;
     type: string;
@@ -25,17 +24,15 @@ export async function generateBudgetRequirement(
   const typeRequirement = arrRequirement.type;
   const typeModalRequirement = arrRequirement.typeModal;
   const values = arrRequirement.values;
-  const valuesBudget = [];
-  let firstDate = initDate;
-  console.log(arrRequirement);
-  while (initDate < finalDate) {
-    let dayMonthYear = format(initDate, "yyyy-MM-dd");
-    let monthYear = format(initDate, "yyyy-MM");
-    let dayWeek = format(initDate, "E");
-    let month = format(initDate, "MM");
+  let firstDate = mainPeriod[0];
+  const valuesBudget = Promise.all( completePeriod.map( async (date) => {
+    let dayMonthYear = format(date, "yyyy-MM-dd");
+    let monthYear = format(date, "yyyy-MM");
+    let dayWeek = format(date, "E");
+    let month = format(date, "MM");
     let tariffBudget = 0;
 
-    if (initDate === firstDate) {
+    if (date.getTime() === firstDate.getTime()) {
       if (typeRequirement === "both" && typeModalRequirement === "person") {
         const tariffValues = await getTariff(dayMonthYear, monthYear);
         let typeCheck = "";
@@ -102,7 +99,7 @@ export async function generateBudgetRequirement(
           tariffBudget = adultValues + childValues;
 
           if(isCorporate) {
-            tariffBudget = Math.round(tariffBudget * (1 - getPercentAdjustmentCorp(initDate)));
+            tariffBudget = Math.round(tariffBudget * (1 - getPercentAdjustmentCorp(date)));
           }
         }
       } else if (typeRequirement === "voucher") {
@@ -118,10 +115,8 @@ export async function generateBudgetRequirement(
       }
     }
 
-    valuesBudget.push(tariffBudget);
-
-    initDate = addDays(initDate, 1);
-  }
+    return tariffBudget;
+  }))
 
   return valuesBudget;
 }

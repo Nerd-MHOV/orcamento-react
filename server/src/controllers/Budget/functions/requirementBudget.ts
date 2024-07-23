@@ -10,8 +10,8 @@ export async function requirementBudget(
   arrForm: ArrFormProps,
   arrRequirement: ArrRequirementProps[],
   unitaryDiscount: UnitaryDiscountProps[],
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date[],
+  completePeriod: Date[],
   room = 0,
   isCorporate = false,
 ) {
@@ -43,8 +43,8 @@ export async function requirementBudget(
     let totalNoDiscount = 0;
 
     valueRequirement = await generateBudgetRequirement(
-      initDate,
-      finalDate,
+      mainPeriod,
+      completePeriod,
       arrRequirement[countRequirement],
       isCorporate
     );

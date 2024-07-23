@@ -7,6 +7,7 @@ export interface RoomCorporate {
     chd: number[],
     pet: PetProps[],
     roomNumber: Category,
+    isStaff: boolean,
 }
 
 export interface RoomCorporateResponse extends RoomCorporate {
@@ -23,7 +24,7 @@ export interface CorporateBodySendBudget {
     pension: string,
     requirements: ArrRequirementProps[],
     discount: number,
-    dateRange: DateRange,
+    dateRange: DateRange[],
     idClient: string | null,
     unitaryDiscount: UnitaryDiscountProps[],
 }
@@ -32,7 +33,7 @@ export interface CorporateBodyResponseBudget {
     rooms: RoomCorporateResponse[],
     pension: string,
     requirements: ArrRequirementProps[],
-    dateRange: DateRange,
+    dateRange: DateRange[],
     idClient: string | null,
     rowsValues: ResponseValues
 }
@@ -46,6 +47,7 @@ export interface Category {
 export interface DateRange {
     startDate: string;
     endDate: string;
+    key: string;
 }
 
 

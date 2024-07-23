@@ -10,8 +10,8 @@ export async function petBudget(
   arrForm: ArrFormProps,
   arrPet: PetProps[],
   unitaryDiscount: UnitaryDiscountProps[],
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date[],
+  completePeriod: Date[],
   room = 0,
 ) {
   let petRows: RowsProps[] = [];
@@ -27,7 +27,7 @@ export async function petBudget(
     const desc = "PET " + uPet;
     const type = "pet";
 
-    valuesPet = await generateBudgetPet(initDate, finalDate, arrForm, uPet);
+    valuesPet = await generateBudgetPet(mainPeriod, completePeriod, arrForm, uPet);
 
     //verify unitary discount
     unitaryDiscount.map((unit) => {

@@ -10,8 +10,8 @@ export async function childBudget(
   arrChild: number[],
   unitaryDiscount: UnitaryDiscountProps[],
   daily_courtesy: boolean,
-  initDate: Date,
-  finalDate: Date,
+  mainPeriod: Date[],
+  completePeriod: Date[],
   isCorp = false,
   room = 0,
 ) {
@@ -35,8 +35,8 @@ export async function childBudget(
 
     if (uChild <= 3 && numChild === 1) {
       valuesChild = await generateBudget(
-        initDate,
-        finalDate,
+        mainPeriod,
+        completePeriod,
         arrForm,
         "chd0",
         false,
@@ -46,8 +46,8 @@ export async function childBudget(
       permitDiscount = false;
     } else if ((uChild > 3 && uChild < 8) || (uChild < 8 && numChild > 1))
       valuesChild = await generateBudget(
-        initDate,
-        finalDate,
+        mainPeriod,
+        completePeriod,
         arrForm,
         "chd4",
         false,
@@ -56,8 +56,8 @@ export async function childBudget(
       );
     else
       valuesChild = await generateBudget(
-        initDate,
-        finalDate,
+        mainPeriod,
+        completePeriod,
         arrForm,
         "chd8",
         false,
@@ -69,8 +69,8 @@ export async function childBudget(
     if (numChild === 1 && uChild > 3 && uChild < 10) {
       permitDiscount = false;
       valuesChild = await generateBudget(
-        initDate,
-        finalDate,
+        mainPeriod,
+        completePeriod,
         arrForm,
         "chd8",
         true,
@@ -82,8 +82,8 @@ export async function childBudget(
     if (Number(amountAdults) === 1 && countChild === amountChild - 1) {
       permitDiscount = true;
       valuesChild = await generateBudget(
-        initDate,
-        finalDate,
+        mainPeriod,
+        completePeriod,
         arrForm,
         "adt",
         false,
