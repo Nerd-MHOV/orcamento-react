@@ -128,6 +128,13 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         }))
     }
 
+    function changeAgencyPercent( agency: number ) {
+        setRoomsToBudget( old => ({
+            ...old,
+            agency,
+        }))
+    }
+
     function changeUnitaryDiscounts( discounts: RowModalDiscount[] ) {
         setRoomsToBudget( old => ({
             ...old,
@@ -149,6 +156,7 @@ const useBodyCorporateBudget = (): BodyCorporateBudgetGTCP => {
         changeCategoryToRoomCorporate,
         verifyIfAllRoomHasEnoughOnePax,
         changeGenereralDiscount,
+        changeAgencyPercent,
         changeUnitaryDiscounts,
         changeRoomToStaff,
     }

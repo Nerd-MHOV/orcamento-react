@@ -31,6 +31,7 @@ export const corporateBodySendBudgetInitial: CorporateBodySendBudget = {
   rooms: [],
   pension: 'completa',
   discount: 0,
+  agency: 0,
   requirements: [],
   dateRange: null,
   idClient: null,

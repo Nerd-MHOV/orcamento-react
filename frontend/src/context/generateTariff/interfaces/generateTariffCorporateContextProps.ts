@@ -47,6 +47,7 @@ export interface BodyCorporateBudgetGTCP {
     bodyResponseBudget: CorporateBodyResponseBudget | null,
     setBodyResponseBudget: React.Dispatch<React.SetStateAction<CorporateBodyResponseBudget | null>>
     changeGenereralDiscount: ( discount: number ) => void;
+    changeAgencyPercent(agency: number): void
     changeUnitaryDiscounts(discounts: RowModalDiscount[]): void;
     changeRoomToStaff(room: RoomCorporate, isStaff: boolean): void;
 }

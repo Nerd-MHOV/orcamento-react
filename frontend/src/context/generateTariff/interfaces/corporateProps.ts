@@ -16,6 +16,7 @@ export interface CorporateBodySendBudget {
     pension: string,
     requirements: RequirementSubmitProps[],
     discount: number,
+    agency: number,
     dateRange: SelectionRangeProps[] | null,
     unitaryDiscount: RowModalDiscount[],
     idClient: string | null,

@@ -10,6 +10,7 @@ import { CategoryCorporateInputForm } from "./partForm/categoryCorporate";
 import { DiscountInputForm } from "./partForm/discount_corp";
 import { LocationInputForm } from "./partForm/location";
 import { StaffCorp } from "./partForm/staff_corp";
+import { AgencyInputForm } from "./partForm/agency_corp";
 
 export const FormOrcCorporate = () => {
   const {
@@ -31,6 +32,7 @@ export const FormOrcCorporate = () => {
             <PensionInputForm corporate />
             <RdClientInputForm corporate />
             <DiscountInputForm />
+            <AgencyInputForm />
             <RequirementInputForm corporate />
             <LocationInputForm />
             <StaffCorp />
