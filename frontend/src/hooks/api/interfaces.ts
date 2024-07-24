@@ -128,7 +128,7 @@ export interface CorporateBodyResponseBudget {
   rooms: RoomCorporateResponse[],
   pension: string,
   requirements: RequirementSubmitProps[],
-  dateRange: DateRange,
+  dateRange: DateRange[],
   idClient: string | null,
   rowsValues: ResponseValues
 }

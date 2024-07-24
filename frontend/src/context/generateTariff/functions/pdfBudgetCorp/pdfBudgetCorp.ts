@@ -1,10 +1,9 @@
-import { Content, ContentTable, TDocumentDefinitions, TableCell } from "pdfmake/interfaces";
+import { TDocumentDefinitions } from "pdfmake/interfaces";
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { addDays, format } from "date-fns";
 import { CorporateBodyResponseBudget } from "../../../../hooks/api/interfaces";
-import getLayoutRooms from "../file-part/getLayoutRooms";
 import { applyBoder } from "./applyBorder";
 import { doBodyAccommodation } from "./accommodation";
 import { doTableBudgetCorp } from "./doTableBudgetCorp";
@@ -44,15 +43,26 @@ async function pdfBudgetCorp(
    return breakPage( callLayoutPageCollaborators )
   }
 
-  const accommodationTable = doTableBudgetCorp([
-    applyBoder(["HOSPEDAGEM", "DISPOSIÇÃO", "PREÇO"], 'total_block'),
-    ...doBodyAccommodation(budget),
-  ], callBreakPage, !!budget.rooms.length)
+  const dateSelection = budget.dateRange.find(date => date.key === 'selection');
+  const dateSecond = budget.dateRange.find(date => date.key === 'second');
 
+  const stringDateSelection = dateSelection && dateSecond ?` (${format(new Date(dateSelection?.startDate), 'dd')} à ${format(new Date(dateSelection?.endDate), 'dd/MM')})` : '';
+  const stringDateSecond = dateSecond ?` (${format(new Date(dateSecond?.startDate), 'dd')} à ${format(new Date(dateSecond?.endDate), 'dd/MM')})` : '';
+
+  const accommodationTable = doTableBudgetCorp([
+    applyBoder([`HOSPEDAGEM${stringDateSelection}`, "DISPOSIÇÃO", "PREÇO"], 'total_block'),
+    ...doBodyAccommodation(budget, false),
+  ], callBreakPage, !!budget.rooms.filter(room => !room.isStaff ).length)
+
+  const accommodationTableStaff = doTableBudgetCorp([
+    applyBoder([`HOSPEDAGEM${stringDateSecond}`, "DISPOSIÇÃO", "PREÇO"], 'total_block'),
+    ...doBodyAccommodation(budget, true),
+  ], callBreakPage, !!budget.rooms.filter(room => room.isStaff ).length, accommodationTable.rows)
+  
   const requirementTable = doTableBudgetCorp([
     applyBoder(["REQUERIMENTOS", "QUANTIDADE", "PREÇO"], 'total_block'),
     ...doBodyRequirements(budget),
-  ], callBreakPage,!!budget.requirements.some(req => req.type !== "location"), accommodationTable.rows)
+  ], callBreakPage,!!budget.requirements.some(req => req.type !== "location"), accommodationTableStaff.rows)
   
   const locationTable = doTableBudgetCorp([
     applyBoder(["LOCAÇÃO", "QUANTIDADE", "PREÇO"], 'total_block'),
@@ -93,6 +103,7 @@ async function pdfBudgetCorp(
       ...slidesContent,
       callLayoutPageCollaborators(),
       accommodationTable.content,
+      accommodationTableStaff.content,
       requirementTable.content,
       locationTable.content,
       doTableBudgetCorp([

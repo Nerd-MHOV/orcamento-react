@@ -2,8 +2,8 @@ import { CorporateBodyResponseBudget } from "../../../../hooks/api/interfaces"
 import getLayoutRooms from "../file-part/getLayoutRooms"
 import { applyBoder } from "./applyBorder"
 
-export const doBodyAccommodation = (budget: CorporateBodyResponseBudget) => {
-    const bodyAccommodation = budget.rooms.map(room => {
+export const doBodyAccommodation = (budget: CorporateBodyResponseBudget, isStaff: boolean) => {
+    const bodyAccommodation = budget.rooms.filter(room => room.isStaff === isStaff).map(room => {
         return applyBoder([
           `${room.roomNumber.category}`,
           `${getLayoutRooms(room.adt, room.chd, room.pet).slice(2)}`,
@@ -14,10 +14,10 @@ export const doBodyAccommodation = (budget: CorporateBodyResponseBudget) => {
         ])
       })
       const totalAccommodation = () => {
-        const adt = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.adt, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
-        const chd = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.chd.length, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
-        const pet = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.pet.length, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
-        const totalAccomodationValue = budget.rooms.reduce((accumulator, currentValue) => accumulator + currentValue.rowsValues.total.total, 0)
+        const adt = budget.rooms.filter(room => room.isStaff === isStaff).reduce((accumulator, currentValue) => accumulator + currentValue.adt, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
+        const chd = budget.rooms.filter(room => room.isStaff === isStaff).reduce((accumulator, currentValue) => accumulator + currentValue.chd.length, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
+        const pet = budget.rooms.filter(room => room.isStaff === isStaff).reduce((accumulator, currentValue) => accumulator + currentValue.pet.length, 0).toLocaleString('pt-br', { minimumIntegerDigits: 2 })
+        const totalAccomodationValue = budget.rooms.filter(room => room.isStaff === isStaff).reduce((accumulator, currentValue) => accumulator + currentValue.rowsValues.total.total, 0)
         
         let stringLayoutTotalRoom = ""
         if(adt !== '00') stringLayoutTotalRoom += adt + ' ADT'
