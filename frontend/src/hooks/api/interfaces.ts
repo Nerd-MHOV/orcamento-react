@@ -126,7 +126,8 @@ export interface ResponseValues {
 }
 export interface CorporateBodyResponseBudget {
   rooms: RoomCorporateResponse[],
-  pension: string,
+  pension: string
+  agencyPercent: number,
   requirements: RequirementSubmitProps[],
   dateRange: DateRange[],
   idClient: string | null,

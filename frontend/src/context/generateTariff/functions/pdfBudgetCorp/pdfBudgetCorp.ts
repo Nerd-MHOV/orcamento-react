@@ -68,6 +68,15 @@ async function pdfBudgetCorp(
     applyBoder(["LOCAÇÃO", "QUANTIDADE", "PREÇO"], 'total_block'),
     ...doBodyLocations(budget),
   ], callBreakPage, !!budget.requirements.some(req => req.type === "location"), requirementTable.rows)
+  const agencyTable = doTableBudgetCorp([
+    applyBoder(["AGÊNCIA", 
+      `${budget.agencyPercent}%`, 
+      "R$ " + budget.rowsValues.rows.find(row => row.type === 'agency')?.total.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })]
+      , 'total_block'),
+  ], callBreakPage, !!budget.rowsValues.rows.some(row => row.type === "agency"), locationTable.rows)
   
   const docDefinitions: TDocumentDefinitions = {
     defaultStyle: {
@@ -106,6 +115,7 @@ async function pdfBudgetCorp(
       accommodationTableStaff.content,
       requirementTable.content,
       locationTable.content,
+      agencyTable.content,
       doTableBudgetCorp([
         applyBoder(["TOTAL", "",
           "R$ " + budget.rowsValues.total.total.toLocaleString("pt-BR", {
@@ -113,7 +123,7 @@ async function pdfBudgetCorp(
             maximumFractionDigits: 2,
           }),
         ], 'total_block'),
-      ], callBreakPage, true, locationTable.rows).content,
+      ], callBreakPage, true, agencyTable.rows).content,
       {
         image: `slide14`,
         width: 600,

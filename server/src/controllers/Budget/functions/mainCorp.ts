@@ -2,6 +2,7 @@ import { RowsProps } from "../CalcBudgetController";
 import { CorporateBodyResponseBudget, CorporateBodySendBudget, RoomCorporateResponse } from "../CalcBudgetCorpController";
 import { adultBudget } from "./adultBudget";
 import { calcTotal, calcTotalBudgets } from "./calcTotal";
+import { calcTotalAgency } from "./calcTotalAgency";
 import { childBudget } from "./childBudget";
 import getPeriod from "./getPeriod";
 import { petBudget } from "./petBudget";
@@ -9,19 +10,19 @@ import { requirementBudget } from "./requirementBudget";
 
 
 export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
-    
-    const { dateRange, rooms, pension, requirements } = bodyRequest;
 
-    
+    const { agency, dateRange, rooms, pension, requirements } = bodyRequest;
+
+
 
     const completePeriod = getPeriod(dateRange);
     const dateSelection = dateRange.find(range => range.key === 'selection') ?? dateRange[0];
-    const dateSecond = dateRange.find(range => range.key === 'second' );
+    const dateSecond = dateRange.find(range => range.key === 'second');
 
     // mock variables
     const dailyCourtesy: boolean = false;
-    const newRoomsPromises = rooms.map(async ( room ) => {
-        const discount = bodyRequest.unitaryDiscount.find( unitaryD => unitaryD.id === Number(room.roomNumber.unit) && unitaryD.type === "room")?.discount ?? bodyRequest.discount;
+    const newRoomsPromises = rooms.map(async (room) => {
+        const discount = bodyRequest.unitaryDiscount.find(unitaryD => unitaryD.id === Number(room.roomNumber.unit) && unitaryD.type === "room")?.discount ?? bodyRequest.discount;
         const arrForm = {
             adult: room.adt,
             discount,
@@ -47,7 +48,7 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
         };
         return newRoom
     })
-    
+
     // Awaiting to conclusion each async operation
     const newRooms = await Promise.all(newRoomsPromises);
 
@@ -55,9 +56,17 @@ export async function mainCorp(bodyRequest: CorporateBodySendBudget) {
     let requirementRows = await requirementBudget({ adult: 0 }, requirements, bodyRequest.unitaryDiscount, completePeriod, completePeriod, 0, true);
     const rowsFinal: RowsProps[] = [...calcTotalBudgets(newRooms), ...requirementRows];
 
+    if (agency && agency > 0) {
+        const totalNeto = calcTotal(rowsFinal, bodyRequest.discount)
+        const totalAgency = calcTotalAgency(totalNeto, agency)
+        rowsFinal.push(totalAgency);
+    }
+
+
     const response: CorporateBodyResponseBudget = {
         ...bodyRequest,
         rooms: newRooms,
+        agencyPercent: agency,
         rowsValues: {
             rows: rowsFinal,
             total: calcTotal(rowsFinal, bodyRequest.discount)
