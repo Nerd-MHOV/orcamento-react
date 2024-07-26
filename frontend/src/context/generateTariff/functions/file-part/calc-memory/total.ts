@@ -1,6 +1,6 @@
 import {LayoutTableMemoryCalc} from "./layout_table";
 
-export const TotalCalcMemory = (total: number) => {
+export const TotalCalcMemory = (total: number, title = "Total da UH") => {
     return [
         {
             table: {
@@ -8,7 +8,7 @@ export const TotalCalcMemory = (total: number) => {
                 body: [
                     [
                         {
-                            text: "Total da UH",
+                            text: title,
                             alignment: "left",
                             fontSize: 9,
                             bold: true,

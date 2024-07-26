@@ -1,8 +1,6 @@
 import {format} from "date-fns";
-import DataContentProps from "../../../interfaces/tableBudgetDataContentProps";
 
-export const HeaderCalcMemory = (namePerson: string, budget: DataContentProps) => {
-    const rd_client = budget.arrComplete.responseForm.rd_client;
+export const HeaderCalcMemory = (namePerson: string, rd_client: string) => {
     return [
         {
             text: `Memória de Cálculo`,

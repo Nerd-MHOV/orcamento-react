@@ -72,7 +72,8 @@ async function pdfDescription(
                 bold: true,
             });
 
-            if (budget.id < 300) rows_days.push(lineRows);
+            const typeToRowsDays = ['adult', 'child', 'pet', 'room'];
+            if (typeToRowsDays.includes(budget.type)) rows_days.push(lineRows);
             else rows_extra.push(lineRows);
         }
         let lastRow_days = [];
@@ -232,7 +233,7 @@ async function pdfDescription(
         },
         pageMargins: 15,
         content: [
-            ...HeaderCalcMemory(namePerson, realBudget),
+            ...HeaderCalcMemory(namePerson, realBudget.arrComplete.responseForm.rd_client),
             //for
             {
                 text: "_______________________________________________________________________________________",

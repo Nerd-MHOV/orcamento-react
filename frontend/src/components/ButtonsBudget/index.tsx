@@ -11,6 +11,7 @@ import * as React from "react";
 import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
 import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
 import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
+import pdfDescriptionCorp from "../../context/generateTariff/functions/pdfDescriptionCorp/pdfDescriptionCorp";
 
 export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
@@ -74,18 +75,10 @@ export const ButtonsBudget = ({ corporate = false }) => {
       return;
     }
     const deal_id = bodyResponseBudget.idClient;
-    const descriptionData: DataContentProps[] = [
-      {
-        columns: dataTable.columns,
-        rows: dataTable.rows,
-        total: calcTotal(dataTable).total,
-      }
-    ]
-    console.log(budgets);
     let response;
     if (deal_id) response = await api.rdGetaDeal(deal_id);
     let name = response?.name || "undefined";
-    await pdfDescription(descriptionData, name);
+    await pdfDescriptionCorp(dataTable, bodyResponseBudget, name);
     handleCloseBackdrop()
   }
 
