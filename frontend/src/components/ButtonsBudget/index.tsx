@@ -9,9 +9,10 @@ import { useGenerateTariff, useGenerateTariffCorporate } from "../../context/gen
 import {ModalConfirmGroup} from "../ModalConfirmGroup";
 import * as React from "react";
 import pdfBudgetCorp from "../../context/generateTariff/functions/pdfBudgetCorp/pdfBudgetCorp";
-import DataContentProps from "../../context/generateTariff/interfaces/tableBudgetDataContentProps";
-import { calcTotal } from "../../context/generateTariff/functions/calcTotal";
 import pdfDescriptionCorp from "../../context/generateTariff/functions/pdfDescriptionCorp/pdfDescriptionCorp";
+import { ModalEditableText } from "../ModalEditableText";
+import { Descendant } from "slate";
+import slateToPdfMake from "../ModalEditableText/ConvertText";
 
 export const ButtonsBudget = ({ corporate = false }) => {
   const { userLogin } = useContext(AuthContext);
@@ -28,6 +29,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
   } = corporate ? useGenerateTariffCorporate() : { ...useGenerateTariff(), bodyResponseBudget: null};
   const api = useApi();
   const [openModalConfirmGroup, setOpenModalConfirmGroup] = React.useState(false);
+  const [openModalEditableText, setOpenModalEditableText] = React.useState(false);
 
   const handleOpenModalConfirmGroup = () => {
     const dealId = budgets.reduce((acc, budget) => {
@@ -42,18 +44,21 @@ export const ButtonsBudget = ({ corporate = false }) => {
       return;
     }
 
-    handleOpenBackdrop();
 
     if(!corporate) generatePdfBudget();
-    else generatePdfBudgetCorporate();
+    else setOpenModalEditableText(true);
+    
+    handleOpenBackdrop();
    };
 
-  const handleCloseModalConfirmGroup = () => {
+  const handleCloseModal = () => {
     setOpenModalConfirmGroup(false);
+    setOpenModalEditableText(false);
   };
 
-  async function generatePdfBudgetCorporate () {
-    handleCloseModalConfirmGroup();
+  async function generatePdfBudgetCorporate (text: Descendant []) {
+    console.log(text, slateToPdfMake(text));
+    handleCloseModal();
     if(!bodyResponseBudget) {
       handleCloseBackdrop();
       return;
@@ -64,6 +69,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
       arrUser.name,
       arrUser.email,
       arrUser.phone,
+      slateToPdfMake(text),
     );
     handleCloseBackdrop();
   }
@@ -81,8 +87,6 @@ export const ButtonsBudget = ({ corporate = false }) => {
     await pdfDescriptionCorp(dataTable, bodyResponseBudget, name);
     handleCloseBackdrop()
   }
-
-
 
   async function generatePdfDescription() {
     // if (
@@ -102,7 +106,7 @@ export const ButtonsBudget = ({ corporate = false }) => {
   }
 
   async function generatePdfBudget(group = false) {
-    handleCloseModalConfirmGroup();
+    handleCloseModal();
     if (budgets.length < 1) {
       return;
     }
@@ -136,9 +140,16 @@ export const ButtonsBudget = ({ corporate = false }) => {
     <div className="boxButtons" style={{ marginTop: 32 }}>
       <ModalConfirmGroup
        open={openModalConfirmGroup}
-       handleClose={handleCloseModalConfirmGroup}
+       handleClose={handleCloseModal}
        handleConclusion={generatePdfBudget}
       />
+
+      <ModalEditableText
+       open={openModalEditableText}
+       handleClose={handleCloseModal}
+       handleConclusion={generatePdfBudgetCorporate}
+      />
+
       { !corporate && <Btn action="Salvar Orçamento" color="blue" onClick={handleSaveBudget} />}
       <Btn
         action="Gerar PDF Orçamento"

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/css": "^11.13.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.15",
@@ -22,6 +23,7 @@
     "imask": "^6.4.3",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",
+    "quill": "^2.0.2",
     "react": "^18.2.0",
     "react-currency-input-field": "^3.6.9",
     "react-date-range": "^1.4.0",
@@ -33,6 +35,9 @@
     "react-router-dom": "^6.4.3",
     "react-text-mask": "^5.5.0",
     "sass": "^1.56.1",
+    "slate": "^0.103.0",
+    "slate-history": "^0.100.0",
+    "slate-react": "^0.107.1",
     "text-mask-addons": "^3.8.0",
     "xlsx": "^0.18.5"
   },
