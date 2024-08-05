@@ -1,10 +1,8 @@
 import {
-  Autocomplete,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getAllowedDiscount } from "../../../context/generateTariff/functions/getters/getAllowedDiscount";
@@ -20,7 +18,7 @@ export const ActionInputForm = ({ corporate = false }) => {
 
   const getAction = async () => {
     const response = await getAllowedDiscount(
-      selectionRange,
+      selectionRange[0],
       getPayers(dataTable)
     );
 
