@@ -12,9 +12,10 @@ import { doBodyRequirements } from "./requirements";
 import { layoutPageCollaborators } from "./LayoutPageCollaborator";
 import { breakPage } from "./breakPage";
 import { doBodyLocations } from "./location";
+import { PATH_IMAGES_BUDGET } from "../../../../config";
 (<any>pdfMake).vfs = pdfFonts && pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : globalThis.pdfMake.vfs;
 
-const slideImagesPath = 'http://localhost:5173/budgetCorpImages/';
+const slideImagesPath = PATH_IMAGES_BUDGET;
 
 async function pdfBudgetCorp(
   budget: CorporateBodyResponseBudget,
