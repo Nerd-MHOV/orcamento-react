@@ -5,7 +5,4 @@ qodana.yaml
 .vscode
 dist
 .idea
-.vscode
-db_bk
-.idea
-.vscode
+db_bkp
