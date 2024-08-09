@@ -71,6 +71,14 @@ export const ButtonsBudget = ({ corporate = false }) => {
       arrUser.phone,
       slateToPdfMake(text),
     );
+
+
+    // save budget
+    const deal_id = bodyResponseBudget.idClient;
+    let response;
+    if (deal_id) response = await api.rdGetaDeal(deal_id);
+    // api.saveBudget(userLogin, bodyResponseBudget, true, response?.name);
+
     handleCloseBackdrop();
   }
 
